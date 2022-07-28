@@ -5,6 +5,7 @@ import DefaultButton from "./common/DefaultButton";
 import DefaultSelect from "./common/DefaultSelect";
 import { SelectChangeEvent } from "@mui/material";
 import DefaultTextField from "./common/DefaultTextField";
+import DefaultDatePicker from "./common/DefaultDatePicker";
 
 const SAMPLE_SELECT_LIST = [
   {text: 'None', value:""},
@@ -14,12 +15,21 @@ const SAMPLE_SELECT_LIST = [
 ]
 
 const Sample: FC = () => {
+  // select box state
   const [age, setAge] = React.useState('');
-
+  // select box 함수
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value);
   };
   
+ // datePicker state
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+    new Date(),
+  );
+  //datePicker 함수
+  const handleDateChange = (newValue: Date | null) => {
+    setSelectedDate(newValue);
+  };
 
   return (
     <div>
@@ -37,6 +47,10 @@ const Sample: FC = () => {
       <section>
         <DefaultTextField id="outlined-error" label="이름" message="이름을 입력해주세요" value={""} error={true}/>
         <DefaultTextField id="outlined-required" label="주소" message="주소를 입력해주세요" value={""} error={false} required={true}/>
+      </section>
+      <h1>DatePicker</h1>
+      <section>
+        <DefaultDatePicker label="달력" value={selectedDate} handleChange={handleDateChange}/>
       </section>
     </div>
   );
