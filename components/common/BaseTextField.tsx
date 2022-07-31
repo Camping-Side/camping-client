@@ -11,7 +11,7 @@ interface Props {
   message?: string;
 }
 
-export default function DefaultTextField({
+export default function BaseTextField({
   id,
   value,
   label,

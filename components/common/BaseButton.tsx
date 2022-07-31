@@ -8,7 +8,7 @@ interface Props {
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined
 }
 
-export default function DefaultButton({variant, size,children, onClick}:Props) {
+export default function BaseButton({variant="contained", size,children, onClick}:Props) {
   return (
     <Button variant={variant} size={size} onClick={onClick}>{children}</Button>
   )

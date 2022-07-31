@@ -6,9 +6,11 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 interface ISelectItem {
+  id: string| number
 text: string
 value: string| number| undefined
 }
+
 interface Props {
   selectList: ISelectItem[]
   label: string
@@ -19,7 +21,7 @@ interface Props {
   handleChange: (event: SelectChangeEvent) => void
 }
 
-export default function DefaultSelect({selectList, label,selected, message,handleChange}: Props) {
+export default function BaseSelect({selectList, label,selected, message,handleChange}: Props) {
 
   return (
     <div>
@@ -33,7 +35,7 @@ export default function DefaultSelect({selectList, label,selected, message,handl
           onChange={handleChange}
         >
           {
-            selectList.map(item => <MenuItem key={item.value} value={item.value}>{item.text}</MenuItem>)
+            selectList.map(item => <MenuItem key={item.id} value={item.value}>{item.text}</MenuItem>)
           }
         </Select>
         <FormHelperText>{message}</FormHelperText>

@@ -13,7 +13,7 @@ interface Props {
 
 }
 
-export default function DefaultDatePicker({label, value, handleChange}: Props) {
+export default function BaseDatePicker({label="달력", value, handleChange}: Props) {
 
 
   return (
