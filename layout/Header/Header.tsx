@@ -1,12 +1,55 @@
-import React from "react";
-import { FC } from "react";
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import SearchIcon from '@mui/icons-material/Search';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import Link from "next/link";
 
-const Header: FC = () => {
+export default function DrawerAppBar() {
+
     return (
-        <header>
-            <h2>This is Header</h2>
-        </header>
-    )
+        <AppBar
+            component="nav"
+            position="fixed"
+            sx={{
+                width: 572,
+                left: 674
+            }}
+        >
+            <Toolbar>
+                <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{
+                        flexGrow: 1,
+                    }}
+                >
+                    <a>CAMPOREST LOGO</a>
+                </Typography>
+                <Box sx={{display: {xs: 'none', sm: 'block'}}}>
+                    <Link href={'/search'}>
+                        <Button
+                            sx={{color: '#fff'}}
+                        >
+                            <SearchIcon/>
+                        </Button>
+                    </Link>
+                    <Link href={'/like'}>
+                        <Button sx={{color: '#fff'}}>
+                            <FavoriteBorderIcon/>
+                        </Button>
+                    </Link>
+                    <Link href={'/cart'}>
+                        <Button sx={{color: '#fff'}}>
+                            <ShoppingBasketIcon/>
+                        </Button>
+                    </Link>
+                </Box>
+            </Toolbar>
+        </AppBar>
+    );
 }
-
-export default Header
