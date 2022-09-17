@@ -8,22 +8,18 @@ interface Props {
     children: React.ReactNode,
 }
 
-const MainWidth = styled.div`
-    width: 30%;
-    margin: 0 auto;
-`
 
 const Layout: FC<Props> = (props) => {
 
 
     return (
-        <MainWidth>
+        <div className="layoutContainer layoutWidth">
             <Header />
             <main>
                 {props.children}
             </main>
             <Footer />
-        </MainWidth>
+        </div>
     )
 }
 

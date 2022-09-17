@@ -3,19 +3,11 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Link from "next/link";
+import styles from "@cmStyles/module/footer.module.scss";
 
 export default function BottomAppBar() {
     return (
-        <AppBar
-            position="fixed"
-            color="primary"
-            sx={{
-                top: 'auto',
-                bottom: 0,
-                width: 572,
-                left: 674
-            }}
-        >
+        <div className={styles.footerBar + " layoutWidth"}>
             <Toolbar
                 sx={{ justifyContent: "space-between" }}
             >
@@ -45,6 +37,6 @@ export default function BottomAppBar() {
                     </IconButton>
                 </Link>
             </Toolbar>
-        </AppBar>
+        </div>
     );
 }

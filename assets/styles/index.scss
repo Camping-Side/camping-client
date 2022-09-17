@@ -1,0 +1,31 @@
+@import "./var";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.layoutContainer {
+  margin : 0 auto;
+  height: 100vh;
+}
+
+@media only screen and (min-width: 0px) and (max-width: 410px) {
+  .layoutWidth {
+    min-width: 320px;
+    max-width: 380px;
+  }
+}
+@media only screen and (min-width: 410px) and (max-width: 700px) {
+  .layoutWidth {
+    min-width: 400px;
+    max-width: 550px;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .layoutWidth {
+    min-width: 650px;
+    max-width: 650px;
+  }
+}

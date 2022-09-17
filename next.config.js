@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require("path");
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
@@ -25,7 +26,17 @@ module.exports = withBundleAnalyzer({
                     }
                 ],
             },
+            // resolve: {
+            //     ...config.resolve,
+            //     alias: {
+            //         ...config.resolve.alias,
+            //         "@cmStyles": path.resolve(__dirname, "src/assets/styles")
+            //     },
+            // },
             plugins,
         }
     },
+    sassOptions: {
+        includePaths: [path.join(__dirname, "assets/styles")]
+    }
 });

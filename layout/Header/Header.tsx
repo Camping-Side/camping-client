@@ -1,5 +1,4 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -8,18 +7,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import Link from "next/link";
+import styles from "@cmStyles/module/header.module.scss";
+
+
 
 export default function DrawerAppBar() {
 
     return (
-        <AppBar
-            component="nav"
-            position="fixed"
-            sx={{
-                width: 572,
-                left: 674
-            }}
-        >
+        <div className={styles.appBar}>
             <Toolbar>
                 <Typography
                     variant="h6"
@@ -38,6 +33,7 @@ export default function DrawerAppBar() {
                             <SearchIcon/>
                         </Button>
                     </Link>
+                    <span className=""></span>
                     <Link href={'/like'}>
                         <Button sx={{color: '#fff'}}>
                             <FavoriteBorderIcon/>
@@ -50,6 +46,6 @@ export default function DrawerAppBar() {
                     </Link>
                 </Box>
             </Toolbar>
-        </AppBar>
+        </div>
     );
 }
