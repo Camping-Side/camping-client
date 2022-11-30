@@ -2,7 +2,6 @@ import React from "react";
 import { FC } from "react";
 import Footer from "./Footer/Footer";
 import Header from "./Header/Header";
-import styled from '@emotion/styled';
 
 interface Props {
     children: React.ReactNode,

@@ -51,7 +51,8 @@ const Login: FC = () => {
     };
 
     const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        e.preventDefault()
+        console.log('???????????')
     };
 
     const handleAgree = (e: React.FormEvent<HTMLInputElement>) => {
@@ -81,7 +82,7 @@ const Login: FC = () => {
                                         type="email"
                                         id="email"
                                         name="email"
-                                        label="이메일 주소"
+                                        label="email"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -106,11 +107,14 @@ const Login: FC = () => {
                                         }
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6}>
                                     <FormControlLabel
                                         control={<Checkbox onChange={handleAgree} color="primary" />}
                                         label="remember"
                                     />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Link href="/user/find">회원정보찾기</Link> / <Link href="/user/join">회원가입</Link>
                                 </Grid>
                             </Grid>
                             <Button
@@ -123,6 +127,55 @@ const Login: FC = () => {
                                 로그인
                             </Button>
                         </FormControl>
+                    </Boxs>
+                </Box>
+            </Container>
+            <Container component="main" maxWidth="xs">
+                <Box
+                    sx={{
+                        marginTop: 8,
+                    }}
+                >
+                    <Typography component="h1" variant="h5">
+                        SNS 계정으로 간편 로그인 / 회원가입
+                    </Typography>
+                    <Boxs component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            size="large"
+                        >
+                            카카오 로그인
+                        </Button>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            size="large"
+                        >
+                            네이버 로그인
+                        </Button>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            size="large"
+                        >
+                            구글 로그인
+                        </Button>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            size="large"
+                        >
+                            로그인에 어려움이 있나요?
+                        </Button>
                     </Boxs>
                 </Box>
             </Container>
