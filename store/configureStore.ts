@@ -12,14 +12,12 @@ import createSagaMiddleware from 'redux-saga';
 
 const configureStore = () => {
     const sagaMiddleware = createSagaMiddleware();
-    // const middlewares = [sagaMiddleware, loggerMiddleware];
     const middlewares = [sagaMiddleware];
-    // 배포용, 개발용 미들웨어 구분
     const enhancer = process.env.NODE_ENV === "production"
         ?   compose(applyMiddleware(...middlewares ))
         :   composeWithDevTools(applyMiddleware(...middlewares))
     const store = createStore(reducer, enhancer);
-    // store.sagaTask = sagaMiddleware.run(rootSaga);
+    store.sagaTask = sagaMiddleware.run(rootSaga);
     return store;
 };
 
