@@ -1,11 +1,9 @@
-import React, {FC, useCallback} from "react";
+import React, {FC} from "react";
 import Layout from "@layout/Layout";
 import Link from "next/link";
 import {
-    Unstable_Grid2 as Grid2,
     TextField,
     FormControl,
-    InputLabel,
     OutlinedInput,
     InputAdornment,
     IconButton,
@@ -17,10 +15,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styled from '@emotion/styled';
 import SocialLoginComponent from "../../components/user/SocialLogin";
-import { useDispatch, useSelector } from 'react-redux';
-import useInput from '../../hooks/useInput';
-import { loginRequestAction } from '../../reducers/user';
-
+import { useDispatch } from 'react-redux';
+import { login } from '../../actions/user';
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
 `;
@@ -34,17 +30,12 @@ interface State {
 const Login: FC = () => {
 
     const dispatch = useDispatch();
-    // @ts-ignore
-    const { logInLoading } = useSelector((state) => state.user);
 
     const [values, setValues] = React.useState<State>({
        id: '',
        password: '',
        showPassword: false,
     });
-
-    const [email, onChangeEmail] = useInput();
-    const [password, onChangePassword] = useInput();
 
     const handleChange =
         (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,17 +53,13 @@ const Login: FC = () => {
         event.preventDefault();
     };
 
-    /*const handleSubmit = useCallback(() => {
-        dispatch({
-            type: LOG_IN_REQUEST,
-            data: {},
-        });
-    }, [email, password]);*/
-
     const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('handleSubmit')
-        dispatch(loginRequestAction({ email, password }));
+        // @ts-ignore
+        dispatch(login({
+            email: values.id,
+            password: values.password
+        }));
     };
 
     const handleAgree = (e: React.FormEvent<HTMLInputElement>) => {
@@ -103,6 +90,8 @@ const Login: FC = () => {
                                         id="email"
                                         name="email"
                                         label="email"
+                                        value={values.id}
+                                        onChange={handleChange('id')}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>

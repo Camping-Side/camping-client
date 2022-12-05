@@ -1,53 +1,41 @@
-import produce from '../util/produce';
+import { createSlice } from '@reduxjs/toolkit';
+import {
+    login,
+} from '../actions/user';
 
+// 기본 state
 export const initialState = {
-    logInLoading: false, // 로그인 시도중
-    logInDone: false,
-    logInError: null,
-    user: {
-        isLoggedIn: false,
-        id: '',
-        name: '',
-    }
-}
+    me: null, // 내 정보
+    userInfo: null, // 유저 정보
+    loginLoading: false, // 로그인 시도중
+    loginDone: false,
+    loginError: null,
+};
 
-export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
-export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
-export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
+// toolkit 사용방법
+const userSlice = createSlice({
+    name: 'user',
+    initialState,
+    reducers: {
 
-export const loginRequestAction = (data: any) => ({
-    type: LOG_IN_REQUEST,
-    data,
+    },
+    extraReducers: (builder) => builder
+        // login
+        .addCase(login.pending, (state) => {
+            console.log('state: ', state)
+            state.loginLoading = true;
+            state.loginDone = false;
+            state.loginError = null;
+        })
+        .addCase(login.fulfilled, (state, action) => {
+            state.loginLoading = false;
+            state.me = action.payload;
+            state.loginDone = true;
+        })
+        .addCase(login.rejected, (state: any, action) => {
+            state.loginLoading = false;
+            state.loginError = action.payload;
+        })
 });
 
-const dummyUser = (data: any) => ({
-    ...data,
-    id: 1,
-    name: '나상엽'
-});
-
-const reducer = (state = initialState, action: any) => {
-    return produce(state, (draft: any) => {
-        console.log('reducers action: ', action)
-        switch (action.type) {
-            case LOG_IN_REQUEST:
-                draft.logInLoading = true;
-                draft.logInError = null;
-                draft.logInDone = false;
-                break;
-            case LOG_IN_SUCCESS:
-                draft.logInLoading = false;
-                draft.me = dummyUser(action.data);
-                draft.logInDone = true;
-                break;
-            case LOG_IN_FAILURE:
-                draft.logInLoading = false;
-                draft.logInError = action.error;
-                break;
-            default:
-                break;
-        }
-    })
-}
-
-export default reducer;
+export default userSlice;
