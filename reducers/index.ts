@@ -1,19 +1,20 @@
-import { HYDRATE } from "next-redux-wrapper";
-import { combineReducers } from "redux";
-import user from "./user"
+import { combineReducers } from 'redux';
+import { HYDRATE } from 'next-redux-wrapper';
+
+import userSlice from './user';
 
 // (이전상태, 액션) => 다음상태
 const rootReducer = (state: any, action: any) => {
-    switch(action.type) {
+    switch (action.type) {
         case HYDRATE:
             return action.payload;
         default: {
-            const combineReducer = combineReducers({
-                user,
-            })
-            return combineReducer(state, action);
+            const combinedReducer = combineReducers({
+                user: userSlice.reducer,
+            });
+            return combinedReducer(state, action);
         }
     }
-}
+};
 
 export default rootReducer;
