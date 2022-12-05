@@ -5,6 +5,7 @@ import Layout from "@layout/Layout";
 import Link from "next/link";
 import userSlice from "../reducers/user";
 import {useDispatch, useSelector} from "react-redux";
+import BaseButton from "@cp/common/BaseButton";
 
 const App: FC = () => {
 
@@ -20,7 +21,7 @@ const App: FC = () => {
         <Layout>
             <Link href="/sample">샘플바로가기</Link><br/>
             { !loginDone && <Link href="/user/login">로그인 바로가기</Link>}
-            {  loginDone && <button onClick={logoutAction}>로그아웃</button>}
+            {  loginDone && <BaseButton variant="contained" size="large" onClick={logoutAction}>로그아웃</BaseButton>}
         </Layout>
     )
 }

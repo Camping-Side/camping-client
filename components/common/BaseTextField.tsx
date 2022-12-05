@@ -9,6 +9,8 @@ interface Props {
   error?: boolean;
   required?:boolean
   message?: string;
+  type?: string;
+  onChange?: any
 }
 
 export default function BaseTextField({
@@ -18,6 +20,8 @@ export default function BaseTextField({
   error,
   required,
   message,
+  type,
+  onChange
 }: Props) {
   return (
     <div>
@@ -28,6 +32,8 @@ export default function BaseTextField({
         label={label}
         defaultValue={value}
         helperText={message}
+        type={type}
+        onChange={onChange}
       />
     </div>
   );
