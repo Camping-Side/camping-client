@@ -10,3 +10,4 @@ export const login = createAsyncThunk('user/login', async (data, { rejectWithVal
     return rejectWithValue(error.response.data);
   }
 });
+

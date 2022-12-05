@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useEffect} from "react";
 import Layout from "@layout/Layout";
 import Link from "next/link";
 import {
@@ -15,8 +15,10 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styled from '@emotion/styled';
 import SocialLoginComponent from "../../components/user/SocialLogin";
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { login } from '../../actions/user';
+import Router from 'next/router';
+
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
 `;
@@ -30,6 +32,16 @@ interface State {
 const Login: FC = () => {
 
     const dispatch = useDispatch();
+
+    const { loginDone } = useSelector((state: any) => state.user)
+
+    console.log('loginDone: ', loginDone)
+    useEffect(()=>{
+        console.log('loginDone: ', loginDone)
+        if(loginDone){
+            Router.push('/')
+        }
+    },[loginDone])
 
     const [values, setValues] = React.useState<State>({
        id: '',

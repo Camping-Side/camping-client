@@ -5,8 +5,7 @@ import {
 
 // 기본 state
 export const initialState = {
-    me: null, // 내 정보
-    userInfo: null, // 유저 정보
+    loginInfo: null,
     loginLoading: false, // 로그인 시도중
     loginDone: false,
     loginError: null,
@@ -17,10 +16,13 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-
+        logout(state){
+            state.loginDone = false;
+            state.loginInfo = null;
+        }
     },
     extraReducers: (builder) => builder
-        // login
+        // 로그인
         .addCase(login.pending, (state) => {
             console.log('state: ', state)
             state.loginLoading = true;
@@ -29,7 +31,7 @@ const userSlice = createSlice({
         })
         .addCase(login.fulfilled, (state, action) => {
             state.loginLoading = false;
-            state.me = action.payload;
+            state.loginInfo = action.payload.resultData;
             state.loginDone = true;
         })
         .addCase(login.rejected, (state: any, action) => {
