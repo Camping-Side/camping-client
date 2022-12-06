@@ -55,7 +55,7 @@ const Join: FC = () => {
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     const joinParam = {
       username: name,
