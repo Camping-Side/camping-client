@@ -3,7 +3,7 @@ import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
 import rootReducer from '../reducers';
 
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = process.env.NEXT_PUBLIC_HOST === 'local' || process.env.NEXT_PUBLIC_HOST === 'dev';
 const createStore = () => {
     const middleware = getDefaultMiddleware();
     if (isDev) {
