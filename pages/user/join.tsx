@@ -1,57 +1,148 @@
 /** @jsxImportSource @emotion/react */
-import React, {useState} from "react";
-import styled from "@emotion/styled";
-import { FC } from "react";
-import {IconButton, InputAdornment, OutlinedInput, SelectChangeEvent} from "@mui/material";
-import BaseButton from "../../components/common/BaseButton";
+import React, { FC, useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  FormControl,
+  Grid,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import BaseSelect from "../../components/common/BaseSelect";
 import BaseTextField from "../../components/common/BaseTextField";
-import BaseDatePicker from "../../components/common/BaseDatePicker";
 import Layout from "../../layout/Layout";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Visibility from "@mui/icons-material/Visibility";
+import useInputs from "../../hooks/useInput";
+import styled from "@emotion/styled";
+import { join } from "../../actions/user";
+import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
+import userSlice from "@reducers/user";
+
+const Boxs = styled(Box)`
+  padding-bottom: 40px !important;
+`;
 
 const SAMPLE_SELECT_LIST = [
-  {id:0,text: 'None', value:""},
-  {id:1,text: '10', value:"10"},
-  {id:2,text: '20', value:"20"},
-  {id:3,text: '30', value:"30"},
-]
+  { id: 0, text: "None", value: "" },
+  { id: 1, text: "10", value: "10" },
+  { id: 2, text: "20", value: "20" },
+  { id: 3, text: "30", value: "30" },
+];
 
 const Join: FC = () => {
+  const dispatch = useDispatch();
+
+  const { joinDone } = useSelector((state: any) => state.user);
+
+  useEffect(() => {
+    if (joinDone) {
+      dispatch(userSlice.actions.joinDone());
+      Router.push("/user/login");
+    }
+  }, [joinDone]);
+
   // select box 함수
+  const [age, setAge] = useState("");
   const handleAgeChange = (event: SelectChangeEvent) => {
     setAge(event.target.value);
   };
-  const handlePasswordChange = (event: SelectChangeEvent) => {
-    setPassword(event.target.value);
+
+  const [{ name, id, password }, onChange, reset] = useInputs({
+    name: "",
+    id: "",
+    password: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const joinParam = {
+      username: name,
+      email: id,
+      password: password,
+      age: age,
+    };
+    // @ts-ignore
+    dispatch(join(joinParam));
   };
 
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-
   return (
-      <Layout>
-        <div>
-          <h1>회원가입</h1>
-          <section>
-            <BaseTextField id="outlined-error" label="이름" message="이름을 입력해주세요" value={name} error={false} required={true} onChange={setName}/>
-          </section>
-          <section>
-            <BaseTextField id="outlined-required" label="아이디" message="아이디를 입력해주세요" value={""} error={false} required={true}/>
-          </section>
-           <section>
-            <BaseTextField id="outlined-error" label="비밀번호" message="비밀번호를 입력해주세요" value={""} error={false} required={true} type='password'/>
-          </section>
-
-          <section>
-            <BaseSelect selectList={SAMPLE_SELECT_LIST} label={"나이"} selected={age} handleChange={handleAgeChange} message={"나이를 선택해 주세요"}/>
-          </section>
-          <BaseButton variant="contained" size="large">회원가입</BaseButton>
-        </div>
-      </Layout>
+    <Layout>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            회원가입
+          </Typography>
+          <Boxs component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <FormControl component="fieldset" variant="standard">
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <BaseTextField
+                    id="outlined-error"
+                    name="name"
+                    label="이름"
+                    message="이름을 입력해주세요"
+                    value={name}
+                    error={false}
+                    required={true}
+                    onChange={onChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <BaseTextField
+                    id="outlined-required"
+                    name="id"
+                    label="아이디"
+                    message="아이디를 입력해주세요"
+                    value={id}
+                    error={false}
+                    required={true}
+                    onChange={onChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <BaseTextField
+                    id="outlined-error"
+                    name="password"
+                    label="비밀번호"
+                    message="비밀번호를 입력해주세요"
+                    value={password}
+                    error={false}
+                    required={true}
+                    type="password"
+                    onChange={onChange}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <BaseSelect
+                    selectList={SAMPLE_SELECT_LIST}
+                    label={"나이"}
+                    selected={age}
+                    handleChange={handleAgeChange}
+                    message={"나이를 선택해 주세요"}
+                    required={true}
+                  />
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                size="large"
+              >
+                회원가입
+              </Button>
+            </FormControl>
+          </Boxs>
+        </Box>
+      </Container>
+    </Layout>
   );
 };
 

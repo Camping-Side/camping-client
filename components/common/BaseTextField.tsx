@@ -7,10 +7,11 @@ interface Props {
   value: string | number;
   label?: string;
   error?: boolean;
-  required?:boolean
+  required?: boolean;
   message?: string;
   type?: string;
-  onChange?: any
+  onChange?: any;
+  name?: string;
 }
 
 export default function BaseTextField({
@@ -21,14 +22,16 @@ export default function BaseTextField({
   required,
   message,
   type,
-  onChange
+  onChange,
+  name,
 }: Props) {
   return (
     <div>
       <TextField
+        id={id}
+        name={name}
         error={error}
         required={required}
-        id={id}
         label={label}
         defaultValue={value}
         helperText={message}
