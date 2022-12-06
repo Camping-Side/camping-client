@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Layout from "@layout/Layout";
 import Link from "next/link";
 import {
@@ -40,6 +40,8 @@ const Login: FC = () => {
 
   const { loginDone } = useSelector((state: any) => state.user);
 
+  const [rememberChecked, setRememberChecked] = useState(false);
+
   useEffect(() => {
     if (loginDone) {
       Router.push("/");
@@ -76,8 +78,8 @@ const Login: FC = () => {
     dispatch(login({ email: values.id, password: values.password }));
   };
 
-  const handleAgree = (e: React.FormEvent<HTMLInputElement>) => {
-    // setChecked(event.target.checked);
+  const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberChecked(event.target.checked);
   };
 
   return (
@@ -142,7 +144,7 @@ const Login: FC = () => {
                 <Grid item xs={6}>
                   <FormControlLabel
                     control={
-                      <Checkbox onChange={handleAgree} color="primary" />
+                      <Checkbox onChange={checkRemember} color="primary" />
                     }
                     label="remember"
                   />
