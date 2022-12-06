@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import Layout from "@layout/Layout";
 import Link from "next/link";
 import {
@@ -29,7 +29,7 @@ const Boxs = styled(Box)`
   padding-bottom: 40px !important;
 `;
 
-interface State {
+interface loginInfo {
   id: string;
   password: string;
   showPassword: boolean;
@@ -38,22 +38,40 @@ interface State {
 const Login: FC = () => {
   const dispatch = useDispatch();
 
-  const { loginDone } = useSelector((state: any) => state.user);
-
-  useEffect(() => {
-    if (loginDone) {
-      Router.push("/");
-    }
-  }, [loginDone]);
-
-  const [values, setValues] = React.useState<State>({
+  const [values, setValues] = useState<loginInfo>({
     id: "",
     password: "",
     showPassword: false,
   });
+  const [rememberChecked, setRememberChecked] = useState(false);
+
+  const { loginDone } = useSelector((state: any) => state.user);
+
+  //mounted
+  useEffect(() => {
+      //remember 체크
+      if(localStorage.getItem('camporest_remember')){
+        const rememberId = localStorage.getItem('camporest_remember') || ""
+        setValues({
+          ...values,
+          id: rememberId
+        })
+        setRememberChecked(true)
+      }
+  }, []);
+
+  //loginDone
+  useEffect(() => {
+    if (loginDone) {
+      if(rememberChecked && !localStorage.getItem('camporest_remember')){
+        localStorage.setItem('camporest_remember', values.id)
+      }
+      Router.push("/");
+    }
+  }, [loginDone]);
 
   const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (prop: keyof loginInfo) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setValues({ ...values, [prop]: event.target.value });
     };
 
@@ -70,14 +88,14 @@ const Login: FC = () => {
     event.preventDefault();
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
     e.preventDefault();
     // @ts-ignore
     dispatch(login({ email: values.id, password: values.password }));
   };
 
-  const handleAgree = (e: React.FormEvent<HTMLInputElement>) => {
-    // setChecked(event.target.checked);
+  const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberChecked(event.target.checked);
   };
 
   return (
@@ -94,7 +112,6 @@ const Login: FC = () => {
           </Typography>
           <Boxs
             component="form"
-            noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
@@ -142,7 +159,7 @@ const Login: FC = () => {
                 <Grid item xs={6}>
                   <FormControlLabel
                     control={
-                      <Checkbox onChange={handleAgree} color="primary" />
+                      <Checkbox onChange={checkRemember} checked={rememberChecked} color="primary" />
                     }
                     label="remember"
                   />
