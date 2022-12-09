@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const DOMAIN = process.env.NEXT_PUBLIC_API_URL;
 
 export const login = createAsyncThunk(
-  "user/login",
+  "auth/login",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(DOMAIN + "/api/v1/auth/login", data);
@@ -16,7 +16,7 @@ export const login = createAsyncThunk(
 );
 
 export const join = createAsyncThunk(
-  "user/join",
+  "auth/join",
   async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(DOMAIN + "/api/v1/auth/sign", data);

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login, join } from "../actions/user";
+import { login, join } from "../actions/auth";
 
 // 기본 state
 export const initialState = {
@@ -13,8 +13,8 @@ export const initialState = {
 };
 
 // toolkit 사용방법
-const userSlice = createSlice({
-  name: "user",
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
     logout(state) {
@@ -58,4 +58,4 @@ const userSlice = createSlice({
       }),
 });
 
-export default userSlice;
+export default authSlice;

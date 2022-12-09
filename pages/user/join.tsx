@@ -15,13 +15,18 @@ import BaseTextField from "../../components/common/BaseTextField";
 import Layout from "../../layout/Layout";
 import useInputs from "../../hooks/useInput";
 import styled from "@emotion/styled";
-import { join } from "../../actions/user";
+import { join } from "../../actions/auth";
+import { checkPhoneDup } from "../../actions/account";
 import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
-import userSlice from "@reducers/user";
+import authSlice from "@reducers/auth";
 
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
+`;
+
+const CheckDupBtn = styled(Button)`
+  margin-top: 7pt;
 `;
 
 const SAMPLE_SELECT_LIST = [
@@ -34,34 +39,62 @@ const SAMPLE_SELECT_LIST = [
 const Join: FC = () => {
   const dispatch = useDispatch();
 
-  const { joinDone } = useSelector((state: any) => state.user);
+  const { joinDone } = useSelector((state: any) => state.auth);
+  const { isPhoneDup, checkPhoneDupDone } = useSelector(
+    (state: any) => state.account
+  );
 
   useEffect(() => {
     if (joinDone) {
-      dispatch(userSlice.actions.joinDone());
+      dispatch(authSlice.actions.joinDone());
       Router.push("/user/login");
     }
   }, [joinDone]);
 
   // select box 함수
   const [age, setAge] = useState("");
+
   const handleAgeChange = (event: SelectChangeEvent) => {
     setAge(event.target.value);
   };
 
-  const [{ name, id, password }, onChange, reset] = useInputs({
+  const [{ name, id, password, phone }, onChange, reset] = useInputs({
     name: "",
     id: "",
     password: "",
+    phone: "",
   });
+
+  const handleCheckPhoneDup = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!phone) {
+      alert("휴대폰번호를 입력하세요.");
+      return;
+    }
+    const checkPhoneDupParam = {
+      phone: phone,
+    };
+    // @ts-ignore
+    dispatch(checkPhoneDup(checkPhoneDupParam));
+  };
+
+  useEffect(() => {
+    if (isPhoneDup) {
+      alert("중복된 휴대폰입니다.");
+    }
+  }, [checkPhoneDupDone]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!checkPhoneDupDone) {
+      alert("휴대폰 중복확인을 해주세요.");
+      return;
+    }
     const joinParam = {
       username: name,
       email: id,
       password: password,
       age: age,
+      phone: phone,
     };
     // @ts-ignore
     dispatch(join(joinParam));
@@ -93,6 +126,27 @@ const Join: FC = () => {
                     required={true}
                     onChange={onChange}
                   />
+                </Grid>
+                <Grid item xs={8}>
+                  <BaseTextField
+                    id="outlined-error"
+                    name="phone"
+                    label="휴대폰번호"
+                    message="휴대폰번호를 입력해주세요"
+                    value={phone}
+                    error={false}
+                    required={true}
+                    onChange={onChange}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <CheckDupBtn
+                    variant="outlined"
+                    size="medium"
+                    onClick={handleCheckPhoneDup}
+                  >
+                    중복확인
+                  </CheckDupBtn>
                 </Grid>
                 <Grid item xs={12}>
                   <BaseTextField
@@ -135,6 +189,9 @@ const Join: FC = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
                 size="large"
+                disabled={
+                  !checkPhoneDupDone || (checkPhoneDupDone && isPhoneDup)
+                }
               >
                 회원가입
               </Button>
