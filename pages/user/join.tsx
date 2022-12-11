@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useEffect, useState} from "react";
 import {
   Box,
   Button,
@@ -16,10 +16,11 @@ import Layout from "../../layout/Layout";
 import useInputs from "../../hooks/useInput";
 import styled from "@emotion/styled";
 import { join } from "../../actions/auth";
-import { checkPhoneDup } from "../../actions/account";
+import { checkPhoneDup, checkEmailDup } from "../../actions/account";
 import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
 import authSlice from "@reducers/auth";
+import accountSlice from "@reducers/account";
 
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
@@ -40,9 +41,15 @@ const Join: FC = () => {
   const dispatch = useDispatch();
 
   const { joinDone } = useSelector((state: any) => state.auth);
-  const { isPhoneDup, checkPhoneDupDone } = useSelector(
+  const { isPhoneDup, checkPhoneDupDone, isEmailDup, checkEmailDupDone } = useSelector(
     (state: any) => state.account
   );
+
+  useEffect(()=>{
+    return()=>{
+      dispatch(accountSlice.actions.resetDupChecked());
+    }
+  },[]);
 
   useEffect(() => {
     if (joinDone) {
@@ -50,6 +57,22 @@ const Join: FC = () => {
       Router.push("/user/login");
     }
   }, [joinDone]);
+
+  useEffect(() => {
+    if (checkPhoneDupDone && isPhoneDup) {
+      alert("중복된 휴대폰번호입니다.");
+    } else if(checkPhoneDupDone && !isPhoneDup){
+      alert("사용가능한 휴대폰번호입니다.");
+    }
+  }, [checkPhoneDupDone, isPhoneDup]);
+
+  useEffect(() => {
+    if (checkEmailDupDone && isEmailDup) {
+      alert("중복된 아이디(이메일)입니다.");
+    } else if(checkEmailDupDone && !isEmailDup){
+      alert("사용가능한 아이디(이메일)입니다.");
+    }
+  }, [checkEmailDupDone, isEmailDup]);
 
   // select box 함수
   const [age, setAge] = useState("");
@@ -77,15 +100,21 @@ const Join: FC = () => {
     dispatch(checkPhoneDup(checkPhoneDupParam));
   };
 
-  useEffect(() => {
-    if (isPhoneDup) {
-      alert("중복된 휴대폰입니다.");
+  const handleCheckEmailDup = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!id) {
+      alert("아이디(이메일)을 입력하세요.");
+      return;
     }
-  }, [checkPhoneDupDone]);
+    const checkEmailDupParam = {
+      email: id,
+    };
+    // @ts-ignore
+    dispatch(checkEmailDup(checkEmailDupParam));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!checkPhoneDupDone) {
+    if (isPhoneDup) {
       alert("휴대폰 중복확인을 해주세요.");
       return;
     }
@@ -148,17 +177,26 @@ const Join: FC = () => {
                     중복확인
                   </CheckDupBtn>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={8}>
                   <BaseTextField
                     id="outlined-required"
                     name="id"
                     label="아이디"
-                    message="아이디를 입력해주세요"
+                    message="아이디(이메일)를 입력해주세요"
                     value={id}
                     error={false}
                     required={true}
                     onChange={onChange}
                   />
+                </Grid>
+                <Grid item xs={4}>
+                  <CheckDupBtn
+                      variant="outlined"
+                      size="medium"
+                      onClick={handleCheckEmailDup}
+                  >
+                    중복확인
+                  </CheckDupBtn>
                 </Grid>
                 <Grid item xs={12}>
                   <BaseTextField
@@ -190,7 +228,7 @@ const Join: FC = () => {
                 sx={{ mt: 3, mb: 2 }}
                 size="large"
                 disabled={
-                  !checkPhoneDupDone || (checkPhoneDupDone && isPhoneDup)
+                  !checkPhoneDupDone || isPhoneDup || !checkEmailDupDone || isEmailDup
                 }
               >
                 회원가입
