@@ -45,7 +45,7 @@ const Login: FC = () => {
   });
   const [rememberChecked, setRememberChecked] = useState(false);
 
-  const { loginDone } = useSelector((state: any) => state.user);
+  const { loginDone } = useSelector((state: any) => state.auth);
 
   //mounted
   useEffect(() => {

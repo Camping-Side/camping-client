@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, {FC, useEffect, useState} from "react";
+import {SubmitHandler, useForm} from "react-hook-form";
 import {
   Box,
   Button,
@@ -9,6 +10,7 @@ import {
   Grid,
   SelectChangeEvent,
   Typography,
+  TextField
 } from "@mui/material";
 import BaseSelect from "../../components/common/BaseSelect";
 import BaseTextField from "../../components/common/BaseTextField";
@@ -21,6 +23,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
 import authSlice from "@reducers/auth";
 import accountSlice from "@reducers/account";
+
+type Inputs = {
+  name: string,
+  phone: string,
+};
 
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
@@ -39,7 +46,7 @@ const SAMPLE_SELECT_LIST = [
 
 const Join: FC = () => {
   const dispatch = useDispatch();
-
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
   const { joinDone } = useSelector((state: any) => state.auth);
   const { isPhoneDup, checkPhoneDupDone, isEmailDup, checkEmailDupDone } = useSelector(
     (state: any) => state.account
@@ -81,14 +88,15 @@ const Join: FC = () => {
     setAge(event.target.value);
   };
 
-  const [{ name, id, password, phone }, onChange, reset] = useInputs({
+  /*const [{ name, id, password, phone }, onChange, reset] = useInputs({
     name: "",
     id: "",
     password: "",
     phone: "",
-  });
+  });*/
 
   const handleCheckPhoneDup = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const phone = watch("phone");
     if (!phone) {
       alert("휴대폰번호를 입력하세요.");
       return;
@@ -101,7 +109,7 @@ const Join: FC = () => {
   };
 
   const handleCheckEmailDup = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!id) {
+    /*if (!id) {
       alert("아이디(이메일)을 입력하세요.");
       return;
     }
@@ -109,25 +117,27 @@ const Join: FC = () => {
       email: id,
     };
     // @ts-ignore
-    dispatch(checkEmailDup(checkEmailDupParam));
+    dispatch(checkEmailDup(checkEmailDupParam));*/
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (isPhoneDup) {
-      alert("휴대폰 중복확인을 해주세요.");
-      return;
-    }
-    const joinParam = {
-      username: name,
-      email: id,
-      password: password,
-      age: age,
-      phone: phone,
-    };
-    // @ts-ignore
-    dispatch(join(joinParam));
-  };
+  /*const onSubmit = (data: any) => {
+    console.log('data: ', data)
+    // if (isPhoneDup) {
+    //   alert("휴대폰 중복확인을 해주세요.");
+    //   return;
+    // }
+    // const joinParam = {
+    //   username: name,
+    //   email: id,
+    //   password: password,
+    //   age: age,
+    //   phone: phone,
+    // };
+    // // @ts-ignore
+    // dispatch(join(joinParam));
+  };*/
+
+  const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
 
   return (
     <Layout>
@@ -141,31 +151,25 @@ const Join: FC = () => {
           <Typography component="h1" variant="h5">
             회원가입
           </Typography>
-          <Boxs component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Boxs component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
             <FormControl component="fieldset" variant="standard">
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <BaseTextField
-                    id="outlined-error"
-                    name="name"
-                    label="이름"
-                    message="이름을 입력해주세요"
-                    value={name}
-                    error={false}
-                    required={true}
-                    onChange={onChange}
+                  <TextField
+                      id="outlined-required"
+                      label="이름"
+                      {...register("name", { required: true })}
+                      error={ !!errors.name }
+                      helperText="이름을 입력하세요."
                   />
                 </Grid>
                 <Grid item xs={8}>
-                  <BaseTextField
-                    id="outlined-error"
-                    name="phone"
-                    label="휴대폰번호"
-                    message="휴대폰번호를 입력해주세요"
-                    value={phone}
-                    error={false}
-                    required={true}
-                    onChange={onChange}
+                  <TextField
+                      id="outlined-required"
+                      label="휴대폰번호"
+                      {...register("phone", { required: true })}
+                      error={ !!errors.phone || isPhoneDup}
+                      helperText={ isPhoneDup ? "중복된 휴대폰번호입니다" : "휴대폰번호를 입력하세요." }
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -180,13 +184,8 @@ const Join: FC = () => {
                 <Grid item xs={8}>
                   <BaseTextField
                     id="outlined-required"
-                    name="id"
-                    label="아이디"
+                    label="아이디(이메일)"
                     message="아이디(이메일)를 입력해주세요"
-                    value={id}
-                    error={false}
-                    required={true}
-                    onChange={onChange}
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -204,11 +203,7 @@ const Join: FC = () => {
                     name="password"
                     label="비밀번호"
                     message="비밀번호를 입력해주세요"
-                    value={password}
-                    error={false}
-                    required={true}
                     type="password"
-                    onChange={onChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -218,11 +213,10 @@ const Join: FC = () => {
                     selected={age}
                     handleChange={handleAgeChange}
                     message={"나이를 선택해 주세요"}
-                    required={true}
                   />
                 </Grid>
               </Grid>
-              <Button
+              {/*<Button
                 type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
@@ -230,6 +224,14 @@ const Join: FC = () => {
                 disabled={
                   !checkPhoneDupDone || isPhoneDup || !checkEmailDupDone || isEmailDup
                 }
+              >
+                회원가입
+              </Button>*/}
+              <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  size="large"
               >
                 회원가입
               </Button>

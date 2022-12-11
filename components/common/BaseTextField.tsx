@@ -3,8 +3,8 @@ import React from "react";
 import { NumberLiteralType } from "typescript";
 
 interface Props {
-  id: string;
-  value: string | number;
+  id?: string;
+  value?: string | number;
   label?: string;
   error?: boolean;
   required?: boolean;
