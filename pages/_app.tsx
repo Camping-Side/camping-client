@@ -7,17 +7,6 @@ import "@cmStyles/index.scss";
 // 전체 페이지에 공통적인 적용함
 const Camping: FunctionComponent<{Component: any, pageProps: any}> = ({ Component, pageProps }) => {
 
-    //https://velog.io/@eunddodi/React-모바일-웹-앱-100vh-실제-화면-크기로-맞추기--------
-    // function setScreenSize() {
-    //     let vh = window.innerHeight * 0.01;
-    //     document.documentElement.style.setProperty("--vh", `${vh}px`);
-    // }
-    //
-    // useEffect(() => {
-    //     setScreenSize();
-    // });
-    //https://velog.io/@eunddodi/React-모바일-웹-앱-100vh-실제-화면-크기로-맞추기-------
-
     return (
         <>
             <Head>

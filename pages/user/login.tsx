@@ -22,7 +22,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import styled from "@emotion/styled";
 import SocialLoginComponent from "../../components/user/SocialLogin";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../actions/user";
+import { login } from "../../actions/auth";
 import Router from "next/router";
 
 const Boxs = styled(Box)`
