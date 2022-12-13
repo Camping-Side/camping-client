@@ -3,6 +3,18 @@ import api from "../util/api";
 
 const DOMAIN = process.env.NEXT_PUBLIC_API_URL;
 
+export const reissueToken = createAsyncThunk(
+  "auth/reissueToken",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.post(DOMAIN + "/api/v1/auth/reissue", data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const login = createAsyncThunk(
   "auth/login",
   async (data, { rejectWithValue }) => {

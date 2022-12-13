@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-
 const client = axios.create({
   baseURL: "http://localhost:9060/",
 });
@@ -7,6 +6,7 @@ const client = axios.create({
 client.interceptors.request.use(function (config: AxiosRequestConfig) {
   const token = localStorage.getItem("camporest_auth");
   if (token) {
+    console.log("token: ", token);
     const { accessToken, refreshToken } = JSON.parse(token);
     if (!config.headers) {
       config.headers = {};
@@ -14,6 +14,8 @@ client.interceptors.request.use(function (config: AxiosRequestConfig) {
     config.headers.accessToken = accessToken;
     config.headers.refreshToken = refreshToken;
   }
+  console.log("config: ", config);
+  client.defaults.headers.post["Content-Type"] = "application/json";
   return config;
 });
 
@@ -22,28 +24,28 @@ client.interceptors.response.use(
     return response;
   },
   async function (error) {
-    if (error.response && error.response.status === 403) {
+    console.log("error: ", error.response.status);
+    if (error.response && error.response.status === 401) {
       try {
         const originalRequest = error.config;
-        const data = await client.get("auth/refreshtoken");
-        if (data) {
+        const item = localStorage.getItem("camporest_auth");
+        const data = await client.post("/api/v1/auth/reissue", item);
+        console.log(data);
+        /*if (data) {
           const { accessToken, refreshToken } = data.data;
           localStorage.removeItem("camporest_auth");
           localStorage.setItem(
-            "camporest_auth",
-            JSON.stringify(data.data, ["accessToken", "refreshToken"])
+              "camporest_auth",
+              JSON.stringify(data.data, ["accessToken", "refreshToken"])
           );
           originalRequest.headers.accessToken = accessToken;
           originalRequest.headers.refreshToken = refreshToken;
           return await client.request(originalRequest);
-        }
+        }*/
       } catch (error) {
-        localStorage.removeItem("camporest_auth");
         console.log(error);
       }
-      return Promise.reject(error);
     }
-    return Promise.reject(error);
   }
 );
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkPhoneDup, checkEmailDup } from "../actions/account";
+import { checkPhoneDup, checkEmailDup, getInfo } from "../actions/account";
 
 // 기본 state
 export const initialState = {
@@ -11,6 +11,10 @@ export const initialState = {
   checkEmailDupDone: false,
   isEmailDup: false,
   checkEmailDupError: null,
+  getInfoLoading: false,
+  getInfoDone: false,
+  myInfo: null,
+  getInfoError: null,
 };
 
 // toolkit 사용방법
@@ -58,6 +62,22 @@ const accountSlice = createSlice({
       .addCase(checkPhoneDup.rejected, (state: any, action) => {
         state.checkPhoneDupLoading = false;
         state.checkPhoneDupError = action.payload;
+      })
+      //내정보
+      .addCase(getInfo.pending, (state) => {
+        state.getInfoDone = false;
+        state.getInfoLoading = true;
+        state.getInfoError = null;
+      })
+      .addCase(getInfo.fulfilled, (state, action) => {
+        state.getInfoLoading = false;
+        state.getInfoDone = true;
+        state.myInfo = action.payload.resultData;
+        console.log("getInfo: ", action.payload.resultData);
+      })
+      .addCase(getInfo.rejected, (state: any, action) => {
+        state.getInfoLoading = false;
+        state.getInfoError = action.payload;
       }),
 });
 

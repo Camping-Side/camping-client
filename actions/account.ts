@@ -32,3 +32,15 @@ export const checkPhoneDup = createAsyncThunk(
     }
   }
 );
+
+export const getInfo = createAsyncThunk(
+  "account/getInfo",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.get(DOMAIN + "/api/v1/admin/test");
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
