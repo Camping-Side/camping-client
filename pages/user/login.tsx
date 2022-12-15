@@ -2,28 +2,23 @@ import React, { FC, useEffect, useState } from "react";
 import Layout from "@layout/Layout";
 import Link from "next/link";
 import {
-  TextField,
-  FormControl,
-  OutlinedInput,
-  InputAdornment,
-  IconButton,
   Box,
+  Button,
+  Checkbox,
   Container,
   CssBaseline,
-  Avatar,
-  Typography,
-  Grid,
+  FormControl,
   FormControlLabel,
-  Checkbox,
-  Button,
+  Grid,
+  TextField,
+  Typography,
 } from "@mui/material/";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import styled from "@emotion/styled";
 import SocialLoginComponent from "../../components/user/SocialLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/auth";
 import Router from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
@@ -35,67 +30,125 @@ interface loginInfo {
   showPassword: boolean;
 }
 
+type Inputs = {
+  email: string;
+  password: string;
+};
+
 const Login: FC = () => {
-  const dispatch = useDispatch();
-
-  const [values, setValues] = useState<loginInfo>({
-    id: "",
-    password: "",
-    showPassword: false,
-  });
-  const [rememberChecked, setRememberChecked] = useState(false);
-
-  const { loginDone } = useSelector((state: any) => state.auth);
-
   //mounted
   useEffect(() => {
-      //remember 체크
-      if(localStorage.getItem('camporest_remember')){
-        const rememberId = localStorage.getItem('camporest_remember') || ""
-        setValues({
-          ...values,
-          id: rememberId
-        })
-        setRememberChecked(true)
-      }
+    //remember 체크
+    if (localStorage.getItem("camporest_remember")) {
+      const rememberId = localStorage.getItem("camporest_remember") || "";
+      setValue("email", rememberId);
+      setRememberChecked(true);
+    }
   }, []);
 
+  const dispatch = useDispatch();
+
+  //react-hook-form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    clearErrors,
+    setError,
+  } = useForm<Inputs>();
+
+  //remember
+  const [rememberChecked, setRememberChecked] = useState(false);
+  const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberChecked(event.target.checked);
+  };
+
   //loginDone
+  const { loginDone } = useSelector((state: any) => state.auth);
   useEffect(() => {
     if (loginDone) {
-      if(rememberChecked && !localStorage.getItem('camporest_remember')){
-        localStorage.setItem('camporest_remember', values.id)
+      if (rememberChecked && !localStorage.getItem("camporest_remember")) {
+        localStorage.setItem("camporest_remember", watch("email"));
       }
       Router.push("/");
     }
   }, [loginDone]);
 
-  const handleChange =
-    (prop: keyof loginInfo) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
+  //로그인
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const { email, password } = data;
+    const loginParam = {
+      email: email,
+      password: password,
     };
-
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
-    e.preventDefault();
     // @ts-ignore
-    dispatch(login({ email: values.id, password: values.password }));
+    dispatch(login(loginParam));
   };
 
-  const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRememberChecked(event.target.checked);
+  const errorMessage = {
+    email: () => {
+      let msg = "";
+      if (errors.email?.type === "pattern") {
+        msg = "정확한 이메일을 입력해주세요";
+      } else if (!!errors.email) {
+        msg = "아이디(이메일)을 입력해주세요";
+      }
+      return msg;
+    },
+    password: () => {
+      let msg = "";
+      if (errors.password?.type === "minLength") {
+        msg = "비밀번호를 정확히 입력해주세요(6~12자리)";
+      } else if (!!errors.password) {
+        msg = "비밀번호를 입력해주세요";
+      }
+      return msg;
+    },
+  };
+
+  const resetError = (item: any) => {
+    clearErrors(item);
+    if (!watch(item)) {
+      setError(item, { type: "empty", message: "empty" });
+    }
+  };
+
+  const formInfo = {
+    email: {
+      label: "아이디(이메일)",
+      value: {
+        ...register("email", {
+          required: true,
+          pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        }),
+        onChange: (
+          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          resetError("email");
+        },
+      },
+      error: !!errors.email,
+      errorMessage: errorMessage.email(),
+    },
+    password: {
+      label: "비밀번호(6~12자리)",
+      value: {
+        ...register("password", {
+          required: true,
+          minLength: 4,
+        }),
+        onChange: (
+          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        ) => {
+          setValue("password", e.target.value.substring(0, 12));
+          resetError("password");
+        },
+      },
+      error: !!errors.password,
+      errorMessage: errorMessage.password(),
+    },
   };
 
   return (
@@ -112,54 +165,38 @@ const Login: FC = () => {
           </Typography>
           <Boxs
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             sx={{ mt: 3 }}
           >
             <FormControl component="fieldset" variant="standard">
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    required
-                    autoFocus
                     fullWidth
-                    type="email"
-                    id="email"
-                    name="email"
-                    label="email"
-                    value={values.id}
-                    onChange={handleChange("id")}
+                    label={formInfo.email.label}
+                    {...formInfo.email.value}
+                    error={formInfo.email.error}
+                    helperText={formInfo.email.errorMessage}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <OutlinedInput
-                    id="password"
-                    label="password"
+                  <TextField
                     fullWidth
-                    type={values.showPassword ? "text" : "password"}
-                    value={values.password}
-                    onChange={handleChange("password")}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {values.showPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    }
+                    type="password"
+                    label={formInfo.password.label}
+                    {...formInfo.password.value}
+                    error={formInfo.password.error}
+                    helperText={formInfo.password.errorMessage}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <FormControlLabel
                     control={
-                      <Checkbox onChange={checkRemember} checked={rememberChecked} color="primary" />
+                      <Checkbox
+                        onChange={checkRemember}
+                        checked={rememberChecked}
+                        color="primary"
+                      />
                     }
                     label="remember"
                   />

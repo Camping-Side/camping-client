@@ -191,7 +191,7 @@ const Join: FC = () => {
     },
   };
 
-  const serError = (item: any) => {
+  const resetError = (item: any) => {
     clearErrors(item);
     if (!watch(item)) {
       setError(item, { type: "empty", message: "empty" });
@@ -207,7 +207,7 @@ const Join: FC = () => {
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
         ) => {
           setValue("name", e.target.value.substring(0, 9));
-          serError("name");
+          resetError("name");
         },
       },
       error: !!errors.name,
@@ -227,7 +227,7 @@ const Join: FC = () => {
               .replace(/(\..*)\./g, "$1")
               .substring(0, 11)
           );
-          serError("phone");
+          resetError("phone");
         },
       },
       error: !!errors.phone || isPhoneDup,
@@ -244,7 +244,7 @@ const Join: FC = () => {
         onChange: (
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
         ) => {
-          serError("email");
+          resetError("email");
         },
       },
       error: !!errors.email || isEmailDup,
@@ -262,7 +262,7 @@ const Join: FC = () => {
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
         ) => {
           setValue("password", e.target.value.substring(0, 12));
-          serError("password");
+          resetError("password");
         },
       },
       error: !!errors.password || watch("password") !== watch("passwordCheck"),
@@ -279,7 +279,7 @@ const Join: FC = () => {
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
         ) => {
           setValue("passwordCheck", e.target.value.substring(0, 12));
-          serError("passwordCheck");
+          resetError("passwordCheck");
         },
       },
       error:
@@ -300,7 +300,7 @@ const Join: FC = () => {
               .replace(/(\..*)\./g, "$1")
               .substring(0, 8)
           );
-          serError("birth");
+          resetError("birth");
         },
       },
       error: !!errors.birth,
