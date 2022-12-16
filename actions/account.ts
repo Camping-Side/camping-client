@@ -32,3 +32,33 @@ export const checkPhoneDup = createAsyncThunk(
     }
   }
 );
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.post(
+        DOMAIN + "/api/v1/accounts/resetPassword",
+        data
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const findEmail = createAsyncThunk(
+  "auth/findEmail",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.post(
+        DOMAIN + "/api/v1/accounts/findEmail",
+        data
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { checkPhoneDup, checkEmailDup } from "../actions/account";
+import {
+  checkPhoneDup,
+  checkEmailDup,
+  resetPassword,
+  findEmail,
+} from "../actions/account";
 
 // 기본 state
 export const initialState = {
@@ -11,6 +16,13 @@ export const initialState = {
   checkEmailDupDone: false,
   isEmailDup: false,
   checkEmailDupError: null,
+  resetPasswordLoading: false,
+  resetPasswordDone: false,
+  resetPasswordError: null,
+  findEmailLoading: false,
+  findEmailDone: false,
+  findEmailError: null,
+  findEmailResult: null,
 };
 
 // toolkit 사용방법
@@ -23,6 +35,12 @@ const accountSlice = createSlice({
       state.checkPhoneDupDone = false;
       state.isEmailDup = false;
       state.checkEmailDupDone = false;
+    },
+    resetResetPasswordDone(state) {
+      state.resetPasswordDone = false;
+    },
+    findEmailDone(state) {
+      state.findEmailDone = false;
     },
   },
   extraReducers: (builder) =>
@@ -58,6 +76,35 @@ const accountSlice = createSlice({
       .addCase(checkPhoneDup.rejected, (state: any, action) => {
         state.checkPhoneDupLoading = false;
         state.checkPhoneDupError = action.payload;
+      })
+      //비밀번호 재설정
+      .addCase(resetPassword.pending, (state) => {
+        state.resetPasswordDone = false;
+        state.resetPasswordLoading = true;
+        state.resetPasswordError = null;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.resetPasswordLoading = false;
+        state.resetPasswordDone = true;
+      })
+      .addCase(resetPassword.rejected, (state: any, action) => {
+        state.resetPasswordLoading = false;
+        state.resetPasswordError = action.payload;
+      })
+      //아이디(이메일) 찾기
+      .addCase(findEmail.pending, (state) => {
+        state.findEmailDone = false;
+        state.findEmailLoading = true;
+        state.findEmailError = null;
+      })
+      .addCase(findEmail.fulfilled, (state, action) => {
+        state.findEmailLoading = false;
+        state.findEmailDone = true;
+        state.findEmailResult = action.payload.email;
+      })
+      .addCase(findEmail.rejected, (state: any, action) => {
+        state.findEmailLoading = false;
+        state.findEmailError = action.payload;
       }),
 });
 

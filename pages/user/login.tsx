@@ -24,12 +24,6 @@ const Boxs = styled(Box)`
   padding-bottom: 40px !important;
 `;
 
-interface loginInfo {
-  id: string;
-  password: string;
-  showPassword: boolean;
-}
-
 type Inputs = {
   email: string;
   password: string;

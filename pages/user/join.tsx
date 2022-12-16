@@ -241,11 +241,6 @@ const Join: FC = () => {
           required: true,
           pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         }),
-        onChange: (
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          resetError("email");
-        },
       },
       error: !!errors.email || isEmailDup,
       errorMessage: errorMessage.email(),
