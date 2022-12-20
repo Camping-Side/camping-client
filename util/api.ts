@@ -1,18 +1,21 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-
+import { isRequireAuth } from "./apiAuthFilter";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 const client = axios.create({
-  baseURL: "http://localhost:9060/",
+  baseURL: BASE_URL,
+  headers: {
+    "Content-type": "application/json",
+  },
 });
 
 client.interceptors.request.use(function (config: AxiosRequestConfig) {
-  const token = localStorage.getItem("camporest_auth");
-  if (token) {
-    const { accessToken, refreshToken } = JSON.parse(token);
+  const authInfo = localStorage.getItem("camporest_auth");
+  if (isRequireAuth(config.url) && authInfo) {
+    const { accessToken } = JSON.parse(authInfo);
     if (!config.headers) {
       config.headers = {};
     }
-    config.headers.accessToken = accessToken;
-    config.headers.refreshToken = refreshToken;
+    config.headers.Authorization = "Bearer " + accessToken;
   }
   return config;
 });
@@ -22,28 +25,35 @@ client.interceptors.response.use(
     return response;
   },
   async function (error) {
-    if (error.response && error.response.status === 403) {
+    console.log("error: ", error.response.status);
+    if (error.response && error.response.status === 401) {
       try {
-        const originalRequest = error.config;
-        const data = await client.get("auth/refreshtoken");
-        if (data) {
-          const { accessToken, refreshToken } = data.data;
+        const authInfo = localStorage.getItem("camporest_auth") || "";
+        const reissueResult = await client.post(
+          "/api/v1/auth/reissue",
+          JSON.parse(authInfo)
+        );
+        const { data } = reissueResult;
+        if (data && data.statusCode === 200) {
           localStorage.removeItem("camporest_auth");
           localStorage.setItem(
             "camporest_auth",
-            JSON.stringify(data.data, ["accessToken", "refreshToken"])
+            JSON.stringify(data.resultData)
           );
-          originalRequest.headers.accessToken = accessToken;
-          originalRequest.headers.refreshToken = refreshToken;
-          return await client.request(originalRequest);
+          const { config } = error;
+          const axiosRequestConfig = {
+            url: config.url,
+            method: config.method,
+            headers: {
+              Authorization: "Bearer " + data.resultData.accessToken,
+            },
+          };
+          return await client.request(axiosRequestConfig);
         }
       } catch (error) {
-        localStorage.removeItem("camporest_auth");
         console.log(error);
       }
-      return Promise.reject(error);
     }
-    return Promise.reject(error);
   }
 );
 
