@@ -4,9 +4,8 @@ import {
   checkEmailDup,
   resetPassword,
   findEmail,
-    getInfo
+  getInfo,
 } from "../actions/account";
-
 // 기본 state
 export const initialState = {
   checkPhoneDupLoading: false,
@@ -24,10 +23,10 @@ export const initialState = {
   findEmailDone: false,
   findEmailError: null,
   findEmailResult: null,
-    getInfoLoading: false,
-    getInfoDone: false,
-    myInfo: null,
-    getInfoError: null,
+  getInfoLoading: false,
+  getInfoDone: false,
+  myInfo: null,
+  getInfoError: null,
 };
 
 // toolkit 사용방법
@@ -111,22 +110,22 @@ const accountSlice = createSlice({
         state.findEmailLoading = false;
         state.findEmailError = action.payload;
       })
-    //내정보
-    .addCase(getInfo.pending, (state) => {
+      //내정보
+      .addCase(getInfo.pending, (state) => {
         state.getInfoDone = false;
         state.getInfoLoading = true;
         state.getInfoError = null;
-    })
-        .addCase(getInfo.fulfilled, (state, action) => {
-            state.getInfoLoading = false;
-            state.getInfoDone = true;
-            state.myInfo = action.payload.resultData;
-            console.log("getInfo: ", action.payload.resultData);
-        })
-        .addCase(getInfo.rejected, (state: any, action) => {
-            state.getInfoLoading = false;
-            state.getInfoError = action.payload;
-        }),
+      })
+      .addCase(getInfo.fulfilled, (state, action) => {
+        state.getInfoLoading = false;
+        state.getInfoDone = true;
+        state.myInfo = action.payload.resultData;
+        console.log("getInfo: ", action.payload.resultData);
+      })
+      .addCase(getInfo.rejected, (state: any, action) => {
+        state.getInfoLoading = false;
+        state.getInfoError = action.payload;
+      }),
 });
 
 export default accountSlice;
