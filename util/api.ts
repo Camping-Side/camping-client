@@ -1,22 +1,21 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { isRequireAuth } from "./apiAuthFilter";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 const client = axios.create({
-  baseURL: "http://localhost:9060/",
+  baseURL: BASE_URL,
   headers: {
     "Content-type": "application/json",
   },
 });
 
 client.interceptors.request.use(function (config: AxiosRequestConfig) {
-  const token = localStorage.getItem("camporest_auth");
-  if (token) {
-    console.log("token: ", token);
-    const { accessToken, refreshToken } = JSON.parse(token);
+  const authInfo = localStorage.getItem("camporest_auth");
+  if (isRequireAuth(config.url) && authInfo) {
+    const { accessToken } = JSON.parse(authInfo);
     if (!config.headers) {
       config.headers = {};
     }
-    //config.headers.Authorization = "Bearer " + accessToken;
-    config.headers.accessToken = accessToken;
-    config.headers.refreshToken = refreshToken;
+    config.headers.Authorization = "Bearer " + accessToken;
   }
   return config;
 });
@@ -29,35 +28,28 @@ client.interceptors.response.use(
     console.log("error: ", error.response.status);
     if (error.response && error.response.status === 401) {
       try {
-        /*const authParams = localStorage.getItem("camporest_auth");
-        //client.defaults.headers.common["Content-type"] = "application/json";
-        const result = await client.post("/api/v1/auth/reissue", authParams);
-        console.log("result : ", result);
-        console.log("error : ", error);
-        const { data } = result;
+        const authInfo = localStorage.getItem("camporest_auth") || "";
+        const reissueResult = await client.post(
+          "/api/v1/auth/reissue",
+          JSON.parse(authInfo)
+        );
+        const { data } = reissueResult;
         if (data && data.statusCode === 200) {
           localStorage.removeItem("camporest_auth");
           localStorage.setItem(
             "camporest_auth",
             JSON.stringify(data.resultData)
           );
-
           const { config } = error;
-
           const axiosRequestConfig = {
             url: config.url,
             method: config.method,
             headers: {
               Authorization: "Bearer " + data.resultData.accessToken,
-              accessToken: data.resultData.accessToken,
-              refreshToken: data.resultData.refreshToken,
             },
           };
-
-          console.log("axiosRequestConfig");
-
           return await client.request(axiosRequestConfig);
-        }*/
+        }
       } catch (error) {
         console.log(error);
       }
