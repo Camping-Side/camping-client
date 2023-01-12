@@ -22,6 +22,7 @@ import accountSlice from "@reducers/account";
 
 type Inputs = {
   name: string;
+  nickname: string;
   phone: string;
   email: string;
   password: string;
@@ -136,6 +137,9 @@ const Join: FC = () => {
     name: () => {
       return !!errors.name ? "이름을 입력하세요" : "";
     },
+    nickname: () => {
+      return !!errors.nickname ? "별명을 입력하세요" : "";
+    },
     phone: () => {
       let msg = "";
       if (errors.phone?.type === "minLength") {
@@ -202,33 +206,48 @@ const Join: FC = () => {
     name: {
       label: "이름",
       value: {
-        ...register("name", { required: true }),
-        onChange: (
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          setValue("name", e.target.value.substring(0, 9));
-          resetError("name");
-        },
+        ...register("name", {
+          required: true,
+          onChange: (e) => {
+            setValue("name", e.target.value.substring(0, 9));
+            resetError("name");
+          },
+        }),
       },
       error: !!errors.name,
       errorMessage: errorMessage.name(),
     },
+    nickname: {
+      label: "별명",
+      value: {
+        ...register("nickname", {
+          required: true,
+          onChange: (e) => {
+            setValue("nickname", e.target.value.substring(0, 9));
+            resetError("nickname");
+          },
+        }),
+      },
+      error: !!errors.nickname,
+      errorMessage: errorMessage.nickname(),
+    },
     phone: {
       label: "휴대폰번호(숫자만입력)",
       value: {
-        ...register("phone", { required: true, minLength: 10 }),
-        onChange: (
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          setValue(
-            "phone",
-            e.target.value
-              .replace(/[^0-9.]/g, "")
-              .replace(/(\..*)\./g, "$1")
-              .substring(0, 11)
-          );
-          resetError("phone");
-        },
+        ...register("phone", {
+          required: true,
+          minLength: 10,
+          onChange: (e) => {
+            setValue(
+              "phone",
+              e.target.value
+                .replace(/[^0-9.]/g, "")
+                .replace(/(\..*)\./g, "$1")
+                .substring(0, 11)
+            );
+            resetError("phone");
+          },
+        }),
       },
       error: !!errors.phone || isPhoneDup,
       errorMessage: errorMessage.phone(),
@@ -252,13 +271,11 @@ const Join: FC = () => {
         ...register("password", {
           required: true,
           minLength: 6,
+          onChange: (e) => {
+            setValue("password", e.target.value.substring(0, 12));
+            resetError("password");
+          },
         }),
-        onChange: (
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          setValue("password", e.target.value.substring(0, 12));
-          resetError("password");
-        },
       },
       error: !!errors.password || watch("password") !== watch("passwordCheck"),
       errorMessage: errorMessage.password(),
@@ -269,13 +286,11 @@ const Join: FC = () => {
         ...register("passwordCheck", {
           required: true,
           minLength: 6,
+          onChange: (e) => {
+            setValue("passwordCheck", e.target.value.substring(0, 12));
+            resetError("passwordCheck");
+          },
         }),
-        onChange: (
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          setValue("passwordCheck", e.target.value.substring(0, 12));
-          resetError("passwordCheck");
-        },
       },
       error:
         !!errors.passwordCheck || watch("password") !== watch("passwordCheck"),
@@ -284,22 +299,23 @@ const Join: FC = () => {
     birth: {
       label: "생년월일(8자리 숫자만입력)",
       value: {
-        ...register("birth", { required: true, minLength: 8 }),
-        onChange: (
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-        ) => {
-          setValue(
-            "birth",
-            e.target.value
-              .replace(/[^0-9.]/g, "")
-              .replace(/(\..*)\./g, "$1")
-              .substring(0, 8)
-          );
-          resetError("birth");
-        },
+        ...register("birth", {
+          required: true,
+          minLength: 8,
+          onChange: (e) => {
+            setValue(
+              "birth",
+              e.target.value
+                .replace(/[^0-9.]/g, "")
+                .replace(/(\..*)\./g, "$1")
+                .substring(0, 8)
+            );
+            resetError("birth");
+          },
+        }),
       },
       error: !!errors.birth,
-      errorMessage: !!errors.birth ? "생년월일을 입력해주세요" : "",
+      errorMessage: errorMessage.birth(),
     },
   };
 
@@ -328,6 +344,14 @@ const Join: FC = () => {
                     {...formInfo.name.value}
                     error={formInfo.name.error}
                     helperText={formInfo.name.errorMessage}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label={formInfo.nickname.label}
+                    {...formInfo.nickname.value}
+                    error={formInfo.nickname.error}
+                    helperText={formInfo.nickname.errorMessage}
                   />
                 </Grid>
                 <Grid item xs={8}>
