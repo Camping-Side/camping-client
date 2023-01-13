@@ -8,6 +8,8 @@ body {
 .layoutContainer {
   margin : 0 auto;
   height: 100vh;
+  //임시적용
+  border: 1px solid black;
 }
 
 @media only screen and (min-width: 0px) and (max-width: 410px) {
