@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 
 import Layout from "@layout/Layout";
 import Link from "next/link";
@@ -7,43 +7,49 @@ import { useDispatch, useSelector } from "react-redux";
 import BaseButton from "@cp/common/BaseButton";
 import { getInfo } from "../actions/account";
 import Grid from "@mui/material/Grid";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Pagination, Navigation } from "swiper";
+import styled from "@emotion/styled";
 
-import Banner from "/assets/img/temp/banner.png";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MobileStepper from "@mui/material/MobileStepper";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
+//임시배너
+import Banner from "../assets/img/temp/banner.png";
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
-const images = [
-  {
-    label: "San Francisco – Oakland Bay Bridge, United States",
-    imgPath:
-      "https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-  {
-    label: "Bird",
-    imgPath:
-      "https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-  {
-    label: "Bali, Indonesia",
-    imgPath:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250",
-  },
-  {
-    label: "Goč, Serbia",
-    imgPath:
-      "https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-];
+//swiper custom style
+const SwiperRoot = styled.div`
+  .swiper {
+    &-pagination-fraction {
+      width: 10% !important;
+      height: 33px;
+      line-height: 33px;
+      background-color: rgba(206, 205, 205, 0.9);
+      margin-left: 85%;
+      margin-bottom: 3%;
+      color: #919191;
+      border-radius: 25px;
+      font-weight: 600 !important;
+    }
+    &-pagination-current {
+      color: white;
+    }
+    &-button-next {
+      padding: 10px;
+      border-radius: 10px;
+      background-color: rgba(232, 231, 230, 0.7);
+      color: white;
+      --swiper-navigation-size: 34px;
+    }
+    &-button-prev {
+      padding: 10px 10px 10px 10px;
+      border-radius: 10px 10px 10px 10px;
+      background-color: rgba(232, 231, 230, 0.7);
+      color: white;
+      --swiper-navigation-size: 34px;
+    }
+  }
+`;
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -59,84 +65,30 @@ const App: FC = () => {
     dispatch(getInfo());
   };
 
-  const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
-  const maxSteps = images.length;
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
-
   return (
     <Layout>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <AutoPlaySwipeableViews
-            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-            index={activeStep}
-            onChangeIndex={handleStepChange}
-            enableMouseEvents
-          >
-            {images.map((step, index) => (
-              <div key={step.label}>
-                {Math.abs(activeStep - index) <= 2 ? (
-                  <Box
-                    component="img"
-                    sx={{
-                      height: 255,
-                      display: "block",
-                      maxWidth: 400,
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                    src={step.imgPath}
-                    alt={step.label}
-                  />
-                ) : null}
-              </div>
-            ))}
-          </AutoPlaySwipeableViews>
-          <MobileStepper
-            steps={maxSteps}
-            position="static"
-            activeStep={activeStep}
-            nextButton={
-              <Button
-                size="small"
-                onClick={handleNext}
-                disabled={activeStep === maxSteps - 1}
-              >
-                Next
-                {theme.direction === "rtl" ? (
-                  <KeyboardArrowLeft />
-                ) : (
-                  <KeyboardArrowRight />
-                )}
-              </Button>
-            }
-            backButton={
-              <Button
-                size="small"
-                onClick={handleBack}
-                disabled={activeStep === 0}
-              >
-                {theme.direction === "rtl" ? (
-                  <KeyboardArrowRight />
-                ) : (
-                  <KeyboardArrowLeft />
-                )}
-                Back
-              </Button>
-            }
-          />
+          <SwiperRoot>
+            <Swiper
+              pagination={{
+                type: "fraction",
+              }}
+              navigation={true}
+              modules={[Pagination, Navigation]}
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <img src={Banner.src} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={Banner.src} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={Banner.src} />
+              </SwiperSlide>
+            </Swiper>
+          </SwiperRoot>
         </Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={4}></Grid>
