@@ -11,14 +11,20 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper";
+import { FreeMode, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
+import Typography from "@mui/material/Typography";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 //임시배너
 import Banner from "../assets/img/temp/banner.png";
 
+//임시상품
+import Product1 from "../assets/img/temp/product1.png";
+import Product2 from "../assets/img/temp/product2.png";
+
 //swiper custom style
-const SwiperRoot = styled.div`
+const BannerSwiperStyle = styled.div`
   .swiper {
     &-pagination-fraction {
       width: 10% !important;
@@ -51,6 +57,28 @@ const SwiperRoot = styled.div`
   }
 `;
 
+const ProductDescStyle = styled.div`
+    .rank {
+      font-size: 12pt;
+      color: #424242;
+      margin-right: 7px;
+    }
+    .name {
+      font-size: 12pt;
+      color: #919191;
+    }
+    .dcRate{
+      font-size: 20pt;
+      color: #FC6E51;
+      margin-right: 15px;
+    }
+    .price{
+      font-size: 20pt;
+      color: #222222;
+    }
+  }
+`;
+
 const App: FC = () => {
   const dispatch = useDispatch();
 
@@ -67,9 +95,9 @@ const App: FC = () => {
 
   return (
     <Layout>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item xs={12}>
-          <SwiperRoot>
+          <BannerSwiperStyle>
             <Swiper
               pagination={{
                 type: "fraction",
@@ -88,11 +116,214 @@ const App: FC = () => {
                 <img src={Banner.src} />
               </SwiperSlide>
             </Swiper>
-          </SwiperRoot>
+          </BannerSwiperStyle>
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={8}></Grid>
+        <Grid item container xs={12} sx={{ padding: 2 }}>
+          <Grid item xs={9} mb={3}>
+            <Typography sx={{ fontSize: 26, fontWeight: 600 }}>
+              캠퍼들의 워너비 Top 10
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            <Typography
+              sx={{
+                color: "#919191",
+                fontSize: 15,
+                lineHeight: 3,
+                float: "right",
+                fontWeight: "bold",
+                marginRight: 0.8,
+              }}
+            >
+              더보기
+            </Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <ArrowForwardIosIcon
+              sx={{ color: "#919191", fontSize: "1.2rem", marginTop: 1.5 }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Swiper
+              slidesPerView={2.8}
+              spaceBetween={0}
+              freeMode={true}
+              modules={[FreeMode]}
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <ProductDescStyle>
+                  <Grid container>
+                    <Grid item xs={12} mb={1.5}>
+                      <img src={Product1.src} />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{ maxWidth: "92% !important" }}
+                    >
+                      <span className={"rank"}>01</span>
+                      <span className={"name"}>HAUEL</span>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{
+                        color: "#383838",
+                        maxWidth: "92% !important",
+                        fontSize: 16,
+                      }}
+                    >
+                      너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어
+                    </Grid>
+                    <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
+                      <span className={"dcRate"}>31%</span>
+                      <span className={"price"}>46,800원</span>
+                    </Grid>
+                  </Grid>
+                </ProductDescStyle>
+              </SwiperSlide>
+              <SwiperSlide>
+                <ProductDescStyle>
+                  <Grid container>
+                    <Grid item xs={12} mb={1.5}>
+                      <img src={Product2.src} />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{ maxWidth: "92% !important" }}
+                    >
+                      <span className={"rank"}>02</span>
+                      <span className={"name"}>HAUEL</span>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{
+                        color: "#383838",
+                        maxWidth: "92% !important",
+                        fontSize: 16,
+                      }}
+                    >
+                      너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어
+                    </Grid>
+                    <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
+                      <span className={"dcRate"}>31%</span>
+                      <span className={"price"}>46,800원</span>
+                    </Grid>
+                  </Grid>
+                </ProductDescStyle>
+              </SwiperSlide>
+              <SwiperSlide>
+                <ProductDescStyle>
+                  <Grid container>
+                    <Grid item xs={12} mb={1.5}>
+                      <img src={Product1.src} />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{ maxWidth: "92% !important" }}
+                    >
+                      <span className={"rank"}>03</span>
+                      <span className={"name"}>HAUEL</span>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{
+                        color: "#383838",
+                        maxWidth: "92% !important",
+                        fontSize: 16,
+                      }}
+                    >
+                      너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어
+                    </Grid>
+                    <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
+                      <span className={"dcRate"}>31%</span>
+                      <span className={"price"}>46,800원</span>
+                    </Grid>
+                  </Grid>
+                </ProductDescStyle>
+              </SwiperSlide>
+              <SwiperSlide>
+                <ProductDescStyle>
+                  <Grid container>
+                    <Grid item xs={12} mb={1.5}>
+                      <img src={Product2.src} />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{ maxWidth: "92% !important" }}
+                    >
+                      <span className={"rank"}>04</span>
+                      <span className={"name"}>HAUEL</span>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{
+                        color: "#383838",
+                        maxWidth: "92% !important",
+                        fontSize: 16,
+                      }}
+                    >
+                      너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어
+                    </Grid>
+                    <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
+                      <span className={"dcRate"}>31%</span>
+                      <span className={"price"}>46,800원</span>
+                    </Grid>
+                  </Grid>
+                </ProductDescStyle>
+              </SwiperSlide>
+              <SwiperSlide>
+                <ProductDescStyle>
+                  <Grid container>
+                    <Grid item xs={12} mb={1.5}>
+                      <img src={Product1.src} />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{ maxWidth: "92% !important" }}
+                    >
+                      <span className={"rank"}>05</span>
+                      <span className={"name"}>HAUEL</span>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{
+                        color: "#383838",
+                        maxWidth: "92% !important",
+                        fontSize: 16,
+                      }}
+                    >
+                      너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어
+                    </Grid>
+                    <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
+                      <span className={"dcRate"}>31%</span>
+                      <span className={"price"}>46,800원</span>
+                    </Grid>
+                  </Grid>
+                </ProductDescStyle>
+              </SwiperSlide>
+            </Swiper>
+          </Grid>
+        </Grid>
       </Grid>
       <Link href="/sample">샘플바로가기</Link>
       <br />
