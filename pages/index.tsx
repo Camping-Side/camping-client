@@ -15,6 +15,7 @@ import { FreeMode, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 //임시배너
 import Banner from "../assets/img/temp/banner.png";
@@ -22,6 +23,9 @@ import Banner from "../assets/img/temp/banner.png";
 //임시상품
 import Product1 from "../assets/img/temp/product1.png";
 import Product2 from "../assets/img/temp/product2.png";
+
+import ProductDislike from "../assets/img/temp/productDislike.svg";
+import ProductLike from "../assets/img/temp/productLike.svg";
 
 //swiper custom style
 const BannerSwiperStyle = styled.div`
@@ -57,25 +61,66 @@ const BannerSwiperStyle = styled.div`
   }
 `;
 
+const ProductImageStyle = styled.div`
+  .image {
+    border-radius: 18px;
+  }
+  .label {
+    position: absolute;
+    top: 4%;
+    left: 8%;
+    background-color: #5bbd6b;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 12px;
+    height: 22px;
+    width: 54px;
+    line-height: 20px;
+    text-align: center;
+    font-weight: 800;
+  }
+  .like {
+    position: absolute;
+    top: 44%;
+    left: 72%;
+  }
+  .soldOut {
+    position: absolute;
+    border-radius: 18px;
+    top: 0%;
+    left: 0%;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.5);
+    .text {
+      position: absolute;
+      top: 44%;
+      left: 42%;
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 700;
+    }
+  }
+`;
+
 const ProductDescStyle = styled.div`
-    .rank {
-      font-size: 12pt;
-      color: #424242;
-      margin-right: 7px;
-    }
-    .name {
-      font-size: 12pt;
-      color: #919191;
-    }
-    .dcRate{
-      font-size: 20pt;
-      color: #FC6E51;
-      margin-right: 15px;
-    }
-    .price{
-      font-size: 20pt;
-      color: #222222;
-    }
+  .rank {
+    font-size: 12pt;
+    color: #424242;
+    margin-right: 7px;
+  }
+  .name {
+    font-size: 12pt;
+    color: #919191;
+  }
+  .dcRate {
+    font-size: 20pt;
+    color: #fc6e51;
+    margin-right: 15px;
+  }
+  .price {
+    font-size: 20pt;
+    color: #222222;
   }
 `;
 
@@ -155,7 +200,14 @@ const App: FC = () => {
                 <ProductDescStyle>
                   <Grid container>
                     <Grid item xs={12} mb={1.5}>
-                      <img src={Product1.src} />
+                      <ProductImageStyle>
+                        <img className={"image"} src={Product1.src} />
+                        <div className={"label"}>무료배송</div>
+                        <img className={"like"} src={ProductLike.src} />
+                        <div className={"soldOut"}>
+                          <span className={"text"}>품절</span>
+                        </div>
+                      </ProductImageStyle>
                     </Grid>
                     <Grid
                       item
@@ -189,7 +241,14 @@ const App: FC = () => {
                 <ProductDescStyle>
                   <Grid container>
                     <Grid item xs={12} mb={1.5}>
-                      <img src={Product2.src} />
+                      <ProductImageStyle>
+                        <img className={"image"} src={Product1.src} />
+                        <div className={"label"}>무료배송</div>
+                        <img className={"like"} src={ProductLike.src} />
+                        {/*<div className={"soldOut"}>
+                          <span className={"text"}>품절</span>
+                        </div>*/}
+                      </ProductImageStyle>
                     </Grid>
                     <Grid
                       item
@@ -223,7 +282,14 @@ const App: FC = () => {
                 <ProductDescStyle>
                   <Grid container>
                     <Grid item xs={12} mb={1.5}>
-                      <img src={Product1.src} />
+                      <ProductImageStyle>
+                        <img className={"image"} src={Product1.src} />
+                        {/*<div className={"label"}>무료배송</div>*/}
+                        <img className={"like"} src={ProductDislike.src} />
+                        {/*<div className={"soldOut"}>
+                          <span className={"text"}>품절</span>
+                        </div>*/}
+                      </ProductImageStyle>
                     </Grid>
                     <Grid
                       item
@@ -257,7 +323,14 @@ const App: FC = () => {
                 <ProductDescStyle>
                   <Grid container>
                     <Grid item xs={12} mb={1.5}>
-                      <img src={Product2.src} />
+                      <ProductImageStyle>
+                        <img className={"image"} src={Product1.src} />
+                        <div className={"label"}>무료배송</div>
+                        <img className={"like"} src={ProductDislike.src} />
+                        <div className={"soldOut"}>
+                          <span className={"text"}>품절</span>
+                        </div>
+                      </ProductImageStyle>
                     </Grid>
                     <Grid
                       item
@@ -266,40 +339,6 @@ const App: FC = () => {
                       sx={{ maxWidth: "92% !important" }}
                     >
                       <span className={"rank"}>04</span>
-                      <span className={"name"}>HAUEL</span>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      mb={1.5}
-                      sx={{
-                        color: "#383838",
-                        maxWidth: "92% !important",
-                        fontSize: 16,
-                      }}
-                    >
-                      너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어
-                    </Grid>
-                    <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
-                      <span className={"dcRate"}>31%</span>
-                      <span className={"price"}>46,800원</span>
-                    </Grid>
-                  </Grid>
-                </ProductDescStyle>
-              </SwiperSlide>
-              <SwiperSlide>
-                <ProductDescStyle>
-                  <Grid container>
-                    <Grid item xs={12} mb={1.5}>
-                      <img src={Product1.src} />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      mb={1.5}
-                      sx={{ maxWidth: "92% !important" }}
-                    >
-                      <span className={"rank"}>05</span>
                       <span className={"name"}>HAUEL</span>
                     </Grid>
                     <Grid
