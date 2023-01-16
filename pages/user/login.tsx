@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import Layout from "@layout/Layout";
-import Link from "next/link";
 import {
   Box,
   Button,
@@ -12,16 +11,26 @@ import {
   Grid,
   TextField,
   Typography,
+  Link,
 } from "@mui/material/";
 import styled from "@emotion/styled";
-import SocialLoginComponent from "../../components/user/SocialLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/auth";
 import Router from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import SocialLoginNaver from "../../assets/img/temp/socialLogin_naver.png";
+import SocialLoginKakao from "../../assets/img/temp/socialLogin_kakao.png";
+import SocialLoginGoogle from "../../assets/img/temp/socialLogin_google.png";
 
 const Boxs = styled(Box)`
   padding-bottom: 40px !important;
+`;
+
+const SocialButtonGrid = styled(Grid)`
+  img {
+    padding: 10px;
+  }
 `;
 
 type Inputs = {
@@ -59,16 +68,17 @@ const Login: FC = () => {
     setRememberChecked(event.target.checked);
   };
 
-  //loginDone
-  const { loginDone } = useSelector((state: any) => state.auth);
+  const { loginDone, loginError } = useSelector((state: any) => state.auth);
   useEffect(() => {
     if (loginDone) {
       if (rememberChecked && !localStorage.getItem("camporest_remember")) {
         localStorage.setItem("camporest_remember", watch("email"));
       }
       Router.push("/");
+    } else if (loginError) {
+      alert("로그인 에러");
     }
-  }, [loginDone]);
+  }, [loginDone, loginError]);
 
   //로그인
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -111,7 +121,7 @@ const Login: FC = () => {
 
   const formInfo = {
     email: {
-      label: "아이디(이메일)",
+      label: "camporest@camporest.com",
       value: {
         ...register("email", {
           required: true,
@@ -127,7 +137,7 @@ const Login: FC = () => {
       errorMessage: errorMessage.email(),
     },
     password: {
-      label: "비밀번호(6~12자리)",
+      label: "비밀번호 입력",
       value: {
         ...register("password", {
           required: true,
@@ -147,14 +157,14 @@ const Login: FC = () => {
 
   return (
     <Layout>
-      <Container component="main" maxWidth="xs">
+      <Container component="main">
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
           }}
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" mb={5}>
             로그인
           </Typography>
           <Boxs
@@ -165,6 +175,9 @@ const Login: FC = () => {
             <FormControl component="fieldset" variant="standard">
               <Grid container spacing={2}>
                 <Grid item xs={12}>
+                  <Typography mb={2} sx={{ fontWeight: 700 }}>
+                    이메일
+                  </Typography>
                   <TextField
                     fullWidth
                     label={formInfo.email.label}
@@ -174,6 +187,9 @@ const Login: FC = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                  <Typography mb={2} sx={{ fontWeight: 700 }}>
+                    비밀번호
+                  </Typography>
                   <TextField
                     fullWidth
                     type="password"
@@ -183,37 +199,98 @@ const Login: FC = () => {
                     helperText={formInfo.password.errorMessage}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} mb={4}>
                   <FormControlLabel
+                    sx={{ fontSize: "16px", fontWeight: "400" }}
                     control={
                       <Checkbox
                         onChange={checkRemember}
                         checked={rememberChecked}
-                        color="primary"
+                        icon={<CheckCircleIcon />}
+                        checkedIcon={<CheckCircleIcon />}
                       />
                     }
-                    label="remember"
+                    label="아이디 저장"
                   />
                 </Grid>
-                <Grid item xs={6}>
-                  <Link href="/user/find">회원정보찾기</Link> /{" "}
-                  <Link href="/user/join">회원가입</Link>
+                <Grid item xs={12} mb={2}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      ":hover": {
+                        bgcolor: "#FC6E51",
+                      },
+                      color: "white",
+                      backgroundColor: "#FC6E51",
+                      borderRadius: "8px",
+                      fontWeight: 700,
+                      fontSize: "16px",
+                    }}
+                    disableFocusRipple
+                    size="large"
+                  >
+                    로그인
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sx={{ textAlign: "center" }} mb={15}>
+                  <Link
+                    href="/user/find"
+                    underline={"none"}
+                    color={"black"}
+                    sx={{ fontSize: "16px", fontWeight: "400" }}
+                  >
+                    회원정보찾기
+                  </Link>{" "}
+                  |{" "}
+                  <Link
+                    href="/user/join"
+                    underline={"none"}
+                    color={"black"}
+                    sx={{ fontSize: "16px", fontWeight: "400" }}
+                  >
+                    회원가입
+                  </Link>
+                </Grid>
+                <Grid item xs={12} sx={{ textAlign: "center" }} mb={3}>
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: "400",
+                      color: "#919191",
+                    }}
+                  >
+                    SNS 계정으로 로그인
+                  </Typography>
+                </Grid>
+                <SocialButtonGrid
+                  item
+                  xs={12}
+                  sx={{ textAlign: "center" }}
+                  mb={25}
+                >
+                  <img src={SocialLoginKakao.src} />
+                  <img src={SocialLoginNaver.src} />
+                  <img src={SocialLoginGoogle.src} />
+                </SocialButtonGrid>
+                <Grid item xs={12} sx={{ textAlign: "center" }}>
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      fontWeight: "400",
+                      color: "#919191",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    로그인에 어려움이 있나요?
+                  </Typography>
                 </Grid>
               </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                size="large"
-              >
-                로그인
-              </Button>
             </FormControl>
           </Boxs>
         </Box>
       </Container>
-      <SocialLoginComponent />
     </Layout>
   );
 };
