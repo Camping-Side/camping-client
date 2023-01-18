@@ -16,7 +16,12 @@ export default function BottomAppBar() {
   return (
     <div className={styles.footerBar + " layoutWidth"}>
       <Toolbar
-        sx={{ justifyContent: "space-between", marginRight: 3, marginLeft: 3 }}
+        sx={{
+          justifyContent: "space-between",
+          marginRight: 3,
+          marginLeft: 3,
+          zIndex: 5,
+        }}
       >
         <Link href={"/"}>
           <div>
