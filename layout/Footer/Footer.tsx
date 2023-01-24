@@ -1,7 +1,5 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Link from "next/link";
 import styles from "@cmStyles/module/footer.module.scss";
 import HomeIcon from "@mui/icons-material/Home";
@@ -11,10 +9,19 @@ import SmsIcon from "@mui/icons-material/Sms";
 import PersonIcon from "@mui/icons-material/Person";
 
 import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import styled from "@emotion/styled";
+import Box from "@mui/material/Box";
+
+const MenuButton = styled(Box)`
+  cursor: pointer;
+`;
 
 export default function BottomAppBar() {
+  const router = useRouter();
+
   return (
-    <div className={styles.footerBar + " layoutWidth"}>
+    <Box className={styles.footerBar + " layoutWidth"}>
       <Toolbar
         sx={{
           justifyContent: "space-between",
@@ -23,42 +30,78 @@ export default function BottomAppBar() {
           zIndex: 5,
         }}
       >
-        <Link href={"/"}>
-          <div>
-            <HomeIcon sx={{ color: "#5bbd6b" }} />
-            <br />
-            <Typography sx={{ color: "#5bbd6b" }}>홈</Typography>
-          </div>
+        <Link href={"/"} passHref>
+          <a>
+            <MenuButton
+              sx={{ color: router.pathname === "/" ? "#5bbd6b" : "#A7A7A7" }}
+            >
+              <HomeIcon />
+              <br />
+              <Typography>홈</Typography>
+            </MenuButton>
+          </a>
         </Link>
-        <Link href={"/shop"}>
-          <div>
-            <ShoppingCartIcon sx={{ color: "#A7A7A7" }} />
-            <br />
-            <Typography sx={{ color: "#7A7A7A" }}>상점</Typography>
-          </div>
+        <Link href={"/shop"} passHref>
+          <a>
+            <MenuButton
+              sx={{
+                color: router.pathname.startsWith("/shop")
+                  ? "#5bbd6b"
+                  : "#A7A7A7",
+              }}
+            >
+              <ShoppingCartIcon />
+              <br />
+              <Typography>상점</Typography>
+            </MenuButton>
+          </a>
         </Link>
-        <Link href={"/info"}>
-          <div>
-            <EditIcon sx={{ color: "#A7A7A7" }} />
-            <br />
-            <Typography sx={{ color: "#7A7A7A" }}>캠핑인포</Typography>
-          </div>
+        <Link href={"/info"} passHref>
+          <a>
+            <MenuButton
+              sx={{
+                color: router.pathname.startsWith("/info")
+                  ? "#5bbd6b"
+                  : "#A7A7A7",
+              }}
+            >
+              <EditIcon />
+              <br />
+              <Typography>캠핑인포</Typography>
+            </MenuButton>
+          </a>
         </Link>
-        <Link href={"/community"}>
-          <div>
-            <SmsIcon sx={{ color: "#A7A7A7" }} />
-            <br />
-            <Typography sx={{ color: "#7A7A7A" }}>커뮤니티</Typography>
-          </div>
+        <Link href={"/community"} passHref>
+          <a>
+            <MenuButton
+              sx={{
+                color: router.pathname.startsWith("/community")
+                  ? "#5bbd6b"
+                  : "#A7A7A7",
+              }}
+            >
+              <SmsIcon />
+              <br />
+              <Typography>커뮤니티</Typography>
+            </MenuButton>
+          </a>
         </Link>
-        <Link href={"/mypage"}>
-          <div>
-            <PersonIcon sx={{ color: "#A7A7A7" }} />
-            <br />
-            <Typography sx={{ color: "#7A7A7A" }}>마이</Typography>
-          </div>
+        <Link href={"/mypage"} passHref>
+          <a>
+            <MenuButton
+              sx={{
+                color: router.pathname.startsWith("/mypage")
+                  ? "#5bbd6b"
+                  : "#A7A7A7",
+              }}
+            >
+              <PersonIcon />
+              <br />
+              <Typography>마이</Typography>
+            </MenuButton>
+          </a>
         </Link>
       </Toolbar>
-    </div>
+    </Box>
   );
 }

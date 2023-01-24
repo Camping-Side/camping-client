@@ -2,10 +2,6 @@ import React, { FC } from "react";
 
 import Layout from "@layout/Layout";
 import Link from "next/link";
-import authSlice from "../../reducers/auth";
-import { useDispatch, useSelector } from "react-redux";
-import BaseButton from "@cp/common/BaseButton";
-import { getInfo } from "../../actions/account";
 import Grid from "@mui/material/Grid";
 
 //임시배너
@@ -29,7 +25,10 @@ import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import styled from "@emotion/styled";
 import SearchIcon from "@mui/icons-material/Search";
+import { Category } from "@cp/product/Category";
+
 const SearchInput = styled.div`
+  position: relative;
   input {
     border: none;
     background-color: #f8f8f8;
@@ -48,27 +47,28 @@ const SearchInput = styled.div`
   }
   .searchIcon {
     position: absolute;
-    top: 16%;
-    left: 75.5%;
+    top: 29%;
+    left: 92%;
   }
 `;
 
 const Shop: FC = () => {
-  const dispatch = useDispatch();
-
-  const { loginDone } = useSelector((state: any) => state.auth);
-
-  const logoutAction = (event: React.MouseEvent<HTMLButtonElement>) => {
-    dispatch(authSlice.actions.logout());
-  };
-
-  const handleGetInfo = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // @ts-ignore
-    dispatch(getInfo());
-  };
-
   //temp bannerList
   const bannerList = [Banner, Banner, Banner, Banner];
+
+  //temp categoryList
+  const categoryList = [
+    { name: "텐트", img: Tent.src },
+    { name: "타프", img: Tarp.src },
+    { name: "침낭", img: SleepingBag.src },
+    { name: "테이블", img: Table.src },
+    { name: "의자", img: Chair.src },
+    { name: "매트", img: Mat.src },
+    { name: "코펠", img: Coppell.src },
+    { name: "화로", img: Fire.src },
+    { name: "랜턴", img: Lantern.src },
+    { name: "수납", img: Box.src },
+  ];
 
   return (
     <Layout>
@@ -115,78 +115,7 @@ const Shop: FC = () => {
           </SearchInput>
         </Grid>
         <Grid item container xs={12} sx={{ textAlign: "center" }}>
-          <Grid item xs={2.4}>
-            <img src={Tent.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              텐트
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Tarp.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              타프
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={SleepingBag.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              침낭
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Table.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              테이블
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Chair.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              체어
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item container xs={12} sx={{ textAlign: "center" }}>
-          <Grid item xs={2.4}>
-            <img src={Mat.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              매트
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Coppell.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              코펠
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Fire.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              화로대
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Lantern.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              랜턴
-            </Typography>
-          </Grid>
-          <Grid item xs={2.4}>
-            <img src={Box.src} />
-            <br />
-            <Typography sx={{ fontWeight: "400", fontSize: "20px" }}>
-              수납
-            </Typography>
-          </Grid>
+          <Category categoryList={categoryList} />
         </Grid>
         <Grid item xs={12} mt={7}>
           <BannerSwiper bannerList={bannerList} />
@@ -195,17 +124,6 @@ const Shop: FC = () => {
       </Grid>
       <Link href="/sample">샘플바로가기</Link>
       <br />
-      {!loginDone && <Link href="/user/login">로그인 바로가기</Link>}
-      {loginDone && (
-        <BaseButton variant="contained" size="large" onClick={logoutAction}>
-          로그아웃
-        </BaseButton>
-      )}
-      {loginDone && (
-        <BaseButton variant="contained" size="large" onClick={handleGetInfo}>
-          내정보
-        </BaseButton>
-      )}
     </Layout>
   );
 };
