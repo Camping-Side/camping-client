@@ -83,9 +83,9 @@ export const ProductSwiper = (props: any) => {
       modules={[FreeMode]}
       className="mySwiper"
     >
-      {props.productList.map((product: any) => {
+      {props.productList.map((product: any, index: number) => {
         return (
-          <SwiperSlide>
+          <SwiperSlide key={index}>
             <ProductDescStyle>
               <Grid container>
                 <Grid item xs={12} mb={1.5}>

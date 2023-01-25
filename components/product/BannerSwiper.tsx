@@ -50,9 +50,9 @@ export const BannerSwiper = (props: any) => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {props.bannerList.map((banner: any) => {
+        {props.bannerList.map((banner: any, index: number) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={index}>
               <img src={banner.src} />
             </SwiperSlide>
           );

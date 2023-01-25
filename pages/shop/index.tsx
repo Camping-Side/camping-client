@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 
 import Layout from "@layout/Layout";
 import Link from "next/link";
@@ -26,6 +26,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import styled from "@emotion/styled";
 import SearchIcon from "@mui/icons-material/Search";
 import { Category } from "@cp/product/Category";
+import CustomLink from "@cp/common/CustomLink";
 
 const SearchInput = styled.div`
   position: relative;
@@ -70,6 +71,18 @@ const Shop: FC = () => {
     { name: "수납", img: Box.src },
   ];
 
+  const [keyword, setKeyword] = useState("");
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && keyword !== "") {
+      console.log("keyword find");
+    }
+  };
+
   return (
     <Layout>
       <Grid container>
@@ -108,7 +121,9 @@ const Shop: FC = () => {
           <SearchInput>
             <input
               type={"text"}
-              value={""}
+              value={keyword}
+              onChange={handleChangeInput}
+              onKeyDown={handleKeyDown}
               placeholder={"찾으시는 장비를 검색해보세요."}
             />
             <SearchIcon className={"searchIcon"} />
@@ -122,7 +137,7 @@ const Shop: FC = () => {
         </Grid>
         <ProductSwiperComponent title={"주간베스트"} link={"/shop/top"} />
       </Grid>
-      <Link href="/sample">샘플바로가기</Link>
+      <CustomLink href={"/sample"}>샘플바로가기</CustomLink>
       <br />
     </Layout>
   );
