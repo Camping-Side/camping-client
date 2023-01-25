@@ -4,7 +4,7 @@ import Footer from "./Footer/Footer";
 
 interface Props {
   children: React.ReactNode;
-  category: string | string[] | undefined;
+  category?: string | string[] | undefined;
 }
 
 const ProductLayout: FC<Props> = (props) => {

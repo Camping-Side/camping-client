@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import CustomLink from "@cp/common/CustomLink";
 
 interface Props {
   category: string | string[] | undefined;
@@ -26,6 +27,10 @@ const HeaderBox = styled(Box)`
     margin-left: 10px;
     font-size: 22px;
     font-weight: 700;
+  }
+  .div-home-icon {
+    line-height: 23px;
+    float: right;
   }
 `;
 
@@ -48,12 +53,12 @@ export default function DrawerAppBar(props: Props) {
             <Typography>{props.category}</Typography>
           </Grid>
           {router.pathname.startsWith("/shop/product/") && (
-            <Grid item xs={1} sx={{ float: "right" }}>
-              <Link href={"/"} passHref>
-                <a>
+            <Grid item xs={1}>
+              <Box className="div-home-icon">
+                <CustomLink href={"/"}>
                   <HomeOutlinedIcon />
-                </a>
-              </Link>
+                </CustomLink>
+              </Box>
             </Grid>
           )}
         </Grid>

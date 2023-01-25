@@ -2,16 +2,17 @@ import React, { FC, useEffect, useState } from "react";
 import ProductLayout from "@layout/ProductLayout";
 import Grid from "@mui/material/Grid";
 //임시배너
-import ProductList1 from "../../assets/img/temp/productList1.png";
+import ProductList1 from "../../../assets/img/temp/productList1.png";
 
-import ProductList2 from "../../assets/img/temp/productList2.png";
+import ProductList2 from "../../../assets/img/temp/productList2.png";
 //임시상품
 import styled from "@emotion/styled";
-import ProductLike from "../../assets/img/temp/productLike.svg";
-import ProductDislike from "../../assets/img/temp/productDislike.svg";
-import { numberCommaFilter } from "../../util/commonFilter";
+import ProductLike from "../../../assets/img/temp/productLike.svg";
+import ProductDislike from "../../../assets/img/temp/productDislike.svg";
+import { numberCommaFilter } from "../../../util/commonFilter";
 import { CategoryTab } from "@cp/product/CategoryTab";
 import { useRouter } from "next/router";
+import CustomLink from "@cp/common/CustomLink";
 
 const ProductImageStyle = styled.div`
   text-align: center;
@@ -81,7 +82,7 @@ const ProductDescStyle = styled.div`
   }
 `;
 
-type Product = {
+type Index = {
   img: string;
   label: string;
   like: boolean;
@@ -100,7 +101,7 @@ const Product: FC = () => {
   const query = router.query;
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [productList, setProductList] = useState<Product[]>([]);
+  const [productList, setProductList] = useState<Index[]>([]);
 
   //temp categoryList
   const categoryList = [
@@ -173,7 +174,7 @@ const Product: FC = () => {
   };
 
   //temp productList
-  const result: Product[] = [
+  const result: Index[] = [
     product1,
     product2,
     product3,
@@ -212,62 +213,64 @@ const Product: FC = () => {
         <Grid item container xs={12}>
           {productList.map((product: any, index: number) => {
             return (
-              <Grid item container xs={6} key={index}>
-                <Grid item xs={12} mb={1.5}>
-                  <ProductImageStyle>
-                    <img className={"image"} src={product.img} />
-                    {product.label && (
-                      <div className={"label"}>{product.label}</div>
-                    )}
-                    {product.like && (
-                      <img className={"like"} src={ProductLike.src} />
-                    )}
-                    {!product.like && (
-                      <img className={"like"} src={ProductDislike.src} />
-                    )}
-                    {product.soldOut && (
-                      <div className={"soldOut"}>
-                        <span className={"text"}>품절</span>
-                      </div>
-                    )}
-                  </ProductImageStyle>
-                </Grid>
-                <ProductDescStyle>
-                  <Grid
-                    item
-                    xs={12}
-                    mb={1.5}
-                    sx={{ maxWidth: "95% !important" }}
-                  >
-                    {product.rank && (
-                      <span className={"rank"}>{product.rank}</span>
-                    )}
-                    <span className={"name"}>
-                      {index}
-                      {product.name}
-                    </span>
+              <Grid item container xs={6}>
+                <CustomLink href={"/shop/product/" + index} key={index}>
+                  <Grid item xs={12} mb={1.5}>
+                    <ProductImageStyle>
+                      <img className={"image"} src={product.img} />
+                      {product.label && (
+                        <div className={"label"}>{product.label}</div>
+                      )}
+                      {product.like && (
+                        <img className={"like"} src={ProductLike.src} />
+                      )}
+                      {!product.like && (
+                        <img className={"like"} src={ProductDislike.src} />
+                      )}
+                      {product.soldOut && (
+                        <div className={"soldOut"}>
+                          <span className={"text"}>품절</span>
+                        </div>
+                      )}
+                    </ProductImageStyle>
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    mb={1.5}
-                    sx={{
-                      color: "#383838",
-                      maxWidth: "95% !important",
-                      fontSize: 16,
-                    }}
-                  >
-                    {product.desc}
-                  </Grid>
-                  <Grid item xs={12} sx={{ maxWidth: "95% !important" }}>
-                    {product.dcRate > 0 && (
-                      <span className={"dcRate"}>{product.dcRate}%</span>
-                    )}
-                    <span className={"price"}>
-                      {numberCommaFilter(product.price)}원
-                    </span>
-                  </Grid>
-                </ProductDescStyle>
+                  <ProductDescStyle>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{ maxWidth: "95% !important" }}
+                    >
+                      {product.rank && (
+                        <span className={"rank"}>{product.rank}</span>
+                      )}
+                      <span className={"name"}>
+                        {index}
+                        {product.name}
+                      </span>
+                    </Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      mb={1.5}
+                      sx={{
+                        color: "#383838",
+                        maxWidth: "95% !important",
+                        fontSize: 16,
+                      }}
+                    >
+                      {product.desc}
+                    </Grid>
+                    <Grid item xs={12} sx={{ maxWidth: "95% !important" }}>
+                      {product.dcRate > 0 && (
+                        <span className={"dcRate"}>{product.dcRate}%</span>
+                      )}
+                      <span className={"price"}>
+                        {numberCommaFilter(product.price)}원
+                      </span>
+                    </Grid>
+                  </ProductDescStyle>
+                </CustomLink>
               </Grid>
             );
           })}
