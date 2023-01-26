@@ -12,7 +12,6 @@ const ProductLayout: FC<Props> = (props) => {
     <div className="layoutContainer layoutWidth">
       <ProductHeader category={props.category} />
       <main>{props.children}</main>
-      <Footer />
     </div>
   );
 };

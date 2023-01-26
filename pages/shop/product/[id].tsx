@@ -20,6 +20,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { NumberCommaFilter } from "../../../util/commonFilter";
 import { Divider } from "@mui/material";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 
 const InfoGrid = styled(Grid)`
   .sub-image-grid {
@@ -34,9 +35,6 @@ const TitleGrid = styled(Grid)`
     text-align: center;
     cursor: pointer;
     line-height: 44px;
-    .favorite-icon {
-      color: red;
-    }
   }
   .brand {
     font-weight: 700;
@@ -103,6 +101,57 @@ const SubImageBox = styled(Box)`
     outline: 2px solid #5bbd6b;
     outline-offset: -2px;
     opacity: 1;
+  }
+`;
+
+const PurchaseTabGrid = styled(Grid)`
+  position: fixed;
+  bottom: 0;
+  width: 640px;
+  height: 60px;
+  margin: 0 auto;
+  background-color: #fc6e51;
+  border-radius: 10px 10px 0px 0px;
+  z-index: 1;
+  color: white;
+  text-align: center;
+  .div-purchase-favorite-icon {
+    line-height: 81px;
+    svg {
+      cursor: pointer;
+      font-size: 2rem;
+    }
+  }
+  .div-purchase-cart-icon {
+    line-height: 77px;
+    svg {
+      cursor: pointer;
+      font-size: 2rem;
+    }
+  }
+  .div-purchase-text {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 61px;
+    cursor: pointer;
+  }
+  .grid-purchase-divider {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .divider {
+      width: 17px;
+      height: 17px;
+      justify-content: center;
+    }
+    .right-divider {
+      border-right: 1px solid white;
+    }
+    .left-divider {
+      border-left: 1px solid white;
+    }
   }
 `;
 
@@ -194,6 +243,8 @@ const Product: FC = () => {
     setIsFavorite(!isFavorite);
   };
 
+  const handleClickCart = () => {};
+
   return (
     <ProductLayout>
       <InfoGrid container>
@@ -225,22 +276,8 @@ const Product: FC = () => {
           <Grid className="brand" item xs={12}>
             <Typography>{product.brand}</Typography>
           </Grid>
-          <Grid className="name" item xs={10}>
+          <Grid className="name" item xs={11}>
             <Typography>{product.name}</Typography>
-          </Grid>
-          <Grid className="grid-icon" item xs={1}>
-            {!isFavorite && (
-              <FavoriteBorderIcon
-                className="favorite-icon"
-                onClick={handleClickFavorite}
-              />
-            )}
-            {isFavorite && (
-              <FavoriteIcon
-                className="favorite-icon"
-                onClick={handleClickFavorite}
-              />
-            )}
           </Grid>
           <Grid className="grid-icon" item xs={1}>
             <ShareIcon />
@@ -255,7 +292,7 @@ const Product: FC = () => {
         </TitleGrid>
       </InfoGrid>
       <Divider sx={{ borderWidth: "4px" }} />
-      <DescGrid>
+      <DescGrid container>
         <Grid className="grid-desc-title" item xs={12}>
           <Typography>상품설명</Typography>
         </Grid>
@@ -263,6 +300,30 @@ const Product: FC = () => {
           <img src={product.desc} />
         </Grid>
       </DescGrid>
+      <PurchaseTabGrid container>
+        <Grid item xs={1.5} sx={{ textAlign: "center" }}>
+          <Box className="div-purchase-favorite-icon">
+            {!isFavorite && (
+              <FavoriteBorderIcon onClick={handleClickFavorite} />
+            )}
+            {isFavorite && <FavoriteIcon onClick={handleClickFavorite} />}
+          </Box>
+        </Grid>
+        <Grid className="grid-purchase-divider" item xs={1}>
+          <Box className="divider left-divider"></Box>
+        </Grid>
+        <Grid className="purchase-text" item xs={7}>
+          <Box className="div-purchase-text">구매하기</Box>
+        </Grid>
+        <Grid className="grid-purchase-divider" item xs={1}>
+          <Box className="divider right-divider"></Box>
+        </Grid>
+        <Grid item xs={1.5}>
+          <Box className="div-purchase-cart-icon">
+            <ShoppingBagOutlinedIcon onClick={handleClickCart} />
+          </Box>
+        </Grid>
+      </PurchaseTabGrid>
     </ProductLayout>
   );
 };
