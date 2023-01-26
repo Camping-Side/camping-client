@@ -144,7 +144,6 @@ const PurchaseTabGrid = styled(Grid)`
     .divider {
       width: 17px;
       height: 17px;
-      justify-content: center;
     }
     .right-divider {
       border-right: 1px solid white;

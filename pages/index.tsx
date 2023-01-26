@@ -7,17 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import BaseButton from "@cp/common/BaseButton";
 import { getInfo } from "../actions/account";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 //임시배너
 import Banner from "../assets/img/temp/banner.png";
 
 //임시상품
-import Product1 from "../assets/img/temp/product1.png";
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
-import { ProductSwiper } from "@cp/product/ProductSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
 
 const App: FC = () => {

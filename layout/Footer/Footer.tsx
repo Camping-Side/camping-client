@@ -12,96 +12,86 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import CustomLink from "@cp/common/CustomLink";
 
-const MenuButton = styled(Box)`
-  cursor: pointer;
+const FooterBox = styled(Box)`
+  position: fixed;
+  bottom: 0;
+  width: 640px;
+  height: 58px;
+  margin: 0 auto;
+  border-top: 2px solid #e9e9e9;
+  text-align: center;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  .selected {
+    color: #5bbd6b;
+  }
+  .un-selected {
+    color: #a7a7a7;
+  }
 `;
 
 export default function BottomAppBar() {
   const router = useRouter();
 
+  const getPathIconClassName = (path: string) => {
+    return router.pathname === path ? "selected" : "un-selected";
+  };
+
   return (
-    <Box className={styles.footerBar + " layoutWidth"}>
-      <Toolbar
-        sx={{
-          justifyContent: "space-between",
-          marginRight: 3,
-          marginLeft: 3,
-          zIndex: 5,
-        }}
-      >
-        <Link href={"/"} passHref>
-          <a>
-            <MenuButton
-              sx={{ color: router.pathname === "/" ? "#5bbd6b" : "#A7A7A7" }}
-            >
+    <FooterBox>
+      <Grid container>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/"}>
+            <Box className={getPathIconClassName("/")}>
               <HomeIcon />
               <br />
               <Typography>홈</Typography>
-            </MenuButton>
-          </a>
-        </Link>
-        <Link href={"/shop"} passHref>
-          <a>
-            <MenuButton
-              sx={{
-                color: router.pathname.startsWith("/shop")
-                  ? "#5bbd6b"
-                  : "#A7A7A7",
-              }}
-            >
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/shop"}>
+            <Box className={getPathIconClassName("/shop")}>
               <ShoppingCartIcon />
               <br />
               <Typography>상점</Typography>
-            </MenuButton>
-          </a>
-        </Link>
-        <Link href={"/info"} passHref>
-          <a>
-            <MenuButton
-              sx={{
-                color: router.pathname.startsWith("/info")
-                  ? "#5bbd6b"
-                  : "#A7A7A7",
-              }}
-            >
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/camping"}>
+            <Box className={getPathIconClassName("/camping")}>
               <EditIcon />
               <br />
               <Typography>캠핑인포</Typography>
-            </MenuButton>
-          </a>
-        </Link>
-        <Link href={"/community"} passHref>
-          <a>
-            <MenuButton
-              sx={{
-                color: router.pathname.startsWith("/community")
-                  ? "#5bbd6b"
-                  : "#A7A7A7",
-              }}
-            >
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/community"}>
+            <Box className={getPathIconClassName("/community")}>
               <SmsIcon />
               <br />
               <Typography>커뮤니티</Typography>
-            </MenuButton>
-          </a>
-        </Link>
-        <Link href={"/mypage"} passHref>
-          <a>
-            <MenuButton
-              sx={{
-                color: router.pathname.startsWith("/mypage")
-                  ? "#5bbd6b"
-                  : "#A7A7A7",
-              }}
-            >
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/my"}>
+            <Box className={getPathIconClassName("/my")}>
               <PersonIcon />
               <br />
               <Typography>마이</Typography>
-            </MenuButton>
-          </a>
-        </Link>
-      </Toolbar>
-    </Box>
+            </Box>
+          </CustomLink>
+        </Grid>
+      </Grid>
+    </FooterBox>
   );
 }

@@ -8,6 +8,9 @@ import "swiper/css/navigation";
 
 const BannerSwiperStyle = styled.div`
   .swiper {
+    .swiper-slide {
+      cursor: pointer;
+    }
     &-pagination-fraction {
       width: 10% !important;
       height: 33px;
@@ -40,6 +43,9 @@ const BannerSwiperStyle = styled.div`
 `;
 
 export const BannerSwiper = (props: any) => {
+  const handleClickBanner = () => {
+    console.log("banner click");
+  };
   return (
     <BannerSwiperStyle>
       <Swiper
@@ -52,7 +58,7 @@ export const BannerSwiper = (props: any) => {
       >
         {props.bannerList.map((banner: any, index: number) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} onClick={handleClickBanner}>
               <img src={banner.src} />
             </SwiperSlide>
           );

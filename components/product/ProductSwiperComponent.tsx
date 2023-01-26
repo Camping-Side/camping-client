@@ -8,6 +8,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ProductSwiper } from "@cp/product/ProductSwiper";
 import Product1 from "../../assets/img/temp/product1.png";
 import Link from "next/link";
+import CustomLink from "@cp/common/CustomLink";
 
 export const ProductSwiperComponent = (props: any) => {
   //temp product
@@ -47,13 +48,11 @@ export const ProductSwiperComponent = (props: any) => {
         >
           더보기
         </Typography>
-        <Link href={props.link} passHref>
-          <a>
-            <ArrowForwardIosIcon
-              sx={{ color: "#919191", fontSize: "1.2rem", marginTop: 1.5 }}
-            />
-          </a>
-        </Link>
+        <CustomLink href={props.link}>
+          <ArrowForwardIosIcon
+            sx={{ color: "#919191", fontSize: "1.2rem", marginTop: 1.5 }}
+          />
+        </CustomLink>
       </Grid>
 
       <Grid item xs={12}>
