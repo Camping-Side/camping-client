@@ -9,7 +9,7 @@ import ProductList2 from "../../../assets/img/temp/productList2.png";
 import styled from "@emotion/styled";
 import ProductLike from "../../../assets/img/temp/productLike.svg";
 import ProductDislike from "../../../assets/img/temp/productDislike.svg";
-import { numberCommaFilter } from "../../../util/commonFilter";
+import { NumberCommaFilter } from "../../../util/commonFilter";
 import { CategoryTab } from "@cp/product/CategoryTab";
 import { useRouter } from "next/router";
 import CustomLink from "@cp/common/CustomLink";
@@ -40,7 +40,7 @@ const ProductImageStyle = styled.div`
     left: 79%;
     z-index: 1;
   }
-  .soldOut {
+  .sold-out {
     position: absolute;
     border-radius: 18px;
     top: 0%;
@@ -228,7 +228,7 @@ const Product: FC = () => {
                         <img className={"like"} src={ProductDislike.src} />
                       )}
                       {product.soldOut && (
-                        <div className={"soldOut"}>
+                        <div className={"sold-out"}>
                           <span className={"text"}>품절</span>
                         </div>
                       )}
@@ -266,7 +266,7 @@ const Product: FC = () => {
                         <span className={"dcRate"}>{product.dcRate}%</span>
                       )}
                       <span className={"price"}>
-                        {numberCommaFilter(product.price)}원
+                        {NumberCommaFilter(product.price)}원
                       </span>
                     </Grid>
                   </ProductDescStyle>

@@ -1,4 +1,4 @@
-export const birthFilter = (birth: string) => {
+export const BirthFilter = (birth: string) => {
   if (!birth) return "";
   return (
     birth.substring(0, 4) +
@@ -10,7 +10,7 @@ export const birthFilter = (birth: string) => {
   );
 };
 
-export const phoneFilter = (phone: string) => {
+export const PhoneFilter = (phone: string) => {
   if (!phone) return "";
   let filterdPhone = "";
   if (phone.length === 10) {
@@ -31,6 +31,6 @@ export const phoneFilter = (phone: string) => {
   return filterdPhone;
 };
 
-export const numberCommaFilter = (number: number) => {
+export const NumberCommaFilter = (number: number) => {
   return number ? number.toLocaleString() + "" : "";
 };

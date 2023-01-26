@@ -10,13 +10,77 @@ import ProductDetail4 from "../../../assets/img/temp/product_detail4.png";
 import ProductDetail5 from "../../../assets/img/temp/product_detail5.png";
 import ProductDetail6 from "../../../assets/img/temp/product_detail6.png";
 import ProductDetail7 from "../../../assets/img/temp/product_detail7.png";
+import ProductDesc from "../../../assets/img/temp/product_desc.png";
 
 import Box from "@mui/material/Box";
 import styled from "@emotion/styled";
+import Typography from "@mui/material/Typography";
+import ShareIcon from "@mui/icons-material/Share";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { NumberCommaFilter } from "../../../util/commonFilter";
+import { Divider } from "@mui/material";
 
-const MainGrid = styled(Grid)`
+const InfoGrid = styled(Grid)`
   .sub-image-grid {
     margin-top: 15px;
+  }
+`;
+
+const TitleGrid = styled(Grid)`
+  margin-top: 5px;
+  padding: 20px;
+  .grid-icon {
+    text-align: center;
+    cursor: pointer;
+    line-height: 44px;
+    .favorite-icon {
+      color: red;
+    }
+  }
+  .brand {
+    font-weight: 700;
+    font-size: 16px;
+    color: #919191;
+  }
+  .name {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 30px;
+    color: #222222;
+  }
+  .dc-rate {
+    font-weight: 700;
+    font-size: 26px;
+    color: #fc6e51;
+    margin-right: 16px;
+  }
+  .price {
+    font-weight: 700;
+    font-size: 26px;
+    color: #222222;
+    margin-right: 8px;
+  }
+  .origin-price {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 42px;
+    text-decoration-line: line-through;
+    color: #919191;
+  }
+`;
+
+const DescGrid = styled(Grid)`
+  padding: 20px;
+  p {
+    font-weight: 700;
+    font-size: 22px;
+    color: #222222;
+  }
+  .grid-desc-title {
+    margin-bottom: 16px;
   }
 `;
 
@@ -24,6 +88,7 @@ const SubImageBox = styled(Box)`
   display: flex;
   margin-left: 18px;
   div {
+    position: relative;
     padding: 3.2px;
   }
   img {
@@ -32,15 +97,17 @@ const SubImageBox = styled(Box)`
     line-height: 80px;
     border-radius: 8px;
     cursor: pointer;
+    opacity: 0.4;
   }
   .selected {
     outline: 2px solid #5bbd6b;
     outline-offset: -2px;
+    opacity: 1;
   }
 `;
 
 type Product = {
-  img: string;
+  img: [];
   label: string;
   like: boolean;
   soldOut: boolean;
@@ -77,11 +144,13 @@ const Product: FC = () => {
     like: true,
     soldOut: false,
     rank: "",
-    name: "HAEUL터널",
-    desc: "4너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
+    brand: "HAEUL터널",
+    name: "4너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
     dcRate: 31,
-    price: 46800,
+    price: 20000,
+    originPrice: 46800,
     category: "터널",
+    desc: ProductDesc.src,
   };
 
   const [imgList, setImgList] = useState<SubImage[]>([]);
@@ -119,15 +188,21 @@ const Product: FC = () => {
     setSelectedImg(filteredImgList[0].url);
   };
 
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleClickFavorite = () => {
+    setIsFavorite(!isFavorite);
+  };
+
   return (
     <ProductLayout>
-      <MainGrid container>
-        <Grid item container xs={12}>
+      <InfoGrid container>
+        <Grid item xs={12}>
           <Box>
             <img src={selectedImg} />
           </Box>
         </Grid>
-        <Grid className="sub-image-grid" item container xs={12}>
+        <Grid className="sub-image-grid" item xs={12}>
           <SubImageBox>
             {imgList.map((img: SubImage, index: number) => {
               return (
@@ -141,13 +216,53 @@ const Product: FC = () => {
                       handleClickImage(index);
                     }}
                   />
-                  {index}
                 </Box>
               );
             })}
           </SubImageBox>
         </Grid>
-      </MainGrid>
+        <TitleGrid container>
+          <Grid className="brand" item xs={12}>
+            <Typography>{product.brand}</Typography>
+          </Grid>
+          <Grid className="name" item xs={10}>
+            <Typography>{product.name}</Typography>
+          </Grid>
+          <Grid className="grid-icon" item xs={1}>
+            {!isFavorite && (
+              <FavoriteBorderIcon
+                className="favorite-icon"
+                onClick={handleClickFavorite}
+              />
+            )}
+            {isFavorite && (
+              <FavoriteIcon
+                className="favorite-icon"
+                onClick={handleClickFavorite}
+              />
+            )}
+          </Grid>
+          <Grid className="grid-icon" item xs={1}>
+            <ShareIcon />
+          </Grid>
+          <Grid container item xs={12}>
+            <Box className="dc-rate">{product.dcRate}%</Box>
+            <Box className="price">{NumberCommaFilter(product.price)}원</Box>
+            <Box className="origin-price">
+              {NumberCommaFilter(product.originPrice)}원
+            </Box>
+          </Grid>
+        </TitleGrid>
+      </InfoGrid>
+      <Divider sx={{ borderWidth: "4px" }} />
+      <DescGrid>
+        <Grid className="grid-desc-title" item xs={12}>
+          <Typography>상품설명</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <img src={product.desc} />
+        </Grid>
+      </DescGrid>
     </ProductLayout>
   );
 };

@@ -9,7 +9,8 @@ import Grid from "@mui/material/Grid";
 
 import ProductLike from "../../assets/img/temp/productLike.svg";
 import ProductDislike from "../../assets/img/temp/productDislike.svg";
-import { numberCommaFilter } from "../../util/commonFilter";
+import { NumberCommaFilter } from "../../util/commonFilter";
+import CustomLink from "@cp/common/CustomLink";
 
 const ProductImageStyle = styled.div`
   .image {
@@ -86,55 +87,62 @@ export const ProductSwiper = (props: any) => {
       {props.productList.map((product: any, index: number) => {
         return (
           <SwiperSlide key={index}>
-            <ProductDescStyle>
-              <Grid container>
-                <Grid item xs={12} mb={1.5}>
-                  <ProductImageStyle>
-                    <img className={"image"} src={product.img} />
-                    {product.label && (
-                      <div className={"label"}>{product.label}</div>
+            <CustomLink href={"/shop/product/" + index}>
+              <ProductDescStyle>
+                <Grid container>
+                  <Grid item xs={12} mb={1.5}>
+                    <ProductImageStyle>
+                      <img className={"image"} src={product.img} />
+                      {product.label && (
+                        <div className={"label"}>{product.label}</div>
+                      )}
+                      {product.like && (
+                        <img className={"like"} src={ProductLike.src} />
+                      )}
+                      {!product.like && (
+                        <img className={"like"} src={ProductDislike.src} />
+                      )}
+                      {product.soldOut && (
+                        <div className={"soldOut"}>
+                          <span className={"text"}>품절</span>
+                        </div>
+                      )}
+                    </ProductImageStyle>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    mb={1.5}
+                    sx={{ maxWidth: "92% !important" }}
+                  >
+                    {product.rank && (
+                      <span className={"rank"}>{product.rank}</span>
                     )}
-                    {product.like && (
-                      <img className={"like"} src={ProductLike.src} />
+                    <span className={"name"}>{product.name}</span>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    mb={1.5}
+                    sx={{
+                      color: "#383838",
+                      maxWidth: "92% !important",
+                      fontSize: 16,
+                    }}
+                  >
+                    {product.desc}
+                  </Grid>
+                  <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
+                    {product.dcRate > 0 && (
+                      <span className={"dcRate"}>{product.dcRate}%</span>
                     )}
-                    {!product.like && (
-                      <img className={"like"} src={ProductDislike.src} />
-                    )}
-                    {product.soldOut && (
-                      <div className={"soldOut"}>
-                        <span className={"text"}>품절</span>
-                      </div>
-                    )}
-                  </ProductImageStyle>
+                    <span className={"price"}>
+                      {NumberCommaFilter(product.price)}원
+                    </span>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} mb={1.5} sx={{ maxWidth: "92% !important" }}>
-                  {product.rank && (
-                    <span className={"rank"}>{product.rank}</span>
-                  )}
-                  <span className={"name"}>{product.name}</span>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  mb={1.5}
-                  sx={{
-                    color: "#383838",
-                    maxWidth: "92% !important",
-                    fontSize: 16,
-                  }}
-                >
-                  {product.desc}
-                </Grid>
-                <Grid item xs={12} sx={{ maxWidth: "92% !important" }}>
-                  {product.dcRate > 0 && (
-                    <span className={"dcRate"}>{product.dcRate}%</span>
-                  )}
-                  <span className={"price"}>
-                    {numberCommaFilter(product.price)}원
-                  </span>
-                </Grid>
-              </Grid>
-            </ProductDescStyle>
+              </ProductDescStyle>
+            </CustomLink>
           </SwiperSlide>
         );
       })}
