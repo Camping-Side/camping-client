@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 //임시배너
 import Banner from "../../assets/img/temp/banner.png";
 
-import Box from "../../assets/img/product/category/box.png";
+import BoxImg from "../../assets/img/product/category/box.png";
 import Chair from "../../assets/img/product/category/chair.png";
 import Coppell from "../../assets/img/product/category/coppell.png";
 import Fire from "../../assets/img/product/category/fire.png";
@@ -27,8 +27,49 @@ import styled from "@emotion/styled";
 import SearchIcon from "@mui/icons-material/Search";
 import { Category } from "@cp/product/Category";
 import CustomLink from "@cp/common/CustomLink";
+import Box from "@mui/material/Box";
 
-const SearchInput = styled.div`
+const ShopGrid = styled(Grid)`
+  .grid-shop-padding {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .grid-shop-phrase-margin {
+    margin-top: 24px;
+  }
+  .grid-shop-search-margin {
+    margin-bottom: 32px;
+  }
+  .grid-shop-banner-margin {
+    margin-top: 56px;
+  }
+  .phrase1 {
+    font-size: 26px;
+    font-weight: 400;
+  }
+  .phrase2 {
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .grid-shop-more {
+    display: flex;
+    p {
+      color: #919191;
+      font-size: 15px;
+      line-height: 3;
+      font-weight: 700;
+      margin-right: 4px;
+      margin-left: 16px;
+    }
+    svg {
+      color: #919191;
+      font-size: 1.2rem;
+      margin-top: 12px;
+    }
+  }
+`;
+
+const SearchBox = styled(Box)`
   position: relative;
   input {
     border: none;
@@ -68,7 +109,7 @@ const Shop: FC = () => {
     { name: "코펠", img: Coppell.src },
     { name: "화로", img: Fire.src },
     { name: "랜턴", img: Lantern.src },
-    { name: "수납", img: Box.src },
+    { name: "수납", img: BoxImg.src },
   ];
 
   const [keyword, setKeyword] = useState("");
@@ -85,40 +126,31 @@ const Shop: FC = () => {
 
   return (
     <Layout>
-      <Grid container>
-        <Grid item xs={12} mt={3} sx={{ paddingLeft: 2, paddingRight: 2 }}>
-          <Typography sx={{ fontSize: "26px", fontWeight: "400" }}>
+      <ShopGrid container>
+        <Grid
+          item
+          xs={12}
+          className={"grid-shop-phrase-margin grid-shop-padding"}
+        >
+          <Typography className={"phrase1"}>
             나상엽님, 좋은 아침이에요.
           </Typography>
         </Grid>
-        <Grid item xs={10} mb={3} sx={{ paddingLeft: 2, paddingRight: 2 }}>
-          <Typography sx={{ fontSize: "26px", fontWeight: "700" }}>
-            어떤 장비를 찾으시나요?
-          </Typography>
+        <Grid item xs={10} className={"grid-shop-padding"}>
+          <Typography className={"phrase2"}>어떤 장비를 찾으시나요?</Typography>
         </Grid>
-        <Grid item xs={2} sx={{ display: "flex" }}>
-          <Typography
-            sx={{
-              color: "#919191",
-              fontSize: 15,
-              lineHeight: 3,
-              fontWeight: "bold",
-              marginRight: 0.5,
-              marginLeft: 2,
-            }}
-          >
-            더보기
-          </Typography>
-          <Link href={"/"} passHref>
-            <a>
-              <ArrowForwardIosIcon
-                sx={{ color: "#919191", fontSize: "1.2rem", marginTop: 1.5 }}
-              />
-            </a>
-          </Link>
+        <Grid item xs={2} className={"grid-shop-more"}>
+          <Typography>더보기</Typography>
+          <CustomLink href={"/"}>
+            <ArrowForwardIosIcon />
+          </CustomLink>
         </Grid>
-        <Grid item xs={12} mb={4} sx={{ paddingLeft: 2, paddingRight: 2 }}>
-          <SearchInput>
+        <Grid
+          item
+          xs={12}
+          className={"grid-shop-padding grid-shop-search-margin"}
+        >
+          <SearchBox>
             <input
               type={"text"}
               value={keyword}
@@ -127,16 +159,16 @@ const Shop: FC = () => {
               placeholder={"찾으시는 장비를 검색해보세요."}
             />
             <SearchIcon className={"searchIcon"} />
-          </SearchInput>
+          </SearchBox>
         </Grid>
-        <Grid item container xs={12} sx={{ textAlign: "center" }}>
+        <Grid item container xs={12}>
           <Category categoryList={categoryList} />
         </Grid>
-        <Grid item xs={12} mt={7}>
+        <Grid item xs={12} className={"grid-shop-banner-margin"}>
           <BannerSwiper bannerList={bannerList} />
         </Grid>
         <ProductSwiperComponent title={"주간베스트"} link={"/shop/top"} />
-      </Grid>
+      </ShopGrid>
       <CustomLink href={"/sample"}>샘플바로가기</CustomLink>
       <br />
     </Layout>

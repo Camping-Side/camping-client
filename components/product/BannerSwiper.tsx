@@ -5,8 +5,9 @@ import styled from "@emotion/styled";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Box from "@mui/material/Box";
 
-const BannerSwiperStyle = styled.div`
+const BannerSwiperBox = styled(Box)`
   .swiper {
     .swiper-slide {
       cursor: pointer;
@@ -47,7 +48,7 @@ export const BannerSwiper = (props: any) => {
     console.log("banner click");
   };
   return (
-    <BannerSwiperStyle>
+    <BannerSwiperBox>
       <Swiper
         pagination={{
           type: "fraction",
@@ -64,6 +65,6 @@ export const BannerSwiper = (props: any) => {
           );
         })}
       </Swiper>
-    </BannerSwiperStyle>
+    </BannerSwiperBox>
   );
 };

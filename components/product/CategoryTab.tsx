@@ -4,7 +4,13 @@ import Tab from "@mui/material/Tab";
 import styled from "@emotion/styled";
 import { Tabs } from "@mui/material";
 
-const TabsStyle = styled(Tabs)`
+const CategoryTabBox = styled(Box)`
+  width: 100%;
+  .div-tab {
+    margin-bottom: 40px;
+    border-bottom: 1px solid;
+    border-color: rgba(0, 0, 0, 0.12);
+  }
   .Mui-selected {
     color: #5bbd07 !important;
   }
@@ -17,6 +23,7 @@ const TabsStyle = styled(Tabs)`
     color: #919191;
   }
 `;
+
 export const CategoryTab = (props: any) => {
   const categoryList = props.categoryList;
 
@@ -31,9 +38,9 @@ export const CategoryTab = (props: any) => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }} mb={5}>
-        <TabsStyle
+    <CategoryTabBox>
+      <Box className={"div-tab"}>
+        <Tabs
           value={selectedCategoryIndex}
           onChange={handleSelectedCategory}
           variant="scrollable"
@@ -43,8 +50,8 @@ export const CategoryTab = (props: any) => {
           {categoryList.map((category: any, index: number) => {
             return <Tab key={index} label={category} />;
           })}
-        </TabsStyle>
+        </Tabs>
       </Box>
-    </Box>
+    </CategoryTabBox>
   );
 };

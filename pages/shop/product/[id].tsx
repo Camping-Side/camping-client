@@ -159,9 +159,9 @@ type Product = {
   label: string;
   like: boolean;
   soldOut: boolean;
-  rank: string;
+  rank: number;
+  brand: string;
   name: string;
-  desc: string;
   dcRate: number;
   price: number;
   category: string;
@@ -300,7 +300,7 @@ const Product: FC = () => {
         </Grid>
       </DescGrid>
       <PurchaseTabGrid container>
-        <Grid item xs={1.5} sx={{ textAlign: "center" }}>
+        <Grid item xs={1.5}>
           <Box className="div-purchase-favorite-icon">
             {!isFavorite && (
               <FavoriteBorderIcon onClick={handleClickFavorite} />
