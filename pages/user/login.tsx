@@ -88,7 +88,7 @@ const LoginBox = styled(Box)`
   }
   .grid-login-qna {
     text-align: center;
-    p {
+    a {
       font-size: 16px;
       font-weight: 400;
       color: #919191;
@@ -285,7 +285,7 @@ const Login: FC = () => {
               <img src={SocialLoginGoogle.src} />
             </Grid>
             <Grid item xs={12} className={"grid-login-qna"}>
-              <Typography>로그인에 어려움이 있나요?</Typography>
+              <CustomLink href={"/qna"}>로그인에 어려움이 있나요?</CustomLink>
             </Grid>
           </Grid>
         </FormControl>
