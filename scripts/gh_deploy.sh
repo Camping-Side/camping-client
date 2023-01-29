@@ -10,13 +10,13 @@ APPLICATION_LOG_PATH="/home/ubuntu/$PROJECT_NAME/application.log"
 echo "===== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 
 echo "> install 파일명: $CLIENT_PATH" >> $DEPLOY_LOG_PATH
-npm install 
+yarn install 
 
 echo "> build 시작" >> $DEPLOY_LOG_PATH
-npm build
+yarn build
 
 echo "> PM2 start" >> $DEPLOY_LOG_PATH
-nohup npm pm2 start >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+nohup yarn pm2 start >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
 
 sleep 3
 
