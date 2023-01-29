@@ -8,7 +8,8 @@
     "build": "cross-env ANALYZE=true NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pm2 start": "pm2-runtime start ecosystem.config.js --env production"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "moment": "^2.29.4",
     "next": "^12.2.2",
     "next-redux-wrapper": "^7.0.5",
+    "pm2": "^5.2.2",
     "prettier": "^2.8.1",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
