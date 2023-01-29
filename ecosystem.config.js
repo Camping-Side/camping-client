@@ -4,7 +4,7 @@ module.exports = {
       name: "camping",
       script: "./.next/server/pages/_app.js",
       env_production: {
-        HOST: '15.165.88.20',
+        HOST: '0.0.0.0',
         PORT: 3000,
         NODE_ENV: "production",
       },
