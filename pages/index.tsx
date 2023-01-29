@@ -1,5 +1,4 @@
-import React from "react";
-import { FC } from "react";
+import React, { FC } from "react";
 
 import Layout from "@layout/Layout";
 import Link from "next/link";
@@ -7,6 +6,15 @@ import authSlice from "../reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import BaseButton from "@cp/common/BaseButton";
 import { getInfo } from "../actions/account";
+import Grid from "@mui/material/Grid";
+
+//임시배너
+import Banner from "../assets/img/temp/banner.png";
+
+//임시상품
+
+import { BannerSwiper } from "@cp/product/BannerSwiper";
+import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -22,8 +30,20 @@ const App: FC = () => {
     dispatch(getInfo());
   };
 
+  //temp bannerList
+  const bannerList = [Banner, Banner, Banner, Banner];
+
   return (
     <Layout>
+      <Grid container>
+        <Grid item xs={12}>
+          <BannerSwiper bannerList={bannerList} />
+        </Grid>
+        <ProductSwiperComponent
+          title={"캠퍼들의 워너비 Top 10"}
+          link={"/shop/top"}
+        />
+      </Grid>
       <Link href="/sample">샘플바로가기</Link>
       <br />
       {!loginDone && <Link href="/user/login">로그인 바로가기</Link>}

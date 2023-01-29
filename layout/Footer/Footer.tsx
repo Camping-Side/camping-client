@@ -1,42 +1,97 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+import * as React from "react";
+import Toolbar from "@mui/material/Toolbar";
 import Link from "next/link";
 import styles from "@cmStyles/module/footer.module.scss";
+import HomeIcon from "@mui/icons-material/Home";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import EditIcon from "@mui/icons-material/Edit";
+import SmsIcon from "@mui/icons-material/Sms";
+import PersonIcon from "@mui/icons-material/Person";
+
+import Typography from "@mui/material/Typography";
+import { useRouter } from "next/router";
+import styled from "@emotion/styled";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import CustomLink from "@cp/common/CustomLink";
+
+const FooterBox = styled(Box)`
+  position: fixed;
+  bottom: 0;
+  width: 640px;
+  height: 58px;
+  margin: 0 auto;
+  border-top: 2px solid #e9e9e9;
+  text-align: center;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  .selected {
+    color: #5bbd6b;
+  }
+  .un-selected {
+    color: #a7a7a7;
+  }
+`;
 
 export default function BottomAppBar() {
-    return (
-        <div className={styles.footerBar + " layoutWidth"}>
-            <Toolbar
-                sx={{ justifyContent: "space-between" }}
-            >
-                <Link href={'/'}>
-                    <IconButton color="inherit">
-                        홈
-                    </IconButton>
-                </Link>
-                <Link href={'/shop'}>
-                    <IconButton color="inherit">
-                        상점
-                    </IconButton>
-                </Link>
-                <Link href={'/info'}>
-                    <IconButton color="inherit">
-                        캠핑인포
-                    </IconButton>
-                </Link>
-                <Link href={'/community'}>
-                    <IconButton color="inherit">
-                        커뮤니티
-                    </IconButton>
-                </Link>
-                <Link href={'/mypage'}>
-                    <IconButton color="inherit">
-                        마이페이지
-                    </IconButton>
-                </Link>
-            </Toolbar>
-        </div>
-    );
+  const router = useRouter();
+
+  const getPathIconClassName = (path: string) => {
+    return router.pathname === path ? "selected" : "un-selected";
+  };
+
+  return (
+    <FooterBox>
+      <Grid container>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/"}>
+            <Box className={getPathIconClassName("/")}>
+              <HomeIcon />
+              <br />
+              <Typography>홈</Typography>
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/shop"}>
+            <Box className={getPathIconClassName("/shop")}>
+              <ShoppingCartIcon />
+              <br />
+              <Typography>상점</Typography>
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/camping"}>
+            <Box className={getPathIconClassName("/camping")}>
+              <EditIcon />
+              <br />
+              <Typography>캠핑인포</Typography>
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/community"}>
+            <Box className={getPathIconClassName("/community")}>
+              <SmsIcon />
+              <br />
+              <Typography>커뮤니티</Typography>
+            </Box>
+          </CustomLink>
+        </Grid>
+        <Grid item xs={2.4}>
+          <CustomLink href={"/my"}>
+            <Box className={getPathIconClassName("/my")}>
+              <PersonIcon />
+              <br />
+              <Typography>마이</Typography>
+            </Box>
+          </CustomLink>
+        </Grid>
+      </Grid>
+    </FooterBox>
+  );
 }

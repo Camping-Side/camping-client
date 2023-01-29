@@ -1,12 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import Layout from "@layout/Layout";
-import Link from "next/link";
 import {
   Box,
   Button,
   Checkbox,
-  Container,
-  CssBaseline,
   FormControl,
   FormControlLabel,
   Grid,
@@ -14,14 +11,90 @@ import {
   Typography,
 } from "@mui/material/";
 import styled from "@emotion/styled";
-import SocialLoginComponent from "../../components/user/SocialLogin";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/auth";
 import Router from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import SocialLoginNaver from "../../assets/img/temp/socialLogin_naver.png";
+import SocialLoginKakao from "../../assets/img/temp/socialLogin_kakao.png";
+import SocialLoginGoogle from "../../assets/img/temp/socialLogin_google.png";
+import CustomLink from "@cp/common/CustomLink";
 
-const Boxs = styled(Box)`
-  padding-bottom: 40px !important;
+const LoginBox = styled(Box)`
+  margin-top: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  .grid-login-title-margin {
+    margin-bottom: 50px;
+    p {
+      font-weight: 700;
+      font-size: 22px;
+    }
+  }
+  .grid-login-email-margin {
+    margin-bottom: 30px;
+    p {
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+  }
+  .grid-login-password-margin {
+    margin-bottom: 10px;
+    p {
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+  }
+  .grid-login-remember-margin {
+    margin-bottom: 50px;
+    .MuiFormControlLabel-label {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+  .grid-login-button-margin {
+    margin-bottom: 25px;
+    button {
+      color: white;
+      :hover {
+        background-color: #fc6e51;
+      }
+      background-color: #fc6e51;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+  }
+  .grid-login-join-margin {
+    text-align: center;
+    margin-bottom: 150px;
+  }
+  .grid-login-sns-text-margin {
+    text-align: center;
+    margin-bottom: 24px;
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      color: #919191;
+    }
+  }
+  .grid-login-sns-button-margin {
+    text-align: center;
+    margin-bottom: 200px;
+    img {
+      padding: 10px;
+    }
+  }
+  .grid-login-qna {
+    text-align: center;
+    a {
+      font-size: 16px;
+      font-weight: 400;
+      color: #919191;
+      text-decoration: underline;
+    }
+  }
 `;
 
 type Inputs = {
@@ -59,16 +132,17 @@ const Login: FC = () => {
     setRememberChecked(event.target.checked);
   };
 
-  //loginDone
-  const { loginDone } = useSelector((state: any) => state.auth);
+  const { loginDone, loginError } = useSelector((state: any) => state.auth);
   useEffect(() => {
     if (loginDone) {
       if (rememberChecked && !localStorage.getItem("camporest_remember")) {
         localStorage.setItem("camporest_remember", watch("email"));
       }
       Router.push("/");
+    } else if (loginError) {
+      alert("로그인 에러");
     }
-  }, [loginDone]);
+  }, [loginDone, loginError]);
 
   //로그인
   const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -111,7 +185,7 @@ const Login: FC = () => {
 
   const formInfo = {
     email: {
-      label: "아이디(이메일)",
+      label: "camporest@camporest.com",
       value: {
         ...register("email", {
           required: true,
@@ -127,7 +201,7 @@ const Login: FC = () => {
       errorMessage: errorMessage.email(),
     },
     password: {
-      label: "비밀번호(6~12자리)",
+      label: "비밀번호 입력",
       value: {
         ...register("password", {
           required: true,
@@ -147,73 +221,75 @@ const Login: FC = () => {
 
   return (
     <Layout>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            로그인
-          </Typography>
-          <Boxs
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ mt: 3 }}
-          >
-            <FormControl component="fieldset" variant="standard">
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label={formInfo.email.label}
-                    {...formInfo.email.value}
-                    error={formInfo.email.error}
-                    helperText={formInfo.email.errorMessage}
+      <LoginBox component="form" onSubmit={handleSubmit(onSubmit)}>
+        <FormControl component="fieldset" variant="standard">
+          <Grid container>
+            <Grid item xs={12} className={"grid-login-title-margin"}>
+              <Typography>로그인</Typography>
+            </Grid>
+            <Grid item xs={12} className={"grid-login-email-margin"}>
+              <Typography>이메일</Typography>
+              <TextField
+                fullWidth
+                label={formInfo.email.label}
+                {...formInfo.email.value}
+                error={formInfo.email.error}
+                helperText={formInfo.email.errorMessage}
+              />
+            </Grid>
+            <Grid item xs={12} className={"grid-login-password-margin"}>
+              <Typography>비밀번호</Typography>
+              <TextField
+                fullWidth
+                type="password"
+                label={formInfo.password.label}
+                {...formInfo.password.value}
+                error={formInfo.password.error}
+                helperText={formInfo.password.errorMessage}
+              />
+            </Grid>
+            <Grid item xs={6} className={"grid-login-remember-margin"}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={checkRemember}
+                    checked={rememberChecked}
+                    icon={<CheckCircleIcon />}
+                    checkedIcon={<CheckCircleIcon />}
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    type="password"
-                    label={formInfo.password.label}
-                    {...formInfo.password.value}
-                    error={formInfo.password.error}
-                    helperText={formInfo.password.errorMessage}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        onChange={checkRemember}
-                        checked={rememberChecked}
-                        color="primary"
-                      />
-                    }
-                    label="remember"
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <Link href="/user/find">회원정보찾기</Link> /{" "}
-                  <Link href="/user/join">회원가입</Link>
-                </Grid>
-              </Grid>
+                }
+                label="아이디 저장"
+              />
+            </Grid>
+            <Grid item xs={12} className={"grid-login-button-margin"}>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                disableFocusRipple
                 size="large"
               >
                 로그인
               </Button>
-            </FormControl>
-          </Boxs>
-        </Box>
-      </Container>
-      <SocialLoginComponent />
+            </Grid>
+            <Grid item xs={12} className={"grid-login-join-margin"}>
+              <CustomLink href="/user/find">회원정보찾기</CustomLink> |{" "}
+              <CustomLink href="/user/join">회원가입</CustomLink>
+            </Grid>
+            <Grid item xs={12} className={"grid-login-sns-text-margin"}>
+              <Typography>SNS 계정으로 로그인</Typography>
+            </Grid>
+            <Grid item xs={12} className={"grid-login-sns-button-margin"}>
+              <img src={SocialLoginKakao.src} />
+              <img src={SocialLoginNaver.src} />
+              <img src={SocialLoginGoogle.src} />
+            </Grid>
+            <Grid item xs={12} className={"grid-login-qna"}>
+              <CustomLink href={"/qna"}>로그인에 어려움이 있나요?</CustomLink>
+            </Grid>
+          </Grid>
+        </FormControl>
+      </LoginBox>
     </Layout>
   );
 };
