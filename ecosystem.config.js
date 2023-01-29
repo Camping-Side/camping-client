@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "camping",
-      script: "./_app.js",
+      script: "./.next/server/pages/_app.js",
       env_production: {
         NODE_ENV: "production",
       },
