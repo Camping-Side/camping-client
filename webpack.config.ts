@@ -1,35 +1,37 @@
-import path from 'path';
-import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import { Configuration } from 'webpack';
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from "path";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import { Configuration } from "webpack";
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const config: Configuration = {
-  mode: 'development',
-  devtool: 'eval', // hidden-source-map
+  mode: "production",
+  devtool: "eval", // hidden-source-map
   resolve: {
-    extensions: ['.jsx', '.js', '.tsx', '.ts'],
+    extensions: [".jsx", ".js", ".tsx", ".ts"],
   },
 
   entry: {
-    app: './index',
+    app: "./index",
   },
   module: {
-    rules: [{
-      test: /\.tsx?$/,
-      loader: 'ts-loader',
-    }],
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+      },
+    ],
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: 'index.html',
-      filename: 'index.html',
+      template: "index.html",
+      filename: "index.html",
     }),
   ],
   output: {
-    filename: 'app.js',
-    path: path.join(__dirname, 'dist'),
-    publicPath: '/dist/'
+    filename: "app.js",
+    path: path.join(__dirname, "dist"),
+    publicPath: "/dist/",
   },
 };
 
