@@ -9,7 +9,7 @@ on:
 env:
   S3_BUCKET_NAME: camping-kr
   CODE_DEPLOY_APPLICATION_NAME: camping-code-deploy
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: camping-server
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: camping-client
 
 jobs:
   build:
