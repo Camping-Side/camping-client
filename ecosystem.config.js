@@ -22,8 +22,9 @@ module.exports = {
     {
       name: "camping",
       // 스크립트 실행
-      script: "./.next/server/pages/_app.js",
-      args: "run start",
+      cwd: "/home/ubuntu/camping_client",
+      script: "npm",
+      args: "start",
       // 인스턴스 개수
       instances: 2,
       autorestart: true,
