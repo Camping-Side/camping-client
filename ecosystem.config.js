@@ -5,10 +5,12 @@ module.exports = {
       name: "camping",
       script: "./app.js",
       env_production: {
+      HOST: "127.0.0.1",
         PORT: 3000,
         NODE_ENV: "production",
       },
       env_development: {
+      HOST: "127.0.0.1",
         PORT: 3000,
         NODE_ENV: "development",
       },
