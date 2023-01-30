@@ -39,12 +39,14 @@ module.exports = {
       // 재시작 딜레이
       // restart_delay: 3000,
       env: {
+        HOST: "127.0.0.1",
         PORT: 3000,
         NODE_ENV: "development",
       },
       // 배포 환경에서 적용될 설정
       // pm2 start ecosystem.config.js --env production
       env_production: {
+        HOST: "127.0.0.1",
         PORT: 3000,
         NODE_ENV: "production",
       },
