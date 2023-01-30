@@ -22,7 +22,7 @@ module.exports = {
     {
       name: "camping",
       // 스크립트 실행
-      script: "npm",
+      script: "./.next/server/pages/_app.js",
       args: "run start",
       // 인스턴스 개수
       instances: 2,
