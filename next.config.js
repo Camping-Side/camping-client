@@ -8,7 +8,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 module.exports = withBundleAnalyzer({
   compress: true,
   webpack(config, { webpack }) {
-    const prod = process.env.NEXT_PUBLIC_HOST === "prod";
+    const prod = process.env.NEXT_PUBLIC_HOST === "production";
     const plugins = [
       ...config.plugins,
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /^\.\/ko$/),
