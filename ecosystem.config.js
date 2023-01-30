@@ -1,30 +1,8 @@
-/*
-module.exports = {
-  apps: [
-    {
-      name: "camping",
-      script: "./app.js",
-      env_production: {
-      HOST: "127.0.0.1",
-        PORT: 3000,
-        NODE_ENV: "production",
-      },
-      env_development: {
-      HOST: "127.0.0.1",
-        PORT: 3000,
-        NODE_ENV: "development",
-      },
-    },
-  ],
-};
-*/
-
 module.exports = {
   apps: [
     {
       name: "camping",
       // 스크립트 실행
-      //cwd: "/home/ubuntu/camping_client",
       script: "npm",
       args: "run start",
       // 인스턴스 개수
@@ -39,14 +17,12 @@ module.exports = {
       // 재시작 딜레이
       // restart_delay: 3000,
       env: {
-        //HOST: "127.0.0.1",
-        PORT: 3000,
+        PORT: 3001,
         NODE_ENV: "development",
       },
       // 배포 환경에서 적용될 설정
       // pm2 start ecosystem.config.js --env production
       env_production: {
-        //HOST: "127.0.0.1",
         PORT: 3000,
         NODE_ENV: "production",
       },
