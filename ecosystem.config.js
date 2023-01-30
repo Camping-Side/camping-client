@@ -24,7 +24,7 @@ module.exports = {
       // 스크립트 실행
       cwd: "/home/ubuntu/camping_client",
       script: "npm",
-      args: "start",
+      args: "run start",
       // 인스턴스 개수
       instances: 2,
       autorestart: true,
