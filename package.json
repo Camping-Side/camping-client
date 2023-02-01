@@ -62,11 +62,15 @@
     "@types/webpack": "^5.28.0",
     "fork-ts-checker-webpack-plugin": "^7.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "msw": "^1.0.0",
     "redux-logger": "^3.0.6",
     "sass": "^1.54.9",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.5.0",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

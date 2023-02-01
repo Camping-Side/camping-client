@@ -51,7 +51,9 @@ client.interceptors.response.use(
           return await client.request(axiosRequestConfig);
         }
       } catch (error) {
-        console.log(error);
+        console.log("error: ", error);
+        alert("재로그인이 필요합니다.");
+        location.href = "/";
       }
     }
   }
