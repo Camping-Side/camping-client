@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -6,9 +6,16 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ProductSwiper } from "@cp/product/ProductSwiper";
-import Product1 from "../../assets/img/temp/product1.png";
 import CustomLink from "@cp/common/CustomLink";
 import styled from "@emotion/styled";
+import { getList } from "../../actions/product";
+import { useDispatch, useSelector } from "react-redux";
+import { ReqDto } from "../../type/common/common";
+
+type Props = {
+  title: string;
+  link: string;
+};
 
 type Product = {
   img: string[];
@@ -50,40 +57,21 @@ const ProductSwiperGrid = styled(Grid)`
   }
 `;
 
-export const ProductSwiperComponent = (props: any) => {
-  //temp product
-  const product = {
-    img: [Product1.src],
-    label: "무료배송",
-    like: true,
-    soldOut: false,
-    rank: 1,
-    brand: "HAEUL",
-    name: "너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 46800,
-    category: "터널",
-  };
-  const product2 = {
-    img: [Product1.src],
-    label: "무료배송",
-    like: true,
-    soldOut: true,
-    rank: 1,
-    brand: "HAEUL",
-    name: "너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 46800,
-    category: "원터치",
-  };
+export const ProductSwiperComponent = (props: Props) => {
+  const dispatch = useDispatch();
 
-  //temp productList
-  const result: Product[] = [product, product2, product, product];
+  const productList: Product[] = useSelector(
+    (state: any) => state.product.productList
+  );
 
-  const [productList, setProductList] = useState<Product[]>([]);
+  const productReqData: ReqDto = useSelector(
+    (state: any) => state.product.productReqData
+  );
 
   useEffect(() => {
-    setProductList(result);
+    setTimeout(() => {
+      dispatch(getList(productReqData));
+    });
   }, []);
 
   return (
@@ -98,10 +86,7 @@ export const ProductSwiperComponent = (props: any) => {
         </CustomLink>
       </Grid>
       <Grid item xs={12}>
-        <ProductSwiper
-          productList={productList}
-          setProductList={setProductList}
-        />
+        <ProductSwiper productList={productList} />
       </Grid>
     </ProductSwiperGrid>
   );

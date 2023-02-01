@@ -15,8 +15,10 @@ import { useRouter } from "next/router";
 import CustomLink from "@cp/common/CustomLink";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import { Select } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { SelectChangeEvent } from "@mui/material/Select";
 
 const ProductImageStyle = styled.div`
   text-align: center;
@@ -49,7 +51,7 @@ const ProductImageStyle = styled.div`
     position: absolute;
     border-radius: 18px;
     top: 0%;
-    left: 5.5%;
+    left: 5%;
     width: 289px;
     height: 289px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -72,13 +74,33 @@ const ProductListInfoGrid = styled(Grid)`
       font-size: 16px;
     }
   }
-  .grid-product-select-margin {
+  .grid-product-sort-margin {
     margin-bottom: 24px;
+    text-align: center;
+    .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+      padding: 0px 50px 0px 0px;
+
+      font-weight: 400;
+      font-size: 16px;
+    }
+    .MuiOutlinedInput-notchedOutline {
+      border: none;
+    }
   }
-  select {
-    border: none;
-    font-weight: 400;
-    font-size: 16px;
+
+  .grid-product-filter-margin {
+    padding-left: 15px;
+    text-align: center;
+    margin-bottom: 40px;
+    .MuiOutlinedInput-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary {
+      border-radius: 25px !important;
+      .MuiSelect-select.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+        padding: 10px 30px 10px 20px;
+        font-weight: 400;
+        font-size: 16px;
+        color: #919191;
+      }
+    }
   }
 `;
 
@@ -251,8 +273,24 @@ const Product: FC = () => {
     setProductList(list);
   };
 
-  const handleChangeSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
+  const [sort, setSort] = React.useState("");
+
+  const handleChangeSort = (e: SelectChangeEvent) => {
+    setSort(e.target.value);
+  };
+
+  const [filter1, setFilter1] = React.useState("");
+  const [filter2, setFilter2] = React.useState("");
+  const [filter3, setFilter3] = React.useState("");
+
+  const handleChangeFilter = (e: SelectChangeEvent, type: string) => {
+    if (type === "filter1") {
+      setFilter1(e.target.value);
+    } else if (type === "filter2") {
+      setFilter2(e.target.value);
+    } else if (type === "filter3") {
+      setFilter3(e.target.value);
+    }
   };
 
   return (
@@ -262,16 +300,85 @@ const Product: FC = () => {
         setSelectedCategory={setSelectedCategory}
       />
       <ProductListInfoGrid container>
-        <Grid item xs={9.5} className={"grid-product-text-padding"}>
+        <Grid item container xs={12} className={"grid-product-filter-margin"}>
+          <Grid item xs={2}>
+            <Select
+              value={filter1}
+              onChange={(e: SelectChangeEvent) => {
+                handleChangeFilter(e, "filter1");
+              }}
+              IconComponent={KeyboardArrowDownIcon}
+              displayEmpty
+              sx={{
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#5BBD6B",
+                },
+              }}
+            >
+              <MenuItem value="">필터1</MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={2}>
+            <Select
+              value={filter2}
+              onChange={(e: SelectChangeEvent) => {
+                handleChangeFilter(e, "filter2");
+              }}
+              IconComponent={KeyboardArrowDownIcon}
+              displayEmpty
+              sx={{
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#5BBD6B",
+                },
+              }}
+            >
+              <MenuItem value="">필터2</MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={2}>
+            <Select
+              value={filter3}
+              onChange={(e: SelectChangeEvent) => {
+                handleChangeFilter(e, "filter3");
+              }}
+              IconComponent={KeyboardArrowDownIcon}
+              displayEmpty
+              sx={{
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#5BBD6B",
+                },
+              }}
+            >
+              <MenuItem value="">필터3</MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+        <Grid item xs={6}></Grid>
+        <Grid item xs={9} className={"grid-product-text-padding"}>
           <Typography>상품 {productList.length}개</Typography>
         </Grid>
-        <Grid item xs={2.5} className={"grid-product-select-margin"}>
-          <select onChange={handleChangeSort}>
-            <option value="1">인기순</option>
-            <option value="2">최신순</option>
-            <option value="3">가격낮은순</option>
-            <option value="4">가격높은순</option>
-          </select>
+        <Grid item xs={3} className={"grid-product-sort-margin"}>
+          <Select
+            value={sort}
+            onChange={handleChangeSort}
+            IconComponent={KeyboardArrowDownIcon}
+            displayEmpty
+          >
+            <MenuItem value="">정렬</MenuItem>
+            <MenuItem value={"1"}>인기순</MenuItem>
+            <MenuItem value={"2"}>최신순</MenuItem>
+            <MenuItem value={"3"}>가격낮은순</MenuItem>
+            <MenuItem value={"4"}>가격높은순</MenuItem>
+          </Select>
         </Grid>
         <Grid item container xs={12}>
           {productList.map((product: any, index: number) => {
@@ -304,9 +411,11 @@ const Product: FC = () => {
                       />
                     )}
                     {product.soldOut && (
-                      <div className={"sold-out"}>
-                        <span className={"text"}>품절</span>
-                      </div>
+                      <CustomLink href={"/shop/product/" + index} key={index}>
+                        <div className={"sold-out"}>
+                          <span className={"text"}>품절</span>
+                        </div>
+                      </CustomLink>
                     )}
                   </ProductImageStyle>
                 </Grid>

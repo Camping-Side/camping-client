@@ -106,15 +106,7 @@ const ProductInfoGrid = styled(Grid)`
 `;
 
 export const ProductSwiper = (props: any) => {
-  const handleClickLike = (selectedIndex: number) => {
-    const productList = props.productList.map((m: Product, index: number) => {
-      return {
-        ...m,
-        like: selectedIndex === index ? !m.like : m.like,
-      };
-    });
-    props.setProductList(productList);
-  };
+  const handleClickLike = (selectedIndex: number) => {};
   return (
     <Swiper
       slidesPerView={2.8}
@@ -154,9 +146,11 @@ export const ProductSwiper = (props: any) => {
                     />
                   )}
                   {product.soldOut && (
-                    <div className={"sold-out"}>
-                      <span className={"sold-out-text"}>품절</span>
-                    </div>
+                    <CustomLink href={"/shop/product/" + index}>
+                      <div className={"sold-out"}>
+                        <span className={"sold-out-text"}>품절</span>
+                      </div>
+                    </CustomLink>
                   )}
                 </ProductImageBox>
               </Grid>

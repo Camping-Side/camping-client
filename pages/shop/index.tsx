@@ -167,7 +167,7 @@ const Shop: FC = () => {
         <Grid item xs={12} className={"grid-shop-banner-margin"}>
           <BannerSwiper bannerList={bannerList} />
         </Grid>
-        <ProductSwiperComponent title={"주간베스트"} link={"/shop/top"} />
+        {/*<ProductSwiperComponent title={"주간베스트"} link={"/shop/top"} />*/}
       </ShopGrid>
       <CustomLink href={"/sample"}>샘플바로가기</CustomLink>
       <br />
