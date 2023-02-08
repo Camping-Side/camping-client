@@ -7,7 +7,7 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   Component,
   pageProps,
 }) => {
-  const [isShowComponent, setIsShowComponent] = useState(true);
+  const [isShowComponent, setIsShowComponent] = useState(false);
   useEffect(() => {
     /*if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
       if (
