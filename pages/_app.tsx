@@ -10,7 +10,7 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
 }) => {
   const [isShowComponent, setIsShowComponent] = useState(false);
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
+    /*if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
       if (
         process.env.NODE_ENV === "test" ||
         process.env.NODE_ENV === "development"
@@ -29,6 +29,20 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
       }
     } else {
       setIsShowComponent(true);
+    }*/
+    if (process.env.NODE_ENV === "production") {
+      (async () => {
+        const { server } = await import("./mocks/server");
+        await server.listen();
+        setIsShowComponent(true);
+      })();
+    } else {
+      (async () => {
+        const { worker } = await import("./mocks/browser");
+        worker.start().then(() => {
+          setIsShowComponent(true);
+        });
+      })();
     }
   });
   return (
