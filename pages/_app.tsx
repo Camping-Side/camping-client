@@ -12,10 +12,11 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
       const worker = import("./mocks/browser");
-      worker.then((w) => w.worker.start());
-      setTimeout(() => {
-        setIsShowComponent(true);
-      }, 500);
+      worker.then((w) =>
+        w.worker.start().then(() => {
+          setIsShowComponent(true);
+        })
+      );
     } else {
       setIsShowComponent(true);
     }
