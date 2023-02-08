@@ -1,7 +1,7 @@
 // handlers.ts
 
 import { rest } from "msw";
-import Product1 from "../../assets/img/temp/product1.png";
+import Product1 from "../assets/img/temp/product1.png";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
