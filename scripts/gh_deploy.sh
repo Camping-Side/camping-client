@@ -16,7 +16,7 @@ echo "> build 시작" >> $DEPLOY_LOG_PATH
 yarn build
 
 echo "> PM2 start" >> $DEPLOY_LOG_PATH
-nohup yarn pm2 start >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+nohup pm2 start ecosystem.config.js >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
 
 sleep 3
 
