@@ -30,7 +30,7 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
     } else {
       setIsShowComponent(true);
     }*/
-    if (process.env.NODE_ENV === "production") {
+    /*if (process.env.NODE_ENV === "production") {
       (async () => {
         const { server } = await import("./mocks/server");
         await server.listen();
@@ -43,7 +43,7 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
           setIsShowComponent(true);
         });
       })();
-    }
+    }*/
   });
   return (
     <>
