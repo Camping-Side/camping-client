@@ -3,10 +3,6 @@ import Head from "next/head";
 import wrapper from "../store/configureStore";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import "@cmStyles/index.scss";
-import { setupWorker } from "msw";
-import { setupServer } from "msw/node";
-import { handlers } from "../mocks/handlers";
-
 const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   Component,
   pageProps,
@@ -33,20 +29,20 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
     } else {
       setIsShowComponent(true);
     }*/
-    /*if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === "production") {
       (async () => {
-        const { server } = await import("./mocks/server");
+        const { server } = await import("../mocks/server");
         await server.listen();
         setIsShowComponent(true);
       })();
     } else {
       (async () => {
-        const { worker } = await import("./mocks/browser");
+        const { worker } = await import("../mocks/browser");
         worker.start().then(() => {
           setIsShowComponent(true);
         });
       })();
-    }*/
+    }
   });
   return (
     <>
