@@ -11,12 +11,22 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   const [isShowComponent, setIsShowComponent] = useState(false);
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
-      const worker = import("./mocks/browser");
-      worker.then((w) =>
-        w.worker.start().then(() => {
-          setIsShowComponent(true);
-        })
-      );
+      if (
+        process.env.NODE_ENV === "test" ||
+        process.env.NODE_ENV === "development"
+      ) {
+        const worker = import("./mocks/browser");
+        worker.then((w) =>
+          w.worker.start().then(() => {
+            console.log("mock start dev");
+            setIsShowComponent(true);
+          })
+        );
+      } else if (process.env.NODE_ENV === "production") {
+        const server = import("./mocks/server");
+        console.log("mock start prod");
+        server.then((w) => w.server.listen());
+      }
     } else {
       setIsShowComponent(true);
     }
