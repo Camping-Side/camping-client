@@ -3,6 +3,9 @@ import Head from "next/head";
 import wrapper from "../store/configureStore";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import "@cmStyles/index.scss";
+import { setupWorker } from "msw";
+import { setupServer } from "msw/node";
+import { handlers } from "./mocks/handlers";
 
 const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   Component,
