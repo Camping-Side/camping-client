@@ -29,6 +29,7 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
     } else {
       setIsShowComponent(true);
     }*/
+    console.log("process.env.NODE_ENV: ", process.env.NODE_ENV);
     if (process.env.NODE_ENV === "production") {
       (async () => {
         const { server } = await import("../mocks/server");
