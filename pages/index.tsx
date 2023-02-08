@@ -44,19 +44,7 @@ const App: FC = () => {
           link={"/shop/top"}
         />
       </Grid>
-      <Link href="/sample">샘플바로가기</Link>
       <br />
-      {!loginDone && <Link href="/user/login">로그인 바로가기</Link>}
-      {loginDone && (
-        <BaseButton variant="contained" size="large" onClick={logoutAction}>
-          로그아웃
-        </BaseButton>
-      )}
-      {loginDone && (
-        <BaseButton variant="contained" size="large" onClick={handleGetInfo}>
-          내정보
-        </BaseButton>
-      )}
     </Layout>
   );
 };

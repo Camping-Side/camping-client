@@ -169,7 +169,6 @@ const Shop: FC = () => {
         </Grid>
         {/*<ProductSwiperComponent title={"주간베스트"} link={"/shop/top"} />*/}
       </ShopGrid>
-      <CustomLink href={"/sample"}>샘플바로가기</CustomLink>
       <br />
     </Layout>
   );

@@ -69,9 +69,8 @@ export const ProductSwiperComponent = (props: Props) => {
   );
 
   useEffect(() => {
-    setTimeout(() => {
-      dispatch(getList(productReqData));
-    });
+    // @ts-ignore
+    dispatch(getList(productReqData));
   }, []);
 
   return (
