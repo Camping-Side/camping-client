@@ -4,6 +4,7 @@ type ReqDto = {
   keyword: string;
   startDate: string;
   endDate: string;
+  isList: Boolean;
 };
 
 export const reqDto: ReqDto = {
@@ -12,4 +13,5 @@ export const reqDto: ReqDto = {
   keyword: "",
   startDate: "",
   endDate: "",
+  isList: false,
 };

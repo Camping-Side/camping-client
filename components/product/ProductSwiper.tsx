@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Pagination, Navigation } from "swiper";
 import styled from "@emotion/styled";
@@ -106,7 +106,18 @@ const ProductInfoGrid = styled(Grid)`
 `;
 
 export const ProductSwiper = (props: any) => {
-  const handleClickLike = (selectedIndex: number) => {};
+  const handleClickLike = (selectedIndex: number) => {
+    const mappedProductList = props.productList.map(
+      (m: Product, index: number) => {
+        return {
+          ...m,
+          like: selectedIndex === index ? !m.like : m.like,
+        };
+      }
+    );
+    props.setProductList(mappedProductList);
+  };
+
   return (
     <Swiper
       slidesPerView={2.8}

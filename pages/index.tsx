@@ -27,7 +27,7 @@ const App: FC = () => {
 
   const handleGetInfo = (event: React.MouseEvent<HTMLButtonElement>) => {
     // @ts-ignore
-    dispatch(getInfo());
+    //dispatch(getInfo());
   };
 
   //temp bannerList

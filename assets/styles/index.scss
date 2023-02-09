@@ -1,6 +1,12 @@
 @import "./var";
 
+@font-face {
+  font-family: "basic";
+  src: url("./font/Pretendard-Black.otf") format("truetype");
+}
+
 body {
+  font-family: "basic" !important;
   margin: 0;
   padding: 0;
   a {

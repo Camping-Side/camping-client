@@ -1,11 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import ProductLayout from "@layout/ProductLayout";
 import Grid from "@mui/material/Grid";
-//임시배너
-import ProductList1 from "../../../assets/img/temp/productList1.png";
 
-import ProductList2 from "../../../assets/img/temp/productList2.png";
-//임시상품
 import styled from "@emotion/styled";
 import ProductLike from "../../../assets/img/temp/productLike.svg";
 import ProductDislike from "../../../assets/img/temp/productDislike.svg";
@@ -19,6 +15,10 @@ import MenuItem from "@mui/material/MenuItem";
 import { Select } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { SelectChangeEvent } from "@mui/material/Select";
+import { getList } from "../../../actions/product";
+import { useDispatch, useSelector } from "react-redux";
+import { ReqDto } from "../../../type/common/common";
+import productSlice from "@reducers/product";
 
 const ProductImageStyle = styled.div`
   text-align: center;
@@ -162,12 +162,12 @@ type Product = {
   category: string;
 };
 const Product: FC = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const query = router.query;
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [productList, setProductList] = useState<Product[]>([]);
 
   //temp categoryList
   const categoryList = [
@@ -185,98 +185,58 @@ const Product: FC = () => {
     "하울",
   ];
 
+  const stateProductList: Product[] = useSelector(
+    (state: any) => state.product.productList
+  );
+
+  const getListDone: Product[] = useSelector(
+    (state: any) => state.product.getListDone
+  );
+
+  const productReqData: any = {
+    page: 0,
+    size: 10,
+    keyword: "",
+    startDate: "",
+    endDate: "",
+    isList: false,
+  };
+
+  const [productList, setProductList] = useState<Product[]>([]);
+  const [sort, setSort] = React.useState("");
+
+  const handleChangeSort = (e: SelectChangeEvent) => {
+    setSort(e.target.value);
+    productReqData.isList = true;
+    productReqData.sort = e.target.value;
+
+    console.log("productReqData: ", productReqData);
+
+    // @ts-ignore
+    dispatch(getList(productReqData));
+  };
   useEffect(() => {
     setSelectedCategory(categoryList[0]);
+    productReqData.isList = true;
+    // @ts-ignore
+    dispatch(getList(productReqData));
   }, []);
 
-  //temp product
-  const product1 = {
-    img: [ProductList1.src],
-    label: "무료배송",
-    like: true,
-    soldOut: false,
-    rank: null,
-    brand: "HAEUL원터치",
-    name: "1너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 46800,
-    category: "원터치",
-  };
-  const product2 = {
-    img: [ProductList2.src],
-    label: "무료배송",
-    like: true,
-    soldOut: true,
-    rank: null,
-    brand: "HAEUL돔",
-    name: "2너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 46800,
-    category: "돔",
-  };
-  const product3 = {
-    img: [ProductList2.src],
-    label: "무료배송",
-    like: true,
-    soldOut: true,
-    rank: null,
-    brand: "HAEUL리빙쉘",
-    name: "3너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 46800,
-    category: "리빙쉘",
-  };
-  const product4 = {
-    img: [ProductList2.src],
-    label: "무료배송",
-    like: true,
-    soldOut: false,
-    rank: null,
-    brand: "HAEUL터널",
-    name: "4너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 46800,
-    category: "터널",
-  };
-
-  //temp productList
-  const result: Product[] = [
-    product1,
-    product2,
-    product3,
-    product4,
-    product1,
-    product2,
-    product3,
-    product4,
-    product1,
-    product2,
-    product3,
-    product4,
-    product1,
-    product2,
-    product3,
-    product4,
-  ];
-
   useEffect(() => {
-    setProductList(result);
-  }, [selectedCategory]);
+    setProductList(stateProductList);
+    if (getListDone) {
+      dispatch(productSlice.actions.resetGetListDone());
+    }
+  }, [getListDone]);
 
   const handleClickLike = (selectedIndex: number) => {
-    const list = productList.map((m: Product, index: number) => {
+    const mappedProductList = productList.map((m: Product, index: number) => {
       return {
         ...m,
         like: selectedIndex === index ? !m.like : m.like,
       };
     });
-    setProductList(list);
-  };
-
-  const [sort, setSort] = React.useState("");
-
-  const handleChangeSort = (e: SelectChangeEvent) => {
-    setSort(e.target.value);
+    setProductList(mappedProductList);
   };
 
   const [filter1, setFilter1] = React.useState("");
@@ -374,19 +334,17 @@ const Product: FC = () => {
             displayEmpty
           >
             <MenuItem value="">정렬</MenuItem>
-            <MenuItem value={"1"}>인기순</MenuItem>
-            <MenuItem value={"2"}>최신순</MenuItem>
-            <MenuItem value={"3"}>가격낮은순</MenuItem>
-            <MenuItem value={"4"}>가격높은순</MenuItem>
+            <MenuItem value={"1"}>가격낮은순</MenuItem>
+            <MenuItem value={"2"}>가격높은순</MenuItem>
           </Select>
         </Grid>
         <Grid item container xs={12}>
           {productList.map((product: any, index: number) => {
             return (
-              <ProductInfoGrid item container xs={6}>
+              <ProductInfoGrid item container xs={6} key={index}>
                 <Grid item xs={12} className={"grid-product-img-margin"}>
                   <ProductImageStyle>
-                    <CustomLink href={"/shop/product/" + index} key={index}>
+                    <CustomLink href={"/shop/product/" + index}>
                       <img className={"image"} src={product.img} />
                     </CustomLink>
                     {product.label && (
@@ -411,7 +369,7 @@ const Product: FC = () => {
                       />
                     )}
                     {product.soldOut && (
-                      <CustomLink href={"/shop/product/" + index} key={index}>
+                      <CustomLink href={"/shop/product/" + index}>
                         <div className={"sold-out"}>
                           <span className={"text"}>품절</span>
                         </div>
@@ -419,7 +377,7 @@ const Product: FC = () => {
                     )}
                   </ProductImageStyle>
                 </Grid>
-                <CustomLink href={"/shop/product/" + index} key={index}>
+                <CustomLink href={"/shop/product/" + index}>
                   <Box className={"div-product-desc"}>
                     <Grid item xs={12} className={"grid-product-brand"}>
                       {product.rank && (

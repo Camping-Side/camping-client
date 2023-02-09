@@ -21,6 +21,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { NumberCommaFilter } from "../../../util/commonFilter";
 import { Divider } from "@mui/material";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import ProductDetailLayout from "@layout/ProductDetailLayout";
 
 const InfoGrid = styled(Grid)`
   .sub-image-grid {
@@ -245,7 +246,7 @@ const Product: FC = () => {
   const handleClickCart = () => {};
 
   return (
-    <ProductLayout>
+    <ProductDetailLayout>
       <InfoGrid container>
         <Grid item xs={12}>
           <Box>
@@ -323,7 +324,7 @@ const Product: FC = () => {
           </Box>
         </Grid>
       </PurchaseTabGrid>
-    </ProductLayout>
+    </ProductDetailLayout>
   );
 };
 

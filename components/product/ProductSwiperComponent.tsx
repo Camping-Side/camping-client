@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -11,6 +11,8 @@ import styled from "@emotion/styled";
 import { getList } from "../../actions/product";
 import { useDispatch, useSelector } from "react-redux";
 import { ReqDto } from "../../type/common/common";
+import Box from "@mui/material/Box";
+import productSlice from "@reducers/product";
 
 type Props = {
   title: string;
@@ -60,8 +62,12 @@ const ProductSwiperGrid = styled(Grid)`
 export const ProductSwiperComponent = (props: Props) => {
   const dispatch = useDispatch();
 
-  const productList: Product[] = useSelector(
+  const stateProductList: Product[] = useSelector(
     (state: any) => state.product.productList
+  );
+
+  const getListDone: Product[] = useSelector(
+    (state: any) => state.product.getListDone
   );
 
   const productReqData: ReqDto = useSelector(
@@ -73,6 +79,15 @@ export const ProductSwiperComponent = (props: Props) => {
     dispatch(getList(productReqData));
   }, []);
 
+  const [productList, setProductList] = useState<Product[]>([]);
+
+  useEffect(() => {
+    setProductList(stateProductList);
+    if (getListDone) {
+      dispatch(productSlice.actions.resetGetListDone());
+    }
+  }, [getListDone]);
+
   return (
     <ProductSwiperGrid item container xs={12}>
       <Grid item xs={10} className="grid-product-swiper-title">
@@ -80,12 +95,15 @@ export const ProductSwiperComponent = (props: Props) => {
       </Grid>
       <Grid item xs={2} className="grid-product-swiper-text">
         <Typography>더보기</Typography>
-        <CustomLink href={props.link}>
+        <Box onClick={(e) => alert("개발중입니다.")}>
           <ArrowForwardIosIcon />
-        </CustomLink>
+        </Box>
       </Grid>
       <Grid item xs={12}>
-        <ProductSwiper productList={productList} />
+        <ProductSwiper
+          productList={productList}
+          setProductList={setProductList}
+        />
       </Grid>
     </ProductSwiperGrid>
   );

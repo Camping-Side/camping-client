@@ -45,6 +45,7 @@ const authSlice = createSlice({
         if (localStorage.getItem("camporest_auth")) {
           localStorage.removeItem("camporest_auth");
         }
+
         localStorage.setItem(
           "camporest_auth",
           JSON.stringify(action.payload.resultData)

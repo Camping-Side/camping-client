@@ -276,14 +276,14 @@ const Login: FC = () => {
               <CustomLink href="/user/find">회원정보찾기</CustomLink> |{" "}
               <CustomLink href="/user/join">회원가입</CustomLink>
             </Grid>
-            <Grid item xs={12} className={"grid-login-sns-text-margin"}>
+            {/*<Grid item xs={12} className={"grid-login-sns-text-margin"}>
               <Typography>SNS 계정으로 로그인</Typography>
             </Grid>
             <Grid item xs={12} className={"grid-login-sns-button-margin"}>
               <img src={SocialLoginKakao.src} />
               <img src={SocialLoginNaver.src} />
               <img src={SocialLoginGoogle.src} />
-            </Grid>
+            </Grid>*/}
             <Grid item xs={12} className={"grid-login-qna"}>
               <CustomLink href={"/qna"}>로그인에 어려움이 있나요?</CustomLink>
             </Grid>

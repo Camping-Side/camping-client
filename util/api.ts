@@ -25,8 +25,13 @@ client.interceptors.response.use(
     return response;
   },
   async function (error) {
-    console.log("error: ", error.response.status);
-    if (error.response && error.response.status === 401) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      error.response.data.message === "Invalid password"
+    ) {
+      alert("존재하지 않는 회원정보입니다.");
+    } else if (error.response && error.response.status === 401) {
       try {
         const authInfo = localStorage.getItem("camporest_auth") || "";
         const reissueResult = await client.post(
@@ -51,7 +56,6 @@ client.interceptors.response.use(
           return await client.request(axiosRequestConfig);
         }
       } catch (error) {
-        console.log("error: ", error);
         alert("재로그인이 필요합니다.");
         location.href = "/";
       }

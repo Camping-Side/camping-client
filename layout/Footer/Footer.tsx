@@ -65,25 +65,25 @@ export default function BottomAppBar() {
           </CustomLink>
         </Grid>
         <Grid item xs={2.4}>
-          <CustomLink href={"/camping"}>
+          <Box onClick={(e) => alert("개발중입니다.")}>
             <Box className={getPathIconClassName("/camping")}>
               <EditIcon />
               <br />
               <Typography>캠핑인포</Typography>
             </Box>
-          </CustomLink>
+          </Box>
         </Grid>
         <Grid item xs={2.4}>
-          <CustomLink href={"/community"}>
+          <Box onClick={(e) => alert("개발중입니다.")}>
             <Box className={getPathIconClassName("/community")}>
               <SmsIcon />
               <br />
               <Typography>커뮤니티</Typography>
             </Box>
-          </CustomLink>
+          </Box>
         </Grid>
         <Grid item xs={2.4}>
-          <CustomLink href={"/my"}>
+          <CustomLink href={"/user/login"}>
             <Box className={getPathIconClassName("/my")}>
               <PersonIcon />
               <br />

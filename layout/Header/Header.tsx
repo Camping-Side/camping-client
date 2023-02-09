@@ -27,19 +27,19 @@ export default function DrawerAppBar() {
         </Grid>
         <Grid item xs={6}></Grid>
         <Grid item xs={1}>
-          <CustomLink href={"/search"}>
+          <Box onClick={(e) => alert("개발중입니다.")}>
             <img src={Btn_search.src} loading="lazy" />
-          </CustomLink>
+          </Box>
         </Grid>
         <Grid item xs={1}>
-          <CustomLink href={"/like"}>
+          <Box onClick={(e) => alert("개발중입니다.")}>
             <img src={Btn_like.src} loading="lazy" />
-          </CustomLink>
+          </Box>
         </Grid>
         <Grid item xs={1}>
-          <CustomLink href={"/cart"}>
+          <Box onClick={(e) => alert("개발중입니다.")}>
             <img src={Btn_cart.src} loading="lazy" />
-          </CustomLink>
+          </Box>
         </Grid>
         <Grid item xs={0.5}></Grid>
       </Grid>

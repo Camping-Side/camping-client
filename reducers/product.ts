@@ -20,6 +20,12 @@ const productSlice = createSlice({
     resetGetListDone(state) {
       state.getListDone = false;
     },
+    setProductReqData(state, action) {
+      state.productReqData = {
+        ...state.productReqData,
+        isList: action.payload.isList,
+      };
+    },
   },
   extraReducers: (builder) =>
     builder
