@@ -30,12 +30,76 @@ type Inputs = {
   birth: string;
 };
 
-const Boxs = styled(Box)`
-  padding-bottom: 40px !important;
+const JoinGrid = styled(Grid)`
+  padding: 25px;
+  .grid-title {
+    margin-bottom: 30px;
+    p {
+      font-size: 22px;
+      font-weight: 700;
+    }
+  }
+  .grid-form {
+    margin-top: 32px;
+  }
+
+  .grid-form-submit {
+    margin-top: 32px;
+    margin-bottom: 100px;
+    button {
+      border-radius: 8px;
+      background-color: #fc6e51;
+      border: 0px;
+      :hover {
+        background-color: #fc6e51;
+        border: 0px;
+      }
+      :disabled {
+        background-color: #e9e9e9;
+        color: #919191;
+      }
+      color: white;
+      float: right;
+      height: 56px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  }
 `;
 
-const CheckDupBtn = styled(Button)`
-  margin-top: 7pt;
+const FormGrid = styled(Grid)`
+  p {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .grid-form-item {
+    margin-bottom: 25px;
+  }
+  .submit-button {
+  }
+`;
+
+const DupCheckButtonGrid = styled(Grid)`
+  margin-top: 33px;
+  button {
+    border-radius: 8px;
+    background-color: #fc6e51;
+    border: 0px;
+    :hover {
+      background-color: #fc6e51;
+      border: 0px;
+    }
+    :disabled {
+      background-color: #e9e9e9;
+      color: #919191;
+    }
+    color: white;
+    float: right;
+    height: 56px;
+    font-size: 16px;
+    font-weight: 700;
+  }
 `;
 
 const Join: FC = () => {
@@ -204,7 +268,6 @@ const Join: FC = () => {
 
   const formInfo = {
     name: {
-      label: "이름",
       value: {
         ...register("name", {
           required: true,
@@ -218,7 +281,6 @@ const Join: FC = () => {
       errorMessage: errorMessage.name(),
     },
     nickname: {
-      label: "별명",
       value: {
         ...register("nickname", {
           required: true,
@@ -232,7 +294,6 @@ const Join: FC = () => {
       errorMessage: errorMessage.nickname(),
     },
     phone: {
-      label: "휴대폰번호(숫자만입력)",
       value: {
         ...register("phone", {
           required: true,
@@ -254,7 +315,6 @@ const Join: FC = () => {
       disabled: checkPhoneDupDone && !isPhoneDup,
     },
     email: {
-      label: "아이디(이메일)",
       value: {
         ...register("email", {
           required: true,
@@ -266,7 +326,6 @@ const Join: FC = () => {
       disabled: checkEmailDupDone && !isEmailDup,
     },
     password: {
-      label: "비밀번호(6~12자리)",
       value: {
         ...register("password", {
           required: true,
@@ -281,7 +340,6 @@ const Join: FC = () => {
       errorMessage: errorMessage.password(),
     },
     passwordCheck: {
-      label: "비밀번호 확인(6~12자리)",
       value: {
         ...register("passwordCheck", {
           required: true,
@@ -297,7 +355,6 @@ const Join: FC = () => {
       errorMessage: errorMessage.passwordCheck(),
     },
     birth: {
-      label: "생년월일(8자리 숫자만입력)",
       value: {
         ...register("birth", {
           required: true,
@@ -321,120 +378,131 @@ const Join: FC = () => {
 
   return (
     <Layout>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            회원가입
-          </Typography>
-          <Boxs
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ mt: 3 }}
-          >
+      <JoinGrid container>
+        <Grid item xs={12} className={"grid-title"}>
+          <Typography>회원가입</Typography>
+        </Grid>
+        <Grid item container xs={12} className={"grid-form"}>
+          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
             <FormControl component="fieldset" variant="standard">
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
+              <FormGrid item container>
+                <Grid item xs={12} className={"grid-form-item"}>
+                  <Typography>이름</Typography>
                   <TextField
-                    label={formInfo.name.label}
+                    fullWidth
                     {...formInfo.name.value}
                     error={formInfo.name.error}
                     helperText={formInfo.name.errorMessage}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} className={"grid-form-item"}>
+                  <Typography>별명</Typography>
                   <TextField
-                    label={formInfo.nickname.label}
+                    fullWidth
                     {...formInfo.nickname.value}
                     error={formInfo.nickname.error}
                     helperText={formInfo.nickname.errorMessage}
                   />
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item container xs={12} className={"grid-form-item"}>
+                  <Grid item xs={9}>
+                    <Typography>아이디(이메일)</Typography>
+                    <TextField
+                      placeholder={"camporest@camporest.com"}
+                      fullWidth
+                      {...formInfo.email.value}
+                      error={formInfo.email.error}
+                      helperText={formInfo.email.errorMessage}
+                      disabled={formInfo.email.disabled}
+                    />
+                  </Grid>
+                  <DupCheckButtonGrid item xs={3}>
+                    <Button
+                      variant="outlined"
+                      size="medium"
+                      onClick={handleCheckEmailDup}
+                    >
+                      중복확인
+                    </Button>
+                  </DupCheckButtonGrid>
+                </Grid>
+                <Grid item container xs={12} className={"grid-form-item"}>
+                  <Grid item xs={9}>
+                    <Typography>휴대전화</Typography>
+                    <TextField
+                      placeholder={"숫자만입력"}
+                      fullWidth
+                      {...formInfo.phone.value}
+                      error={formInfo.phone.error}
+                      helperText={formInfo.phone.errorMessage}
+                      disabled={formInfo.phone.disabled}
+                    />
+                  </Grid>
+                  <DupCheckButtonGrid item xs={3}>
+                    <Button
+                      variant="outlined"
+                      size="medium"
+                      onClick={handleCheckPhoneDup}
+                    >
+                      중복확인
+                    </Button>
+                  </DupCheckButtonGrid>
+                </Grid>
+                <Grid item xs={12} className={"grid-form-item"}>
+                  <Typography>비밀번호</Typography>
                   <TextField
-                    label={formInfo.phone.label}
-                    {...formInfo.phone.value}
-                    error={formInfo.phone.error}
-                    helperText={formInfo.phone.errorMessage}
-                    disabled={formInfo.phone.disabled}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <CheckDupBtn
-                    variant="outlined"
-                    size="medium"
-                    onClick={handleCheckPhoneDup}
-                  >
-                    중복확인
-                  </CheckDupBtn>
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    label={formInfo.email.label}
-                    {...formInfo.email.value}
-                    error={formInfo.email.error}
-                    helperText={formInfo.email.errorMessage}
-                    disabled={formInfo.email.disabled}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <CheckDupBtn
-                    variant="outlined"
-                    size="medium"
-                    onClick={handleCheckEmailDup}
-                  >
-                    중복확인
-                  </CheckDupBtn>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
+                    placeholder={"6~12자리"}
+                    fullWidth
                     type="password"
-                    label={formInfo.password.label}
                     {...formInfo.password.value}
                     error={formInfo.password.error}
                     helperText={formInfo.password.errorMessage}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} className={"grid-form-item"}>
+                  <Typography>비밀번호 재확인</Typography>
                   <TextField
+                    placeholder={"6~12자리"}
+                    fullWidth
                     type="password"
-                    label={formInfo.passwordCheck.label}
                     {...formInfo.passwordCheck.value}
                     error={formInfo.passwordCheck.error}
                     helperText={formInfo.passwordCheck.errorMessage}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} className={"grid-form-item"}>
+                  <Typography>생년월일</Typography>
+
                   <TextField
-                    label={formInfo.birth.label}
+                    placeholder={"8자리 숫자만입력"}
+                    fullWidth
                     {...formInfo.birth.value}
                     error={formInfo.birth.error}
                     helperText={formInfo.birth.errorMessage}
                   />
                 </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                size="large"
-                disabled={
-                  !checkPhoneDupDone ||
-                  isPhoneDup ||
-                  !checkEmailDupDone ||
-                  isEmailDup
-                }
-              >
-                회원가입
-              </Button>
+                <Grid item xs={12} className={"grid-form-submit"}>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    onClick={handleCheckPhoneDup}
+                    type="submit"
+                    disabled={
+                      !checkPhoneDupDone ||
+                      isPhoneDup ||
+                      !checkEmailDupDone ||
+                      isEmailDup
+                    }
+                  >
+                    회원가입
+                  </Button>
+                </Grid>
+              </FormGrid>
             </FormControl>
-          </Boxs>
-        </Box>
-      </Container>
+          </Box>
+        </Grid>
+      </JoinGrid>
     </Layout>
   );
 };
