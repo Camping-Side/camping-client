@@ -5,16 +5,17 @@ import rootReducer from "../reducers";
 
 const isDev =
   process.env.NODE_ENV === "test" || process.env.NODE_ENV === "development";
+const middleware = getDefaultMiddleware();
+if (isDev) {
+  middleware.push(logger);
+}
+const store = configureStore({
+  reducer: rootReducer,
+  middleware,
+  devTools: isDev,
+});
+
 const createStore = () => {
-  const middleware = getDefaultMiddleware();
-  if (isDev) {
-    middleware.push(logger);
-  }
-  const store = configureStore({
-    reducer: rootReducer,
-    middleware,
-    devTools: isDev,
-  });
   return store;
 };
 
@@ -23,3 +24,6 @@ const wrapper = createWrapper(createStore, {
 });
 
 export default wrapper;
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

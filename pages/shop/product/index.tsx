@@ -150,6 +150,7 @@ const ProductInfoGrid = styled(Grid)`
 `;
 
 type Product = {
+  id: number;
   img: string[];
   label: string;
   like: boolean;
@@ -222,16 +223,13 @@ const Product: FC = () => {
 
   useEffect(() => {
     setProductList(stateProductList);
-    if (getListDone) {
-      dispatch(productSlice.actions.resetGetListDone());
-    }
   }, [getListDone]);
 
-  const handleClickLike = (selectedIndex: number) => {
-    const mappedProductList = productList.map((m: Product, index: number) => {
+  const handleClickLike = (selectedId: number) => {
+    const mappedProductList = productList.map((m: Product) => {
       return {
         ...m,
-        like: selectedIndex === index ? !m.like : m.like,
+        like: selectedId === m.id ? !m.like : m.like,
       };
     });
     setProductList(mappedProductList);
@@ -337,12 +335,12 @@ const Product: FC = () => {
           </Select>
         </Grid>
         <Grid item container xs={12}>
-          {productList.map((product: Product, index: number) => {
+          {productList.map((product: Product) => {
             return (
-              <ProductInfoGrid item container xs={6} key={index}>
+              <ProductInfoGrid item container xs={6} key={product.id}>
                 <Grid item xs={12} className={"grid-product-img-margin"}>
                   <ProductImageStyle>
-                    <CustomLink href={"/shop/product/" + index}>
+                    <CustomLink href={"/shop/product/" + product.id}>
                       <img className={"image"} src={product.img[0]} />
                     </CustomLink>
                     {product.label && (
@@ -353,7 +351,7 @@ const Product: FC = () => {
                         className={"like"}
                         src={ProductLike.src}
                         onClick={() => {
-                          handleClickLike(index);
+                          handleClickLike(product.id);
                         }}
                       />
                     )}
@@ -362,12 +360,12 @@ const Product: FC = () => {
                         className={"like"}
                         src={ProductDislike.src}
                         onClick={() => {
-                          handleClickLike(index);
+                          handleClickLike(product.id);
                         }}
                       />
                     )}
                     {product.soldOut && (
-                      <CustomLink href={"/shop/product/" + index}>
+                      <CustomLink href={"/shop/product/" + product.id}>
                         <div className={"sold-out"}>
                           <span className={"text"}>품절</span>
                         </div>
@@ -375,7 +373,7 @@ const Product: FC = () => {
                     )}
                   </ProductImageStyle>
                 </Grid>
-                <CustomLink href={"/shop/product/" + index}>
+                <CustomLink href={"/shop/product/" + product.id}>
                   <Box className={"div-product-desc"}>
                     <Grid item xs={12} className={"grid-product-brand"}>
                       {product.rank && (

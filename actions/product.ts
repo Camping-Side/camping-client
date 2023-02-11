@@ -16,3 +16,15 @@ export const getList = createAsyncThunk(
     }
   }
 );
+
+export const getDetail = createAsyncThunk(
+  "product/getDetail",
+  async (data: string | string[] | undefined, { rejectWithValue }) => {
+    try {
+      const response = await api.get(BASE_URL + "/api/v1/product/" + data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

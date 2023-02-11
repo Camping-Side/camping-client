@@ -1,16 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
-import ProductLayout from "@layout/ProductLayout";
 import Grid from "@mui/material/Grid";
 
 import { useRouter } from "next/router";
-import ProductDetail from "../../../assets/img/temp/product_detail.png";
-import ProductDetail2 from "../../../assets/img/temp/product_detail2.png";
-import ProductDetail3 from "../../../assets/img/temp/product_detail3.png";
-import ProductDetail4 from "../../../assets/img/temp/product_detail4.png";
-import ProductDetail5 from "../../../assets/img/temp/product_detail5.png";
-import ProductDetail6 from "../../../assets/img/temp/product_detail6.png";
-import ProductDetail7 from "../../../assets/img/temp/product_detail7.png";
-import ProductDesc from "../../../assets/img/temp/product_desc.png";
 
 import Box from "@mui/material/Box";
 import styled from "@emotion/styled";
@@ -22,6 +13,12 @@ import { NumberCommaFilter } from "../../../util/commonFilter";
 import { Divider } from "@mui/material";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import ProductDetailLayout from "@layout/ProductDetailLayout";
+import { useDispatch, useSelector } from "react-redux";
+import { getDetail } from "../../../actions/product";
+import productSlice from "@reducers/product";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { AppDispatch } from "../../../store/configureStore";
+import communitySlice from "@reducers/community";
 
 const InfoGrid = styled(Grid)`
   .sub-image-grid {
@@ -156,6 +153,7 @@ const PurchaseTabGrid = styled(Grid)`
 `;
 
 type Product = {
+  id: number;
   img: [];
   label: string;
   like: boolean;
@@ -166,6 +164,9 @@ type Product = {
   dcRate: number;
   price: number;
   category: string;
+  detailImg: string[];
+  desc: string;
+  originPrice: number;
 };
 
 type SubImage = {
@@ -173,48 +174,25 @@ type SubImage = {
   isSelected: boolean;
 };
 
-const Product: FC = () => {
+const ProductDetailComponent: FC = () => {
   const router = useRouter();
 
   const { id } = router.query;
 
-  //temp product
-  const product = {
-    img: [
-      ProductDetail.src,
-      ProductDetail2.src,
-      ProductDetail3.src,
-      ProductDetail4.src,
-      ProductDetail5.src,
-      ProductDetail6.src,
-      ProductDetail7.src,
-    ],
-    label: "무료배송",
-    like: true,
-    soldOut: false,
-    rank: "",
-    brand: "HAEUL터널",
-    name: "4너도밤나무 파인우드행어 원목 감성캠핑용품 인디언행어",
-    dcRate: 31,
-    price: 20000,
-    originPrice: 46800,
-    category: "터널",
-    desc: ProductDesc.src,
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
-  const [imgList, setImgList] = useState<SubImage[]>([]);
-  const [selectedImg, setSelectedImg] = useState("");
+  const productDetail: Product = useSelector(
+    (state: any) => state.product.productDetail
+  );
+  const selectedImg: string = useSelector(
+    (state: any) => state.product.selectedImg
+  );
+  const imgList: SubImage[] = useSelector(
+    (state: any) => state.product.imgList
+  );
 
   useEffect(() => {
-    setImgList(
-      product.img.map((img: string, index: number) => {
-        return {
-          url: img,
-          isSelected: index === 0 ? true : false,
-        };
-      })
-    );
-    setSelectedImg(product.img[0]);
+    dispatch(getDetail(id));
   }, []);
 
   const handleClickImage = (selectedIndex: number) => {
@@ -233,8 +211,8 @@ const Product: FC = () => {
       return f.isSelected;
     });
 
-    setImgList(mappedImgList);
-    setSelectedImg(filteredImgList[0].url);
+    dispatch(productSlice.actions.setSelectedImg(filteredImgList[0].url));
+    dispatch(productSlice.actions.setImgList(mappedImgList));
   };
 
   const [isFavorite, setIsFavorite] = useState(false);
@@ -274,19 +252,21 @@ const Product: FC = () => {
         </Grid>
         <TitleGrid container>
           <Grid className="brand" item xs={12}>
-            <Typography>{product.brand}</Typography>
+            <Typography>{productDetail.brand}</Typography>
           </Grid>
           <Grid className="name" item xs={11}>
-            <Typography>{product.name}</Typography>
+            <Typography>{productDetail.name}</Typography>
           </Grid>
           <Grid className="grid-icon" item xs={1}>
             <ShareIcon />
           </Grid>
           <Grid container item xs={12}>
-            <Box className="dc-rate">{product.dcRate}%</Box>
-            <Box className="price">{NumberCommaFilter(product.price)}원</Box>
+            <Box className="dc-rate">{productDetail.dcRate}%</Box>
+            <Box className="price">
+              {NumberCommaFilter(productDetail.price)}원
+            </Box>
             <Box className="origin-price">
-              {NumberCommaFilter(product.originPrice)}원
+              {NumberCommaFilter(productDetail.originPrice)}원
             </Box>
           </Grid>
         </TitleGrid>
@@ -297,7 +277,7 @@ const Product: FC = () => {
           <Typography>상품설명</Typography>
         </Grid>
         <Grid item xs={12}>
-          <img src={product.desc} />
+          <img src={productDetail.desc} />
         </Grid>
       </DescGrid>
       <PurchaseTabGrid container>
@@ -328,4 +308,4 @@ const Product: FC = () => {
   );
 };
 
-export default Product;
+export default ProductDetailComponent;

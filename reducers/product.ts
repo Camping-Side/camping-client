@@ -1,15 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getList } from "../actions/product";
-import { reqDto } from "../dto/common/reqDto";
-// 기본 state
-export const initialState = {
+import { getDetail } from "../actions/product";
+
+const productList = {
   getListLoading: false,
   getListDone: false,
   getListError: null,
   productList: [],
-  productReqData: {
-    ...reqDto,
-  },
+};
+const productDetail = {
+  getDetailLoading: false,
+  getDetailDone: false,
+  getDetailError: null,
+  productDetail: {},
+  selectedImg: "",
+  imgList: [],
+};
+
+// 기본 state
+export const initialState = {
+  ...productList,
+  ...productDetail,
 };
 
 // toolkit 사용방법
@@ -17,18 +28,16 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    resetGetListDone(state) {
-      state.getListDone = false;
+    setSelectedImg(state, action) {
+      state.selectedImg = action.payload;
     },
-    setProductReqData(state, action) {
-      state.productReqData = {
-        ...state.productReqData,
-        isList: action.payload.isList,
-      };
+    setImgList(state, action) {
+      state.imgList = action.payload;
     },
   },
   extraReducers: (builder) =>
     builder
+      //상품 리스트
       .addCase(getList.pending, (state) => {
         state.getListDone = false;
         state.getListLoading = true;
@@ -43,6 +52,30 @@ const productSlice = createSlice({
       .addCase(getList.rejected, (state: any, action) => {
         state.getListLoading = false;
         state.getListError = action.payload;
+      })
+      //상품 상세
+      .addCase(getDetail.pending, (state) => {
+        state.getDetailDone = false;
+        state.getDetailLoading = true;
+        state.getDetailError = null;
+      })
+      .addCase(getDetail.fulfilled, (state, action) => {
+        const result = action.payload;
+        console.log("result: ", result);
+        state.getDetailLoading = false;
+        state.productDetail = result;
+        state.selectedImg = result.detailImg[0];
+        state.imgList = result.detailImg.map((img: string, index: number) => {
+          return {
+            url: img,
+            isSelected: index === 0 ? true : false,
+          };
+        });
+        state.getDetailDone = true;
+      })
+      .addCase(getDetail.rejected, (state: any, action) => {
+        state.getDetailLoading = false;
+        state.getDetailError = action.payload;
       }),
 });
 

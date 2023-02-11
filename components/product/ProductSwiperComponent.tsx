@@ -83,9 +83,6 @@ export const ProductSwiperComponent = (props: Props) => {
 
   useEffect(() => {
     setProductList(stateProductList);
-    if (getListDone) {
-      dispatch(productSlice.actions.resetGetListDone());
-    }
   }, [getListDone]);
 
   return (

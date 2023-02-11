@@ -8,15 +8,14 @@ import CommunityUser from "../../assets/img/temp/community_user_icon.png";
 import CommunityComments from "../../assets/img/temp/community_comments.png";
 import CommunityLike from "../../assets/img/temp/community_like.png";
 
-//임시상품
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import { Button, Divider } from "@mui/material";
-import { getList } from "../../actions/community";
+import { getDetail, getList } from "../../actions/community";
 import { useDispatch, useSelector } from "react-redux";
 import communitySlice from "@reducers/community";
-import CustomLink from "@cp/common/CustomLink";
+import { useRouter } from "next/router";
 
 const CommunityHeaderGrid = styled(Grid)`
   img {
@@ -126,7 +125,6 @@ const CommunityDescGrid = styled(Grid)`
 `;
 
 type Community = {
-  id: number;
   img: string;
   categoryName: string;
   categoryCode: string;
@@ -138,60 +136,37 @@ type Community = {
   comments: number;
 };
 
-const Shop: FC = () => {
+const CommunityDetailComponent: FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+
   const dispatch = useDispatch();
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedSort, setSelectedSort] = useState("like");
 
-  const [communityList, setCommunityList] = useState<Community[]>([]);
+  const [communityDetail, setCommunityDetail] = useState<Community>();
 
-  const communityReqData: any = {
-    page: 0,
-    size: 10,
-    sort: "like",
-    category: "all",
-  };
-
-  const stateCommunityList: Community[] = useSelector(
-    (state: any) => state.community.communityList
+  const stateCommunityDetail: Community = useSelector(
+    (state: any) => state.community.communityDetail
   );
 
-  const getListDone: Boolean = useSelector(
-    (state: any) => state.community.getListDone
+  const getDetailDone: Boolean = useSelector(
+    (state: any) => state.community.getDetailDone
   );
 
   useEffect(() => {
     // @ts-ignore
-    dispatch(getList(communityReqData));
+    dispatch(getDetail(id));
   }, []);
 
-  const handleClickSort = (selectedSort: string) => {
-    setSelectedSort(selectedSort);
-    communityReqData.category = selectedCategory;
-    communityReqData.sort = selectedSort;
-    // @ts-ignore
-    dispatch(getList(communityReqData));
-  };
-
-  const handleClickCategory = (selectedCategory: string) => {
-    setSelectedCategory(selectedCategory);
-    communityReqData.sort = selectedSort;
-    communityReqData.category = selectedCategory;
-    // @ts-ignore
-    dispatch(getList(communityReqData));
-  };
-
   useEffect(() => {
-    setCommunityList(stateCommunityList);
-    if (getListDone) {
-      dispatch(communitySlice.actions.resetGetListDone());
-    }
-  }, [getListDone]);
+    setCommunityDetail(stateCommunityDetail);
+  }, [getDetailDone]);
+
+  console.log(communityDetail);
 
   return (
     <Layout>
       <CommunityHeaderGrid container>
-        <Grid item container xs={12} className={"grid-category-button"}>
+        {/*<Grid item container xs={12} className={"grid-category-button"}>
           <Grid item xs={1.5}>
             <Button
               onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
@@ -259,37 +234,27 @@ const Shop: FC = () => {
               </Box>
             </Box>
           </Grid>
-        </Grid>
+        </Grid>*/}
       </CommunityHeaderGrid>
       <Divider sx={{ borderWidth: "1px" }} />
-      {communityList.map((community: Community) => {
+      {/*{communityList.map((community: Community, index: number) => {
         return (
-          <Box key={community.id}>
+          <Box key={index}>
             <CommunityDescGrid container>
               <Grid item xs={1} className={"grid-desc-category"}>
-                <CustomLink href={"/community/" + community.id}>
-                  <Typography>{community.categoryName}</Typography>
-                </CustomLink>
+                <Typography>{community.categoryName}</Typography>
               </Grid>
               <Grid item xs={11} className={"grid-desc-title"}>
-                <CustomLink href={"/community/" + community.id}>
-                  <Typography>{community.title}</Typography>
-                </CustomLink>
+                <Typography>{community.title}</Typography>
               </Grid>
               <Grid item xs={12} className={"grid-desc-detail"}>
-                <CustomLink href={"/community/" + community.id}>
-                  <Typography>{community.desc}</Typography>
-                </CustomLink>
+                <Typography>{community.desc}</Typography>
               </Grid>
               <Grid item xs={12} className={"grid-desc-img"}>
-                <CustomLink href={"/community/" + community.id}>
-                  <img src={community.img} />
-                </CustomLink>
+                <img src={community.img} />
               </Grid>
               <Grid item xs={9} className={"grid-desc-user-img"}>
-                <CustomLink href={"/community/" + community.id}>
-                  <img src={CommunityUser.src} />
-                </CustomLink>
+                <img src={CommunityUser.src} />
                 <Typography>{community.username}</Typography>
               </Grid>
               <Grid item xs={1.5} className={"grid-desc-like"}>
@@ -308,9 +273,9 @@ const Shop: FC = () => {
             <Divider sx={{ borderWidth: "3px" }} />
           </Box>
         );
-      })}
+      })}*/}
     </Layout>
   );
 };
 
-export default Shop;
+export default CommunityDetailComponent;

@@ -16,3 +16,15 @@ export const getList = createAsyncThunk(
     }
   }
 );
+
+export const getDetail = createAsyncThunk(
+  "community/getDetail",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await api.get(BASE_URL + "/api/v1/community/" + data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
