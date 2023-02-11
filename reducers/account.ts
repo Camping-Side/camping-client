@@ -57,6 +57,7 @@ const accountSlice = createSlice({
         state.checkEmailDupError = null;
       })
       .addCase(checkEmailDup.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.checkEmailDupLoading = false;
         state.isEmailDup = action.payload.isDup;
         state.checkEmailDupDone = true;

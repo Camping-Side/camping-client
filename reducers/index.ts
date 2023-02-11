@@ -4,6 +4,7 @@ import { HYDRATE } from "next-redux-wrapper";
 import authSlice from "./auth";
 import accountSlice from "./account";
 import productSlice from "./product";
+import communitySlice from "./community";
 
 // (이전상태, 액션) => 다음상태
 const rootReducer = (state: any, action: any) => {
@@ -15,6 +16,7 @@ const rootReducer = (state: any, action: any) => {
         auth: authSlice.reducer,
         account: accountSlice.reducer,
         product: productSlice.reducer,
+        community: communitySlice.reducer,
       });
       return combinedReducer(state, action);
     }
