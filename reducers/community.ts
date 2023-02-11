@@ -1,30 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getList } from "../actions/product";
+import { getList } from "../actions/community";
 import { reqDto } from "../dto/common/reqDto";
 // 기본 state
 export const initialState = {
   getListLoading: false,
   getListDone: false,
   getListError: null,
-  productList: [],
-  productReqData: {
-    ...reqDto,
-  },
+  communityList: [],
 };
 
 // toolkit 사용방법
-const productSlice = createSlice({
-  name: "product",
+const communitySlice = createSlice({
+  name: "community",
   initialState,
   reducers: {
     resetGetListDone(state) {
       state.getListDone = false;
-    },
-    setProductReqData(state, action) {
-      state.productReqData = {
-        ...state.productReqData,
-        isList: action.payload.isList,
-      };
     },
   },
   extraReducers: (builder) =>
@@ -37,7 +28,7 @@ const productSlice = createSlice({
       .addCase(getList.fulfilled, (state, action) => {
         state.getListLoading = false;
         console.log("action.payload: ", action.payload);
-        state.productList = action.payload;
+        state.communityList = action.payload;
         state.getListDone = true;
       })
       .addCase(getList.rejected, (state: any, action) => {
@@ -46,4 +37,4 @@ const productSlice = createSlice({
       }),
 });
 
-export default productSlice;
+export default communitySlice;

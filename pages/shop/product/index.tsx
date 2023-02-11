@@ -189,7 +189,7 @@ const Product: FC = () => {
     (state: any) => state.product.productList
   );
 
-  const getListDone: Product[] = useSelector(
+  const getListDone: Boolean = useSelector(
     (state: any) => state.product.getListDone
   );
 
@@ -203,14 +203,12 @@ const Product: FC = () => {
   };
 
   const [productList, setProductList] = useState<Product[]>([]);
-  const [sort, setSort] = React.useState("");
+  const [selectedSort, setSelectedSort] = React.useState("");
 
   const handleChangeSort = (e: SelectChangeEvent) => {
-    setSort(e.target.value);
+    setSelectedSort(e.target.value);
     productReqData.isList = true;
     productReqData.sort = e.target.value;
-
-    console.log("productReqData: ", productReqData);
 
     // @ts-ignore
     dispatch(getList(productReqData));
@@ -328,7 +326,7 @@ const Product: FC = () => {
         </Grid>
         <Grid item xs={3} className={"grid-product-sort-margin"}>
           <Select
-            value={sort}
+            value={selectedSort}
             onChange={handleChangeSort}
             IconComponent={KeyboardArrowDownIcon}
             displayEmpty
@@ -339,13 +337,13 @@ const Product: FC = () => {
           </Select>
         </Grid>
         <Grid item container xs={12}>
-          {productList.map((product: any, index: number) => {
+          {productList.map((product: Product, index: number) => {
             return (
               <ProductInfoGrid item container xs={6} key={index}>
                 <Grid item xs={12} className={"grid-product-img-margin"}>
                   <ProductImageStyle>
                     <CustomLink href={"/shop/product/" + index}>
-                      <img className={"image"} src={product.img} />
+                      <img className={"image"} src={product.img[0]} />
                     </CustomLink>
                     {product.label && (
                       <div className={"label"}>{product.label}</div>

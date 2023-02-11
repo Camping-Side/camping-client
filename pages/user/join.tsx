@@ -421,8 +421,11 @@ const Join: FC = () => {
                       variant="outlined"
                       size="medium"
                       onClick={handleCheckEmailDup}
+                      disabled={checkEmailDupDone && !isEmailDup}
                     >
-                      중복확인
+                      {checkEmailDupDone && !isEmailDup
+                        ? "확인완료"
+                        : "중복확인"}
                     </Button>
                   </DupCheckButtonGrid>
                 </Grid>
@@ -443,8 +446,11 @@ const Join: FC = () => {
                       variant="outlined"
                       size="medium"
                       onClick={handleCheckPhoneDup}
+                      disabled={checkPhoneDupDone && !isPhoneDup}
                     >
-                      중복확인
+                      {checkPhoneDupDone && !isPhoneDup
+                        ? "확인완료"
+                        : "중복확인"}
                     </Button>
                   </DupCheckButtonGrid>
                 </Grid>
@@ -486,7 +492,6 @@ const Join: FC = () => {
                     variant="outlined"
                     size="large"
                     fullWidth
-                    onClick={handleCheckPhoneDup}
                     type="submit"
                     disabled={
                       !checkPhoneDupDone ||
