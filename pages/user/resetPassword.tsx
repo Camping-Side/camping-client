@@ -46,7 +46,6 @@ const ResetPassword: FC = () => {
   useEffect(() => {
     if (resetPasswordDone) {
       alert("비밀번호가 재설정되었습니다.");
-      dispatch(accountSlice.actions.resetResetPasswordDone());
       Router.push("/user/login");
     }
   }, [resetPasswordDone]);

@@ -3,8 +3,6 @@ import React, { FC, useEffect } from "react";
 import Layout from "@layout/Layout";
 import authSlice from "../reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
-import BaseButton from "@cp/common/BaseButton";
-import { getInfo } from "../actions/account";
 import Grid from "@mui/material/Grid";
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
@@ -24,15 +22,8 @@ const App: FC = () => {
     dispatch(getList());
   }, []);
 
-  const { loginDone } = useSelector((state: any) => state.auth);
-
   const logoutAction = (event: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(authSlice.actions.logout());
-  };
-
-  const handleGetInfo = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // @ts-ignore
-    //dispatch(getInfo());
   };
 
   return (

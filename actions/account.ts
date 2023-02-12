@@ -5,11 +5,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const checkEmailDup = createAsyncThunk(
   "account/checkEmailDup",
-  async (data, { rejectWithValue }) => {
+  async (data: string, { rejectWithValue }) => {
     try {
       const response = await api.post(
         BASE_URL + "/api/v1/accounts/checkEmailDup",
-        data
+        { email: data }
       );
       return response.data;
     } catch (error: any) {
@@ -20,11 +20,11 @@ export const checkEmailDup = createAsyncThunk(
 
 export const checkPhoneDup = createAsyncThunk(
   "account/checkPhoneDup",
-  async (data, { rejectWithValue }) => {
+  async (data: string, { rejectWithValue }) => {
     try {
       const response = await api.post(
         BASE_URL + "/api/v1/accounts/checkPhoneDup",
-        data
+        { phone: data }
       );
       return response.data;
     } catch (error: any) {
@@ -38,7 +38,7 @@ export const resetPassword = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await api.post(
-          BASE_URL + "/api/v1/accounts/resetPassword",
+        BASE_URL + "/api/v1/accounts/resetPassword",
         data
       );
       return response.data;
@@ -53,7 +53,7 @@ export const findEmail = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await api.post(
-          BASE_URL + "/api/v1/accounts/findEmail",
+        BASE_URL + "/api/v1/accounts/findEmail",
         data
       );
       return response.data;

@@ -8,7 +8,6 @@ export const initialState = {
   loginDone: false,
   loginError: null,
   joinLoading: false,
-  joinDone: false,
   joinError: null,
   reissueTokenInfo: null,
   reissueTokenLoading: false,
@@ -26,9 +25,6 @@ const authSlice = createSlice({
       state.loginInfo = null;
       localStorage.removeItem("comporest_auth");
     },
-    joinDone(state) {
-      state.joinDone = false;
-    },
   },
   extraReducers: (builder) =>
     builder
@@ -41,7 +37,6 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loginLoading = false;
         state.loginInfo = action.payload.resultData;
-        console.log("login: ", action.payload.resultData);
         if (localStorage.getItem("camporest_auth")) {
           localStorage.removeItem("camporest_auth");
         }
@@ -80,13 +75,11 @@ const authSlice = createSlice({
       })
       // 회원가입
       .addCase(join.pending, (state) => {
-        state.joinDone = false;
         state.joinLoading = true;
         state.joinError = null;
       })
       .addCase(join.fulfilled, (state, action) => {
         state.joinLoading = false;
-        state.joinDone = true;
       })
       .addCase(join.rejected, (state: any, action) => {
         state.joinLoading = false;

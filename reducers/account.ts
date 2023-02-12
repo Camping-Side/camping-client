@@ -10,12 +10,12 @@ import {
 export const initialState = {
   checkPhoneDupLoading: false,
   checkPhoneDupDone: false,
-  isPhoneDup: false,
   checkPhoneDupError: null,
+  checkPhoneDupSuccess: false,
   checkEmailDupLoading: false,
   checkEmailDupDone: false,
-  isEmailDup: false,
   checkEmailDupError: null,
+  checkEmailDupSuccess: false,
   resetPasswordLoading: false,
   resetPasswordDone: false,
   resetPasswordError: null,
@@ -34,33 +34,25 @@ const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {
-    resetDupChecked(state) {
-      state.isPhoneDup = false;
+    resetFlagState(state) {
       state.checkPhoneDupDone = false;
-      state.isEmailDup = false;
+      state.checkPhoneDupSuccess = false;
       state.checkEmailDupDone = false;
-    },
-    resetResetPasswordDone(state) {
-      state.resetPasswordDone = false;
-    },
-    findEmailDone(state) {
-      state.findEmailDone = false;
+      state.checkEmailDupSuccess = false;
     },
   },
   extraReducers: (builder) =>
     builder
       //이메일 중복체크
       .addCase(checkEmailDup.pending, (state) => {
-        state.isEmailDup = false;
         state.checkEmailDupDone = false;
         state.checkEmailDupLoading = true;
         state.checkEmailDupError = null;
       })
       .addCase(checkEmailDup.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.checkEmailDupLoading = false;
-        state.isEmailDup = action.payload.isDup;
         state.checkEmailDupDone = true;
+        state.checkEmailDupSuccess = action.payload.isDup ? false : true;
       })
       .addCase(checkEmailDup.rejected, (state: any, action) => {
         state.checkEmailDupLoading = false;
@@ -68,15 +60,14 @@ const accountSlice = createSlice({
       })
       //휴대폰번호 중복체크
       .addCase(checkPhoneDup.pending, (state) => {
-        state.isPhoneDup = false;
-        state.checkPhoneDupDone = false;
         state.checkPhoneDupLoading = true;
         state.checkPhoneDupError = null;
+        state.checkPhoneDupDone = false;
       })
       .addCase(checkPhoneDup.fulfilled, (state, action) => {
         state.checkPhoneDupLoading = false;
-        state.isPhoneDup = action.payload.isDup;
         state.checkPhoneDupDone = true;
+        state.checkPhoneDupSuccess = action.payload.isDup ? false : true;
       })
       .addCase(checkPhoneDup.rejected, (state: any, action) => {
         state.checkPhoneDupLoading = false;
