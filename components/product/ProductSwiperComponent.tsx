@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -6,30 +6,16 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ProductSwiper } from "@cp/product/ProductSwiper";
-import CustomLink from "@cp/common/CustomLink";
 import styled from "@emotion/styled";
 import { getList } from "../../actions/product";
 import { useDispatch, useSelector } from "react-redux";
-import { ReqDto } from "../../type/common/common";
 import Box from "@mui/material/Box";
-import productSlice from "@reducers/product";
+import { Product, ProductReqData } from "../../type/product/product";
+import { AppDispatch } from "../../store/configureStore";
 
 type Props = {
   title: string;
   link: string;
-};
-
-type Product = {
-  img: string[];
-  label: string;
-  like: boolean;
-  soldOut: boolean;
-  rank: number;
-  brand: string;
-  name: string;
-  dcRate: number;
-  price: number;
-  category: string;
 };
 
 const ProductSwiperGrid = styled(Grid)`
@@ -60,30 +46,26 @@ const ProductSwiperGrid = styled(Grid)`
 `;
 
 export const ProductSwiperComponent = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const stateProductList: Product[] = useSelector(
+  const productList: Product[] = useSelector(
     (state: any) => state.product.productList
   );
 
-  const getListDone: Product[] = useSelector(
-    (state: any) => state.product.getListDone
-  );
-
-  const productReqData: ReqDto = useSelector(
-    (state: any) => state.product.productReqData
-  );
+  const productReqData: ProductReqData = {
+    page: 0,
+    size: 10,
+    keyword: "",
+    startDate: "",
+    endDate: "",
+    isList: false,
+    sort: "",
+    category: 0,
+  };
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(getList(productReqData));
   }, []);
-
-  const [productList, setProductList] = useState<Product[]>([]);
-
-  useEffect(() => {
-    setProductList(stateProductList);
-  }, [getListDone]);
 
   return (
     <ProductSwiperGrid item container xs={12}>
@@ -97,10 +79,7 @@ export const ProductSwiperComponent = (props: Props) => {
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <ProductSwiper
-          productList={productList}
-          setProductList={setProductList}
-        />
+        <ProductSwiper productList={productList} />
       </Grid>
     </ProductSwiperGrid>
   );

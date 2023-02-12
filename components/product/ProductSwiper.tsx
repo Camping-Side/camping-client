@@ -13,19 +13,10 @@ import { NumberCommaFilter } from "../../util/commonFilter";
 import CustomLink from "@cp/common/CustomLink";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-
-type Product = {
-  img: string[];
-  label: string;
-  like: boolean;
-  soldOut: boolean;
-  rank: number;
-  brand: string;
-  name: string;
-  dcRate: number;
-  price: number;
-  category: string;
-};
+import { Product } from "../../type/product/product";
+import productSlice from "@reducers/product";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/configureStore";
 
 const ProductImageBox = styled(Box)`
   .image {
@@ -106,6 +97,8 @@ const ProductInfoGrid = styled(Grid)`
 `;
 
 export const ProductSwiper = (props: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleClickLike = (selectedIndex: number) => {
     const mappedProductList = props.productList.map(
       (m: Product, index: number) => {
@@ -115,7 +108,7 @@ export const ProductSwiper = (props: any) => {
         };
       }
     );
-    props.setProductList(mappedProductList);
+    dispatch(productSlice.actions.setProductList(mappedProductList));
   };
 
   return (
@@ -132,7 +125,7 @@ export const ProductSwiper = (props: any) => {
             <ProductInfoGrid container>
               <Grid item xs={12} className="grid-product-margin">
                 <ProductImageBox>
-                  <CustomLink href={"/shop/product/" + index}>
+                  <CustomLink href={"/shop/product/" + product.id}>
                     <img className={"image"} src={product.img[0]} />
                   </CustomLink>
                   {product.label && (
@@ -157,7 +150,7 @@ export const ProductSwiper = (props: any) => {
                     />
                   )}
                   {product.soldOut && (
-                    <CustomLink href={"/shop/product/" + index}>
+                    <CustomLink href={"/shop/product/" + product.id}>
                       <div className={"sold-out"}>
                         <span className={"sold-out-text"}>품절</span>
                       </div>
@@ -165,7 +158,7 @@ export const ProductSwiper = (props: any) => {
                   )}
                 </ProductImageBox>
               </Grid>
-              <CustomLink href={"/shop/product/" + index}>
+              <CustomLink href={"/shop/product/" + product.id}>
                 <Grid
                   item
                   xs={12}
