@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getList } from "../actions/product";
+import { createSlice } from "@reduxjs/toolkit";
+import { getCategoryList, getList } from "../actions/product";
 import { getDetail } from "../actions/product";
 
 const productList = {
@@ -7,6 +7,12 @@ const productList = {
   getListDone: false,
   getListError: null,
   productList: [],
+  getCategoryListLoading: false,
+  getCategoryListDone: false,
+  getCategoryListError: null,
+  categoryList: [],
+  selectedCategory: "",
+  selectedSort: "",
 };
 const productDetail = {
   getDetailLoading: false,
@@ -34,6 +40,15 @@ const productSlice = createSlice({
     setImgList(state, action) {
       state.imgList = action.payload;
     },
+    setProductList(state, action) {
+      state.productList = action.payload;
+    },
+    setSelectedCategory(state, action) {
+      state.selectedCategory = action.payload;
+    },
+    setSelectedSort(state, action) {
+      state.selectedSort = action.payload;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -53,6 +68,23 @@ const productSlice = createSlice({
         state.getListLoading = false;
         state.getListError = action.payload;
       })
+      //상품 카테고리 리스트
+      .addCase(getCategoryList.pending, (state) => {
+        state.getCategoryListDone = false;
+        state.getCategoryListLoading = true;
+        state.getCategoryListError = null;
+      })
+      .addCase(getCategoryList.fulfilled, (state, action) => {
+        const result = action.payload;
+        state.getCategoryListLoading = false;
+        state.categoryList = action.payload;
+        state.selectedCategory = result[0];
+        state.getCategoryListDone = true;
+      })
+      .addCase(getCategoryList.rejected, (state: any, action) => {
+        state.getCategoryListLoading = false;
+        state.getCategoryListError = action.payload;
+      })
       //상품 상세
       .addCase(getDetail.pending, (state) => {
         state.getDetailDone = false;
@@ -61,7 +93,6 @@ const productSlice = createSlice({
       })
       .addCase(getDetail.fulfilled, (state, action) => {
         const result = action.payload;
-        console.log("result: ", result);
         state.getDetailLoading = false;
         state.productDetail = result;
         state.selectedImg = result.detailImg[0];

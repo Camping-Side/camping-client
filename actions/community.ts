@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../util/api";
+import { CommunityReqData } from "../type/community/community";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const getList = createAsyncThunk(
   "community/getList",
-  async (data, { rejectWithValue }) => {
+  async (data: CommunityReqData, { rejectWithValue }) => {
     try {
       const response = await api.get(BASE_URL + "/api/v1/community", {
         params: data,

@@ -1,16 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getDetail, getList } from "../actions/community";
-import { reqDto } from "../dto/common/reqDto";
-// 기본 state
-export const initialState = {
+
+const communityList = {
   getListLoading: false,
   getListDone: false,
   getListError: null,
   communityList: [],
+  selectedCategory: "",
+  selectedSort: "",
+};
+const communityDetail = {
   getDetailLoading: false,
   getDetailDone: false,
   getDetailError: null,
   communityDetail: {},
+};
+
+// 기본 state
+export const initialState = {
+  ...communityList,
+  ...communityDetail,
 };
 
 // toolkit 사용방법
@@ -18,11 +27,11 @@ const communitySlice = createSlice({
   name: "community",
   initialState,
   reducers: {
-    resetGetListDone(state) {
-      state.getListDone = false;
+    setSelectedCategory(state, action) {
+      state.selectedCategory = action.payload;
     },
-    resetGetDetailDone(state) {
-      state.getDetailDone = false;
+    setSelectedSort(state, action) {
+      state.selectedSort = action.payload;
     },
   },
   extraReducers: (builder) =>
