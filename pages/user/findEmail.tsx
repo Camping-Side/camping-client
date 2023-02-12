@@ -48,7 +48,6 @@ const FindEmail: FC = () => {
   useEffect(() => {
     if (findEmailDone) {
       alert("아이디는 " + findEmailResult + "입니다.");
-      dispatch(accountSlice.actions.findEmailDone());
       Router.push("/user/login");
     }
   }, [findEmailDone]);
