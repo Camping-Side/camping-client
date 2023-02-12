@@ -5,10 +5,14 @@ import { Product } from "../type/product/product";
 import { mockCategoryList, mockProductList } from "./mockData/product";
 import { mockCommunityList } from "./mockData/community";
 import { mockShopCategoryList } from "./mockData/shop";
+import { mockBannerList } from "./mockData/banner";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const handlers = [
+  rest.get(BASE_URL + "/api/v1/banner", (req, res, ctx) => {
+    return res(ctx.json(mockBannerList));
+  }),
   rest.get(BASE_URL + "/api/v1/shop/category", (req, res, ctx) => {
     return res(ctx.json(mockShopCategoryList));
   }),

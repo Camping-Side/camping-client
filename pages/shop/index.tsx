@@ -16,10 +16,11 @@ import { getCategoryList } from "../../actions/shop";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/configureStore";
 import { Category } from "../../type/shop/shop";
+import { CategoryComponent } from "@cp/product/CategoryComponent";
+import { getList } from "../../actions/banner";
 
 //styled-component
 import { SearchBox, ShopGrid } from "../../assets/styles/styled/shop/shop";
-import { CategoryComponent } from "@cp/product/CategoryComponent";
 
 const Shop: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,13 +29,15 @@ const Shop: FC = () => {
     (state: any) => state.shop.categoryList
   );
 
-  //temp bannerList
-  const bannerList = [Banner, Banner, Banner, Banner];
+  const bannerList: Category[] = useSelector(
+    (state: any) => state.banner.bannerList
+  );
 
   const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     dispatch(getCategoryList());
+    dispatch(getList());
   }, []);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
