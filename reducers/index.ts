@@ -5,6 +5,8 @@ import authSlice from "./auth";
 import accountSlice from "./account";
 import productSlice from "./product";
 import communitySlice from "./community";
+import shopSlice from "./shop";
+import bannerSlice from "./banner";
 
 // (이전상태, 액션) => 다음상태
 const rootReducer = (state: any, action: any) => {
@@ -17,6 +19,8 @@ const rootReducer = (state: any, action: any) => {
         account: accountSlice.reducer,
         product: productSlice.reducer,
         community: communitySlice.reducer,
+        shop: shopSlice.reducer,
+        banner: bannerSlice.reducer,
       });
       return combinedReducer(state, action);
     }

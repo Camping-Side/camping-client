@@ -38,6 +38,8 @@ client.interceptors.response.use(
           "/api/v1/auth/reissue",
           JSON.parse(authInfo)
         );
+        //여기서 401 검증
+        console.log("reissueResult: ", reissueResult);
         const { data } = reissueResult;
         if (data && data.statusCode === 200) {
           localStorage.removeItem("camporest_auth");

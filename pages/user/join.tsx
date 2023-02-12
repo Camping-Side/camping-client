@@ -4,106 +4,29 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import {
   Box,
   Button,
-  Container,
-  CssBaseline,
   FormControl,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
 import Layout from "../../layout/Layout";
-import styled from "@emotion/styled";
 import { checkEmailDup, checkPhoneDup } from "../../actions/account";
 import { join } from "../../actions/auth";
 import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
-import authSlice from "@reducers/auth";
+import { AppDispatch } from "../../store/configureStore";
+import { JoinInputs, JoinReqData } from "../../type/auth/auth";
+
+//styled-component
+import {
+  DupCheckButtonGrid,
+  FormGrid,
+  JoinGrid,
+} from "../../assets/styles/styled/auth/join";
 import accountSlice from "@reducers/account";
 
-type Inputs = {
-  name: string;
-  nickname: string;
-  phone: string;
-  email: string;
-  password: string;
-  passwordCheck: string;
-  birth: string;
-};
-
-const JoinGrid = styled(Grid)`
-  padding: 25px;
-  .grid-title {
-    margin-bottom: 30px;
-    p {
-      font-size: 22px;
-      font-weight: 700;
-    }
-  }
-  .grid-form {
-    margin-top: 32px;
-  }
-
-  .grid-form-submit {
-    margin-top: 32px;
-    margin-bottom: 100px;
-    button {
-      border-radius: 8px;
-      background-color: #fc6e51;
-      border: 0px;
-      :hover {
-        background-color: #fc6e51;
-        border: 0px;
-      }
-      :disabled {
-        background-color: #e9e9e9;
-        color: #919191;
-      }
-      color: white;
-      float: right;
-      height: 56px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-  }
-`;
-
-const FormGrid = styled(Grid)`
-  p {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .grid-form-item {
-    margin-bottom: 25px;
-  }
-  .submit-button {
-  }
-`;
-
-const DupCheckButtonGrid = styled(Grid)`
-  margin-top: 33px;
-  button {
-    border-radius: 8px;
-    background-color: #fc6e51;
-    border: 0px;
-    :hover {
-      background-color: #fc6e51;
-      border: 0px;
-    }
-    :disabled {
-      background-color: #e9e9e9;
-      color: #919191;
-    }
-    color: white;
-    float: right;
-    height: 56px;
-    font-size: 16px;
-    font-weight: 700;
-  }
-`;
-
-const Join: FC = () => {
-  const dispatch = useDispatch();
+const JoinComponent: FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
 
   const {
     register,
@@ -113,43 +36,29 @@ const Join: FC = () => {
     setValue,
     clearErrors,
     setError,
-  } = useForm<Inputs>();
+  } = useForm<JoinInputs>();
 
-  const { joinDone } = useSelector((state: any) => state.auth);
-  const { isPhoneDup, checkPhoneDupDone, isEmailDup, checkEmailDupDone } =
-    useSelector((state: any) => state.account);
+  const checkPhoneDupSuccess = useSelector(
+    (state: any) => state.account.checkPhoneDupSuccess
+  );
+
+  const checkEmailDupSuccess = useSelector(
+    (state: any) => state.account.checkEmailDupSuccess
+  );
+
+  const checkPhoneDupDone = useSelector(
+    (state: any) => state.account.checkPhoneDupDone
+  );
+
+  const checkEmailDupDone = useSelector(
+    (state: any) => state.account.checkEmailDupDone
+  );
 
   useEffect(() => {
     return () => {
-      dispatch(accountSlice.actions.resetDupChecked());
+      dispatch(accountSlice.actions.resetFlagState());
     };
   }, []);
-
-  useEffect(() => {
-    if (joinDone) {
-      alert("회원가입되었습니다");
-      dispatch(authSlice.actions.joinDone());
-      Router.push("/user/login");
-    }
-  }, [joinDone]);
-
-  useEffect(() => {
-    if (checkPhoneDupDone && isPhoneDup) {
-      alert("중복된 휴대폰번호입니다.");
-    } else if (checkPhoneDupDone && !isPhoneDup) {
-      alert("사용가능한 휴대폰번호입니다.");
-      clearErrors("phone");
-    }
-  }, [checkPhoneDupDone, isPhoneDup]);
-
-  useEffect(() => {
-    if (checkEmailDupDone && isEmailDup) {
-      alert("중복된 아이디(이메일)입니다.");
-    } else if (checkEmailDupDone && !isEmailDup) {
-      alert("사용가능한 아이디(이메일)입니다.");
-      clearErrors("email");
-    }
-  }, [checkEmailDupDone, isEmailDup]);
 
   const handleCheckPhoneDup = (e: React.MouseEvent<HTMLButtonElement>) => {
     const phone = watch("phone");
@@ -160,11 +69,20 @@ const Join: FC = () => {
       alert("휴대폰번호를 정확히 입력하세요.");
       return;
     }
-    const checkPhoneDupParam = {
-      phone: phone,
-    };
-    // @ts-ignore
-    dispatch(checkPhoneDup(checkPhoneDupParam));
+    dispatch(checkPhoneDup(phone))
+      .unwrap()
+      .then((res) => {
+        const { isDup } = res;
+        if (isDup) {
+          alert("중복된 휴대폰번호입니다.");
+        } else {
+          alert("사용가능한 휴대폰번호입니다.");
+          clearErrors("phone");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const handleCheckEmailDup = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -177,24 +95,42 @@ const Join: FC = () => {
       alert("아이디(이메일)을 정확히 입력하세요.");
       return;
     }
-    const checkEmailDupParam = {
-      email: email,
-    };
-    // @ts-ignore
-    dispatch(checkEmailDup(checkEmailDupParam));
+    dispatch(checkEmailDup(email))
+      .unwrap()
+      .then((res) => {
+        const { isDup } = res;
+        if (isDup) {
+          alert("중복된 아이디(이메일)입니다.");
+        } else {
+          alert("사용가능한 아이디(이메일)입니다.");
+          clearErrors("email");
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<JoinInputs> = (data) => {
     const { name, email, password, phone, birth } = data;
-    const joinParam = {
+    console.log("data: ", data);
+    const joinParam: JoinReqData = {
       username: name,
       email: email,
       password: password,
       birth: birth,
       phone: phone,
     };
-    // @ts-ignore
-    dispatch(join(joinParam));
+    console.log("joinParam: ", joinParam);
+    dispatch(join(joinParam))
+      .unwrap()
+      .then((res) => {
+        alert("회원가입되었습니다");
+        Router.push("/user/login");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const errorMessage = {
@@ -208,7 +144,7 @@ const Join: FC = () => {
       let msg = "";
       if (errors.phone?.type === "minLength") {
         msg = "휴대폰번호를 정확히 입력해주세요";
-      } else if (isPhoneDup) {
+      } else if (checkPhoneDupDone && !checkPhoneDupSuccess) {
         msg = "중복된 휴대폰번호입니다";
       } else if (!!errors.phone) {
         msg = "휴대폰번호를 입력해주세요";
@@ -219,7 +155,7 @@ const Join: FC = () => {
       let msg = "";
       if (errors.email?.type === "pattern") {
         msg = "정확한 이메일을 입력해주세요";
-      } else if (isEmailDup) {
+      } else if (checkEmailDupDone && !checkEmailDupSuccess) {
         msg = "중복된 아이디(이메일)입니다";
       } else if (!!errors.email) {
         msg = "아이디(이메일)을 입력해주세요";
@@ -297,8 +233,9 @@ const Join: FC = () => {
       value: {
         ...register("phone", {
           required: true,
-          minLength: 10,
+          minLength: 11,
           onChange: (e) => {
+            console.log("e.target.value: ", e.target.value);
             setValue(
               "phone",
               e.target.value
@@ -310,9 +247,9 @@ const Join: FC = () => {
           },
         }),
       },
-      error: !!errors.phone || isPhoneDup,
+      error: !!errors.phone || (checkPhoneDupDone && !checkPhoneDupSuccess),
       errorMessage: errorMessage.phone(),
-      disabled: checkPhoneDupDone && !isPhoneDup,
+      disabled: checkPhoneDupDone && checkPhoneDupSuccess,
     },
     email: {
       value: {
@@ -321,9 +258,9 @@ const Join: FC = () => {
           pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         }),
       },
-      error: !!errors.email || isEmailDup,
+      error: !!errors.email || (checkEmailDupDone && !checkEmailDupSuccess),
       errorMessage: errorMessage.email(),
-      disabled: checkEmailDupDone && !isEmailDup,
+      disabled: checkEmailDupDone && checkEmailDupSuccess,
     },
     password: {
       value: {
@@ -421,9 +358,9 @@ const Join: FC = () => {
                       variant="outlined"
                       size="medium"
                       onClick={handleCheckEmailDup}
-                      disabled={checkEmailDupDone && !isEmailDup}
+                      disabled={checkEmailDupDone && checkEmailDupSuccess}
                     >
-                      {checkEmailDupDone && !isEmailDup
+                      {checkEmailDupDone && checkEmailDupSuccess
                         ? "확인완료"
                         : "중복확인"}
                     </Button>
@@ -446,9 +383,9 @@ const Join: FC = () => {
                       variant="outlined"
                       size="medium"
                       onClick={handleCheckPhoneDup}
-                      disabled={checkPhoneDupDone && !isPhoneDup}
+                      disabled={checkPhoneDupDone && checkPhoneDupSuccess}
                     >
-                      {checkPhoneDupDone && !isPhoneDup
+                      {checkPhoneDupDone && checkPhoneDupSuccess
                         ? "확인완료"
                         : "중복확인"}
                     </Button>
@@ -495,9 +432,9 @@ const Join: FC = () => {
                     type="submit"
                     disabled={
                       !checkPhoneDupDone ||
-                      isPhoneDup ||
+                      !checkPhoneDupSuccess ||
                       !checkEmailDupDone ||
-                      isEmailDup
+                      !checkEmailDupSuccess
                     }
                   >
                     회원가입
@@ -512,4 +449,4 @@ const Join: FC = () => {
   );
 };
 
-export default Join;
+export default JoinComponent;

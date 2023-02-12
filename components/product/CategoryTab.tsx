@@ -3,6 +3,11 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import styled from "@emotion/styled";
 import { Tabs } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/configureStore";
+import { Category, Product, ProductReqData } from "../../type/product/product";
+import productSlice from "@reducers/product";
+import { getList } from "../../actions/product";
 
 const CategoryTabBox = styled(Box)`
   width: 100%;
@@ -24,31 +29,44 @@ const CategoryTabBox = styled(Box)`
   }
 `;
 
-export const CategoryTab = (props: any) => {
+type Props = {
+  categoryList: Category[];
+  productReqData: ProductReqData;
+};
+
+export const CategoryTab = (props: Props) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const categoryList = props.categoryList;
 
-  const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
+  const selectedCategory: Category = useSelector(
+    (state: any) => state.product.selectedCategory
+  );
 
   const handleSelectedCategory = (
     event: React.SyntheticEvent,
     categoryIndex: number
   ) => {
-    props.setSelectedCategory(categoryList[categoryIndex]);
-    setSelectedCategoryIndex(categoryIndex);
+    dispatch(
+      productSlice.actions.setSelectedCategory(categoryList[categoryIndex])
+    );
+    props.productReqData.isList = true;
+    props.productReqData.category = categoryList[categoryIndex].id;
+    dispatch(getList(props.productReqData));
   };
 
   return (
     <CategoryTabBox>
       <Box className={"div-tab"}>
         <Tabs
-          value={selectedCategoryIndex}
+          value={selectedCategory.id - 1}
           onChange={handleSelectedCategory}
           variant="scrollable"
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          {categoryList.map((category: any, index: number) => {
-            return <Tab key={index} label={category} />;
+          {categoryList.map((category: any) => {
+            return <Tab key={category.id} label={category.name} />;
           })}
         </Tabs>
       </Box>

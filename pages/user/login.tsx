@@ -10,7 +10,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material/";
-import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/auth";
 import Router from "next/router";
@@ -20,90 +19,18 @@ import SocialLoginNaver from "../../assets/img/temp/socialLogin_naver.png";
 import SocialLoginKakao from "../../assets/img/temp/socialLogin_kakao.png";
 import SocialLoginGoogle from "../../assets/img/temp/socialLogin_google.png";
 import CustomLink from "@cp/common/CustomLink";
+import { LoginInputs, LoginReqData } from "../../type/auth/auth";
 
-const LoginBox = styled(Box)`
-  margin-top: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
-  .grid-login-title-margin {
-    margin-bottom: 50px;
-    p {
-      font-weight: 700;
-      font-size: 22px;
-    }
-  }
-  .grid-login-email-margin {
-    margin-bottom: 30px;
-    p {
-      margin-bottom: 16px;
-      font-weight: 700;
-    }
-  }
-  .grid-login-password-margin {
-    margin-bottom: 10px;
-    p {
-      margin-bottom: 16px;
-      font-weight: 700;
-    }
-  }
-  .grid-login-remember-margin {
-    margin-bottom: 50px;
-    .MuiFormControlLabel-label {
-      font-size: 16px;
-      font-weight: 400;
-    }
-  }
-  .grid-login-button-margin {
-    margin-bottom: 25px;
-    button {
-      color: white;
-      :hover {
-        background-color: #fc6e51;
-      }
-      background-color: #fc6e51;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 16px;
-    }
-  }
-  .grid-login-join-margin {
-    text-align: center;
-    margin-bottom: 150px;
-  }
-  .grid-login-sns-text-margin {
-    text-align: center;
-    margin-bottom: 24px;
-    p {
-      font-size: 16px;
-      font-weight: 400;
-      color: #919191;
-    }
-  }
-  .grid-login-sns-button-margin {
-    text-align: center;
-    margin-bottom: 200px;
-    img {
-      padding: 10px;
-    }
-  }
-  .grid-login-qna {
-    text-align: center;
-    a {
-      font-size: 16px;
-      font-weight: 400;
-      color: #919191;
-      text-decoration: underline;
-    }
-  }
-`;
-
-type Inputs = {
-  email: string;
-  password: string;
-};
+//styled-component
+import { LoginBox } from "../../assets/styles/styled/auth/login";
+import { AppDispatch } from "../../store/configureStore";
 
 const Login: FC = () => {
-  //mounted
+  const dispatch = useDispatch<AppDispatch>();
+  const [rememberChecked, setRememberChecked] = useState(false);
+  const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRememberChecked(event.target.checked);
+  };
   useEffect(() => {
     //remember 체크
     if (localStorage.getItem("camporest_remember")) {
@@ -113,9 +40,6 @@ const Login: FC = () => {
     }
   }, []);
 
-  const dispatch = useDispatch();
-
-  //react-hook-form
   const {
     register,
     handleSubmit,
@@ -124,35 +48,25 @@ const Login: FC = () => {
     setValue,
     clearErrors,
     setError,
-  } = useForm<Inputs>();
+  } = useForm<LoginInputs>();
 
-  //remember
-  const [rememberChecked, setRememberChecked] = useState(false);
-  const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRememberChecked(event.target.checked);
-  };
-
-  const { loginDone, loginError } = useSelector((state: any) => state.auth);
-  useEffect(() => {
-    if (loginDone) {
-      if (rememberChecked && !localStorage.getItem("camporest_remember")) {
-        localStorage.setItem("camporest_remember", watch("email"));
-      }
-      Router.push("/");
-    } else if (loginError) {
-      alert("로그인 에러");
-    }
-  }, [loginDone, loginError]);
-
-  //로그인
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
     const { email, password } = data;
-    const loginParam = {
+    const loginParam: LoginReqData = {
       email: email,
       password: password,
     };
-    // @ts-ignore
-    dispatch(login(loginParam));
+    dispatch(login(loginParam))
+      .unwrap()
+      .then((res) => {
+        if (rememberChecked && !localStorage.getItem("camporest_remember")) {
+          localStorage.setItem("camporest_remember", watch("email"));
+        }
+        Router.push("/");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const errorMessage = {

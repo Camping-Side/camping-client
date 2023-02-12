@@ -12,7 +12,8 @@ const CategoryGrid = styled(Grid)`
   }
 `;
 
-export const Category = (props: any) => {
+export const CategoryComponent = (props: any) => {
+  console.log(props);
   return (
     <>
       {props.categoryList.map((category: any, index: number) => {

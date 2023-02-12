@@ -1,37 +1,30 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 
 import Layout from "@layout/Layout";
-import Link from "next/link";
 import authSlice from "../reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
-import BaseButton from "@cp/common/BaseButton";
-import { getInfo } from "../actions/account";
 import Grid from "@mui/material/Grid";
-
-//임시배너
-import Banner from "../assets/img/temp/banner.png";
-
-//임시상품
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
+import { getList } from "../actions/banner";
+import { AppDispatch } from "../store/configureStore";
+import { Category } from "../type/shop/shop";
 
 const App: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { loginDone } = useSelector((state: any) => state.auth);
+  const bannerList: Category[] = useSelector(
+    (state: any) => state.banner.bannerList
+  );
+
+  useEffect(() => {
+    dispatch(getList());
+  }, []);
 
   const logoutAction = (event: React.MouseEvent<HTMLButtonElement>) => {
     dispatch(authSlice.actions.logout());
   };
-
-  const handleGetInfo = (event: React.MouseEvent<HTMLButtonElement>) => {
-    // @ts-ignore
-    //dispatch(getInfo());
-  };
-
-  //temp bannerList
-  const bannerList = [Banner, Banner, Banner, Banner];
 
   return (
     <Layout>
