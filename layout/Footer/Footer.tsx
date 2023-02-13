@@ -40,7 +40,7 @@ export default function BottomAppBar() {
   const router = useRouter();
 
   const getPathIconClassName = (path: string) => {
-    return router.pathname === path ? "selected" : "un-selected";
+    return router.pathname.startsWith(path) ? "selected" : "un-selected";
   };
 
   return (
