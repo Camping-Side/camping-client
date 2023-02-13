@@ -3,11 +3,21 @@ import Head from "next/head";
 import wrapper from "../store/configureStore";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import "@cmStyles/index.scss";
+
+import { worker } from "../mocks/browser";
+import { server } from "../mocks/server";
+
+if (process.env.NODE_ENV === "development") {
+  worker.start();
+} else if (process.env.NODE_ENV === "production") {
+  server.listen();
+}
+
 const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   Component,
   pageProps,
 }) => {
-  const [isShowComponent, setIsShowComponent] = useState(false);
+  /*const [isShowComponent, setIsShowComponent] = useState(false);
   useEffect(() => {
     if (process.env.NODE_ENV === "production") {
       (async () => {
@@ -23,14 +33,15 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
         });
       })();
     }
-  });
+  });*/
   return (
     <>
       <Head>
         <meta charSet="utf-8" />
         <title>Camping</title>
       </Head>
-      {isShowComponent && <Component {...pageProps} />}
+      {/*{isShowComponent && <Component {...pageProps} />}*/}
+      <Component {...pageProps} />
     </>
   );
 };
