@@ -3,9 +3,6 @@ import React, { FC, useEffect, useState } from "react";
 import Layout from "@layout/Layout";
 import Grid from "@mui/material/Grid";
 
-//임시배너
-import Banner from "../../assets/img/temp/banner.png";
-
 import { BannerSwiper } from "@cp/product/BannerSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
 import Typography from "@mui/material/Typography";
@@ -17,7 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/configureStore";
 import { Category } from "../../type/shop/shop";
 import { CategoryComponent } from "@cp/product/CategoryComponent";
-import { getList } from "../../actions/banner";
+import { getList as getBannerList } from "../../actions/banner";
+import { getList as getProductList } from "../../actions/product";
+import { Product, ProductReqData } from "../../type/product/product";
 
 //styled-component
 import { SearchBox, ShopGrid } from "../../assets/styles/styled/shop/shop";
@@ -33,11 +32,29 @@ const Shop: FC = () => {
     (state: any) => state.banner.bannerList
   );
 
+  const productList: Product[] = useSelector(
+    (state: any) => state.product.productList
+  );
+
+  const myInfo: any = useSelector((state: any) => state.account.myInfo);
+
   const [keyword, setKeyword] = useState("");
+
+  const productReqData: ProductReqData = {
+    page: 0,
+    size: 10,
+    keyword: "",
+    startDate: "",
+    endDate: "",
+    isList: false,
+    sort: "",
+    category: 0,
+  };
 
   useEffect(() => {
     dispatch(getCategoryList());
-    dispatch(getList());
+    dispatch(getProductList(productReqData));
+    dispatch(getBannerList());
   }, []);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +110,11 @@ const Shop: FC = () => {
         <Grid item xs={12} className={"grid-shop-banner-margin"}>
           <BannerSwiper bannerList={bannerList} />
         </Grid>
-        <ProductSwiperComponent title={"주간베스트"} link={"/shop/top"} />
+        <ProductSwiperComponent
+          title={"주간베스트"}
+          link={"/shop/top"}
+          productList={productList}
+        />
       </ShopGrid>
       <br />
     </Layout>

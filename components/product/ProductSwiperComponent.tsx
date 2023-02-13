@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -7,15 +7,13 @@ import Typography from "@mui/material/Typography";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { ProductSwiper } from "@cp/product/ProductSwiper";
 import styled from "@emotion/styled";
-import { getList } from "../../actions/product";
-import { useDispatch, useSelector } from "react-redux";
 import Box from "@mui/material/Box";
-import { Product, ProductReqData } from "../../type/product/product";
-import { AppDispatch } from "../../store/configureStore";
+import { Product } from "../../type/product/product";
 
 type Props = {
   title: string;
   link: string;
+  productList: Product[]
 };
 
 const ProductSwiperGrid = styled(Grid)`
@@ -46,27 +44,6 @@ const ProductSwiperGrid = styled(Grid)`
 `;
 
 export const ProductSwiperComponent = (props: Props) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const productList: Product[] = useSelector(
-    (state: any) => state.product.productList
-  );
-
-  const productReqData: ProductReqData = {
-    page: 0,
-    size: 10,
-    keyword: "",
-    startDate: "",
-    endDate: "",
-    isList: false,
-    sort: "",
-    category: 0,
-  };
-
-  useEffect(() => {
-    dispatch(getList(productReqData));
-  }, []);
-
   return (
     <ProductSwiperGrid item container xs={12}>
       <Grid item xs={10} className="grid-product-swiper-title">
@@ -79,7 +56,7 @@ export const ProductSwiperComponent = (props: Props) => {
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <ProductSwiper productList={productList} />
+        <ProductSwiper productList={props.productList} />
       </Grid>
     </ProductSwiperGrid>
   );
