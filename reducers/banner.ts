@@ -13,7 +13,11 @@ export const initialState = {
 const bannerSlice = createSlice({
   name: "banner",
   initialState,
-  reducers: {},
+  reducers: {
+    setBannerList(state, action) {
+      state.bannerList = action.payload;
+    },
+  },
   extraReducers: (builder) =>
     builder
       //배너 리스트
