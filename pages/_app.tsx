@@ -4,14 +4,9 @@ import wrapper from "../store/configureStore";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import "@cmStyles/index.scss";
 
-import { worker } from "../mocks/browser";
 import { server } from "../mocks/server";
 
-if (process.env.NODE_ENV === "development") {
-  worker.start();
-} else if (process.env.NODE_ENV === "production") {
-  server.listen();
-}
+server.listen();
 
 const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
   Component,
