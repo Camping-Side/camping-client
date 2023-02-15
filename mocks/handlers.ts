@@ -99,4 +99,15 @@ export const handlers = [
 
     return res(ctx.json(detail));
   }),
+  rest.delete(BASE_URL + "/api/v1/community/:id", (req, res, ctx) => {
+    const { id } = req.params;
+
+    const communityList = mockCommunityList;
+
+    const filteredList = communityList.filter((f) => {
+      return f.id !== Number(id);
+    });
+
+    return res(ctx.json(filteredList));
+  }),
 ];

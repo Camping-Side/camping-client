@@ -23,7 +23,7 @@ const HeaderBox = styled(Box)`
     cursor: pointer;
   }
   p {
-    margin-left: 10px;
+    margin-left: 30px;
     font-size: 22px;
     font-weight: 700;
   }
