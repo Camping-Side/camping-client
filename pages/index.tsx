@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
-import wrapper from "../store/configureStore";
+import wrapper, { AppDispatch } from "../store/configureStore";
 import { Category, Product, ProductReqData } from "../type/product/product";
 import { GetServerSideProps } from "next";
 import productSlice from "@reducers/product";
@@ -81,10 +81,6 @@ const Main = (props: Props) => {
   const productList: Product[] = useSelector(
     (state: any) => state.product.productList
   );
-
-  const logoutAction = (event: React.MouseEvent<HTMLButtonElement>) => {
-    //dispatch(authSlice.actions.logout());
-  };
 
   return (
     <Layout>
