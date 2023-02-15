@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 
 import Layout from "@layout/Layout";
 import authSlice from "../reducers/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Grid from "@mui/material/Grid";
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
 import wrapper from "../store/configureStore";
-import { Product, ProductReqData } from "../type/product/product";
+import { Category, Product, ProductReqData } from "../type/product/product";
 import { GetServerSideProps } from "next";
 import productSlice from "@reducers/product";
 import axios from "axios";
@@ -71,7 +71,6 @@ export const getServerSideProps: GetServerSideProps =
     const brandTag = brandTagList.toString();
     return {
       props: {
-        productList: productList,
         bannerList: bannerList,
         tag: brandTag,
       },
@@ -79,6 +78,10 @@ export const getServerSideProps: GetServerSideProps =
   });
 
 const Main = (props: Props) => {
+  const productList: Product[] = useSelector(
+    (state: any) => state.product.productList
+  );
+
   const logoutAction = (event: React.MouseEvent<HTMLButtonElement>) => {
     //dispatch(authSlice.actions.logout());
   };
@@ -99,7 +102,7 @@ const Main = (props: Props) => {
         <ProductSwiperComponent
           title={"캠퍼들의 워너비 Top 10"}
           link={"/shop/top"}
-          productList={props.productList}
+          productList={productList}
         />
       </Grid>
       <br />
