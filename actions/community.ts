@@ -20,9 +20,47 @@ export const getList = createAsyncThunk(
 
 export const getDetail = createAsyncThunk(
   "community/getDetail",
-  async (data, { rejectWithValue }) => {
+  async (data: string | string[] | undefined, { rejectWithValue }) => {
     try {
       const response = await api.get(BASE_URL + "/api/v1/community/" + data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const update = createAsyncThunk(
+  "community/update",
+  async (data: number, { rejectWithValue }) => {
+    try {
+      const response = await api.put(BASE_URL + "/api/v1/community/" + data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const remove = createAsyncThunk(
+  "community/remove",
+  async (data: number, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(BASE_URL + "/api/v1/community/" + data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const removeComment = createAsyncThunk(
+  "community/removeComment",
+  async (data: number, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(
+        BASE_URL + "/api/v1/community/comment/" + data
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);

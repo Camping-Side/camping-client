@@ -39,7 +39,10 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loginLoading = false;
-        state.loginInfo = action.payload.resultData;
+        const result = action.payload.resultData;
+        //todo: rs에 id값 추가되면 제거
+        result.id = 1;
+        state.loginInfo = result;
         if (localStorage.getItem("camporest_auth")) {
           localStorage.removeItem("camporest_auth");
         }

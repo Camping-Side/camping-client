@@ -5,9 +5,18 @@ export type CommunityReqData = {
   category: string;
 };
 
+export type FeedComment = {
+  id: number;
+  userId: number;
+  username: string;
+  desc: string;
+  created: string;
+};
+
 export type Feed = {
   id: number;
   img: string;
+  descImg: string[];
   categoryName: string;
   categoryCode: string;
   title: string;
@@ -16,4 +25,8 @@ export type Feed = {
   distance: number;
   like: number;
   comments: number;
+  userId: number;
+  created: string;
+  location: string;
+  commentList: FeedComment[];
 };
