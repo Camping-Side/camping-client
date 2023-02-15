@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import ShareIcon from "@mui/icons-material/Share";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { NumberCommaFilter } from "../../../util/commonFilter";
+import { NumberCommaFilter } from "../../../util/filter";
 import { Divider } from "@mui/material";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import ProductDetailLayout from "@layout/ProductDetailLayout";

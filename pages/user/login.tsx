@@ -12,7 +12,7 @@ import {
 } from "@mui/material/";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/auth";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SocialLoginNaver from "../../assets/img/temp/socialLogin_naver.png";
@@ -23,10 +23,10 @@ import { LoginInputs, LoginReqData } from "../../type/auth/auth";
 
 //styled-component
 import { LoginBox } from "../../assets/styles/styled/auth/login";
-import { AppDispatch } from "../../store/configureStore";
 
 const Login: FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [rememberChecked, setRememberChecked] = useState(false);
   const checkRemember = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRememberChecked(event.target.checked);
@@ -56,15 +56,16 @@ const Login: FC = () => {
       email: email,
       password: password,
     };
+    // @ts-ignore
     dispatch(login(loginParam))
       .unwrap()
-      .then((res) => {
+      .then((res: any) => {
         if (rememberChecked && !localStorage.getItem("camporest_remember")) {
           localStorage.setItem("camporest_remember", watch("email"));
         }
-        Router.push("/");
+        router.push("/");
       })
-      .catch((e) => {
+      .catch((e: any) => {
         console.log(e);
       });
   };

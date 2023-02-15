@@ -9,14 +9,15 @@ import Grid from "@mui/material/Grid";
 
 import ProductLike from "../../assets/img/temp/productLike.svg";
 import ProductDislike from "../../assets/img/temp/productDislike.svg";
-import { NumberCommaFilter } from "../../util/commonFilter";
+import { NumberCommaFilter } from "../../util/filter";
 import CustomLink from "@cp/common/CustomLink";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { Product } from "../../type/product/product";
 import productSlice from "@reducers/product";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store/configureStore";
+import { useRouter } from "next/router";
 
 const ProductImageBox = styled(Box)`
   .image {
@@ -97,9 +98,15 @@ const ProductInfoGrid = styled(Grid)`
 `;
 
 export const ProductSwiper = (props: any) => {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
+  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+
   const handleClickLike = (selectedIndex: number) => {
+    if (!isLoggedIn && confirm("로그인이 필요합니다. 로그인하시겠습니까?")) {
+      router.push("/user/login");
+    }
     const mappedProductList = props.productList.map(
       (m: Product, index: number) => {
         return {

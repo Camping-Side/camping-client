@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Layout from "@layout/Layout";
 import authSlice from "../reducers/auth";
@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
-import wrapper, { AppDispatch } from "../store/configureStore";
+import wrapper from "../store/configureStore";
 import { Product, ProductReqData } from "../type/product/product";
 import { GetServerSideProps } from "next";
 import productSlice from "@reducers/product";
@@ -78,13 +78,9 @@ export const getServerSideProps: GetServerSideProps =
     };
   });
 
-const App = (props: Props) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  console.log("props: ", props);
-
+const Main = (props: Props) => {
   const logoutAction = (event: React.MouseEvent<HTMLButtonElement>) => {
-    dispatch(authSlice.actions.logout());
+    //dispatch(authSlice.actions.logout());
   };
 
   return (
@@ -111,4 +107,4 @@ const App = (props: Props) => {
   );
 };
 
-export default App;
+export default Main;

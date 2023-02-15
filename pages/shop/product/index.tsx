@@ -3,7 +3,7 @@ import ProductLayout from "@layout/ProductLayout";
 import Grid from "@mui/material/Grid";
 import ProductLike from "../../../assets/img/temp/productLike.svg";
 import ProductDislike from "../../../assets/img/temp/productDislike.svg";
-import { NumberCommaFilter } from "../../../util/commonFilter";
+import { NumberCommaFilter } from "../../../util/filter";
 import { CategoryTab } from "@cp/product/CategoryTab";
 import { useRouter } from "next/router";
 import CustomLink from "@cp/common/CustomLink";
