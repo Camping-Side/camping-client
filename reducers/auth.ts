@@ -13,6 +13,7 @@ export const initialState = {
   reissueTokenLoading: false,
   reissueTokenDone: false,
   reissueTokenError: null,
+  isLoggedIn: false,
 };
 
 // toolkit 사용방법
@@ -22,6 +23,7 @@ const authSlice = createSlice({
   reducers: {
     logout(state) {
       state.loginDone = false;
+      state.isLoggedIn = false;
       state.loginInfo = null;
       localStorage.removeItem("comporest_auth");
     },
@@ -33,6 +35,7 @@ const authSlice = createSlice({
         state.loginLoading = true;
         state.loginDone = false;
         state.loginError = null;
+        state.isLoggedIn = false;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loginLoading = false;
@@ -46,10 +49,12 @@ const authSlice = createSlice({
           JSON.stringify(action.payload.resultData)
         );
         state.loginDone = true;
+        state.isLoggedIn = true;
       })
       .addCase(login.rejected, (state: any, action) => {
         state.loginLoading = false;
         state.loginError = action.payload;
+        state.isLoggedIn = false;
       })
       // 토큰재발급
       .addCase(reissueToken.pending, (state) => {

@@ -15,8 +15,7 @@ import Layout from "../../layout/Layout";
 import styled from "@emotion/styled";
 import { resetPassword } from "../../actions/account";
 import { useDispatch, useSelector } from "react-redux";
-import Router from "next/router";
-import accountSlice from "@reducers/account";
+import { useRouter } from "next/router";
 
 type Inputs = {
   phone: string;
@@ -28,6 +27,7 @@ const Boxs = styled(Box)`
 `;
 
 const ResetPassword: FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const {
@@ -46,7 +46,7 @@ const ResetPassword: FC = () => {
   useEffect(() => {
     if (resetPasswordDone) {
       alert("비밀번호가 재설정되었습니다.");
-      Router.push("/user/login");
+      router.push("/user/login");
     }
   }, [resetPasswordDone]);
 

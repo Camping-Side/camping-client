@@ -1,8 +1,12 @@
 import PropTypes from "prop-types";
 import Head from "next/head";
-import wrapper from "../store/configureStore";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import "@cmStyles/index.scss";
+
+import { persistor } from "../store/configureStore";
+import { store, wrapper } from "../store/configureStore";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 import { server } from "../mocks/server";
 
@@ -30,14 +34,16 @@ const Camping: FunctionComponent<{ Component: any; pageProps: any }> = ({
     }
   });*/
   return (
-    <>
-      <Head>
-        <meta charSet="utf-8" />
-        <title>Camping</title>
-      </Head>
-      {/*{isShowComponent && <Component {...pageProps} />}*/}
-      <Component {...pageProps} />
-    </>
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <Head>
+          <meta charSet="utf-8" />
+          <title>Camping</title>
+        </Head>
+        {/*{isShowComponent && <Component {...pageProps} />}*/}
+        <Component {...pageProps} />
+      </PersistGate>
+    </Provider>
   );
 };
 

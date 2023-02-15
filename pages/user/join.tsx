@@ -13,7 +13,7 @@ import Layout from "../../layout/Layout";
 import { checkEmailDup, checkPhoneDup } from "../../actions/account";
 import { join } from "../../actions/auth";
 import { useDispatch, useSelector } from "react-redux";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { AppDispatch } from "../../store/configureStore";
 import { JoinInputs, JoinReqData } from "../../type/auth/auth";
 
@@ -26,6 +26,7 @@ import {
 import accountSlice from "@reducers/account";
 
 const JoinComponent: FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -126,7 +127,7 @@ const JoinComponent: FC = () => {
       .unwrap()
       .then((res) => {
         alert("회원가입되었습니다");
-        Router.push("/user/login");
+        router.push("/user/login");
       })
       .catch((e) => {
         console.log(e);
