@@ -25,3 +25,12 @@ export type LoginInputs = {
   email: string;
   password: string;
 };
+
+export type LoginInfo = {
+  accessToken: string;
+  accessTokenExpiresIn: number;
+  grantType: string;
+  id: number;
+  refreshToken: string;
+  username: string;
+};

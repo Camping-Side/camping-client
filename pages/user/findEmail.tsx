@@ -16,6 +16,7 @@ import styled from "@emotion/styled";
 import { findEmail } from "../../actions/account";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { RootState } from "../../store/configureStore";
 
 type Inputs = {
   phone: string;
@@ -42,7 +43,7 @@ const FindEmail: FC = () => {
   } = useForm<Inputs>();
 
   const { findEmailDone, findEmailResult } = useSelector(
-    (state: any) => state.account
+    (state: RootState) => state.account
   );
 
   useEffect(() => {

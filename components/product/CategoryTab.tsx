@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import styled from "@emotion/styled";
 import { Tabs } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { Category, Product, ProductReqData } from "../../type/product/product";
 import productSlice from "@reducers/product";
 import { getList } from "../../actions/product";
@@ -40,7 +40,7 @@ export const CategoryTab = (props: Props) => {
   const categoryList = props.categoryList;
 
   const selectedCategory: Category = useSelector(
-    (state: any) => state.product.selectedCategory
+    (state: RootState) => state.product.selectedCategory
   );
 
   const handleSelectedCategory = (

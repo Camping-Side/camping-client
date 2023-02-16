@@ -16,7 +16,7 @@ import Typography from "@mui/material/Typography";
 import { Product } from "../../type/product/product";
 import productSlice from "@reducers/product";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { useRouter } from "next/router";
 
 const ProductImageBox = styled(Box)`
@@ -101,7 +101,7 @@ export const ProductSwiper = (props: any) => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
-  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const handleClickLike = (selectedIndex: number) => {
     if (!isLoggedIn && confirm("로그인이 필요합니다. 로그인하시겠습니까?")) {

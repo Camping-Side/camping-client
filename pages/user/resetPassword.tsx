@@ -16,6 +16,7 @@ import styled from "@emotion/styled";
 import { resetPassword } from "../../actions/account";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { RootState } from "../../store/configureStore";
 
 type Inputs = {
   phone: string;
@@ -41,7 +42,9 @@ const ResetPassword: FC = () => {
     setError,
   } = useForm<Inputs>();
 
-  const { resetPasswordDone } = useSelector((state: any) => state.account);
+  const { resetPasswordDone } = useSelector(
+    (state: RootState) => state.account
+  );
 
   useEffect(() => {
     if (resetPasswordDone) {

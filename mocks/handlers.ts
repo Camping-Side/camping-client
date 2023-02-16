@@ -3,9 +3,13 @@
 import { rest } from "msw";
 import { Product } from "../type/product/product";
 import { mockCategoryList, mockProductList } from "./mockData/product";
-import { mockCommunityList } from "./mockData/community";
+import {
+  mockCommunityCommentList,
+  mockCommunityList,
+} from "./mockData/community";
 import { mockShopCategoryList } from "./mockData/shop";
 import { mockBannerList } from "./mockData/banner";
+import { Feed, FeedComment } from "../type/community/community";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -89,16 +93,29 @@ export const handlers = [
 
     return res(ctx.json(communityList));
   }),
+
   rest.get(BASE_URL + "/api/v1/community/:id", (req, res, ctx) => {
     const { id } = req.params;
-    const communityList = mockCommunityList;
+    const communityList: Feed[] = mockCommunityList;
 
-    const detail = communityList.find((f) => {
+    const detail = communityList.find((f: Feed) => {
       return f.id === Number(id);
     });
 
     return res(ctx.json(detail));
   }),
+
+  rest.get(BASE_URL + "/api/v1/community/comment/:id", (req, res, ctx) => {
+    const { id } = req.params;
+    const communityCommentList: FeedComment[] = mockCommunityCommentList;
+
+    const commentList = communityCommentList.filter((f: FeedComment) => {
+      return f.feedId === Number(id);
+    });
+
+    return res(ctx.json(commentList));
+  }),
+
   rest.delete(BASE_URL + "/api/v1/community/:id", (req, res, ctx) => {
     const { id } = req.params;
 

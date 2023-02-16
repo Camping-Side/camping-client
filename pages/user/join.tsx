@@ -14,7 +14,7 @@ import { checkEmailDup, checkPhoneDup } from "../../actions/account";
 import { join } from "../../actions/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { JoinInputs, JoinReqData } from "../../type/auth/auth";
 
 //styled-component
@@ -40,19 +40,19 @@ const JoinComponent: FC = () => {
   } = useForm<JoinInputs>();
 
   const checkPhoneDupSuccess = useSelector(
-    (state: any) => state.account.checkPhoneDupSuccess
+    (state: RootState) => state.account.checkPhoneDupSuccess
   );
 
   const checkEmailDupSuccess = useSelector(
-    (state: any) => state.account.checkEmailDupSuccess
+    (state: RootState) => state.account.checkEmailDupSuccess
   );
 
   const checkPhoneDupDone = useSelector(
-    (state: any) => state.account.checkPhoneDupDone
+    (state: RootState) => state.account.checkPhoneDupDone
   );
 
   const checkEmailDupDone = useSelector(
-    (state: any) => state.account.checkEmailDupDone
+    (state: RootState) => state.account.checkEmailDupDone
   );
 
   useEffect(() => {

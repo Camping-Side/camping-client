@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import authSlice from "@reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const HeaderBox = styled(Box)`
@@ -27,7 +27,7 @@ const HeaderBox = styled(Box)`
 export default function DrawerAppBar() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
 
   const handleClickLogout = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>

@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 
 import { BannerSwiper } from "@cp/product/BannerSwiper";
 import { ProductSwiperComponent } from "@cp/product/ProductSwiperComponent";
-import wrapper, { AppDispatch } from "../store/configureStore";
+import wrapper, { RootState } from "../store/configureStore";
 import { Category, Product, ProductReqData } from "../type/product/product";
 import { GetServerSideProps } from "next";
 import productSlice from "@reducers/product";
@@ -79,7 +79,7 @@ export const getServerSideProps: GetServerSideProps =
 
 const Main = (props: Props) => {
   const productList: Product[] = useSelector(
-    (state: any) => state.product.productList
+    (state: RootState) => state.product.productList
   );
 
   return (

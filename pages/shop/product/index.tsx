@@ -21,7 +21,7 @@ import {
   ProductReqData,
 } from "../../../type/product/product";
 import productSlice from "@reducers/product";
-import { AppDispatch } from "../../../store/configureStore";
+import { AppDispatch, RootState } from "../../../store/configureStore";
 
 //styled-component
 import {
@@ -38,15 +38,15 @@ const ProductComponent: FC = () => {
   const query = router.query;
 
   const productList: Product[] = useSelector(
-    (state: any) => state.product.productList
+    (state: RootState) => state.product.productList
   );
 
   const categoryList: Category[] = useSelector(
-    (state: any) => state.product.categoryList
+    (state: RootState) => state.product.categoryList
   );
 
   const selectedSort: string = useSelector(
-    (state: any) => state.product.selectedSort
+    (state: RootState) => state.product.selectedSort
   );
 
   const productReqData: ProductReqData = {

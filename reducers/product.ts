@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { getCategoryList, getList } from "../actions/product";
 import { getDetail } from "../actions/product";
 
@@ -50,7 +50,7 @@ const productSlice = createSlice({
       state.selectedSort = action.payload;
     },
   },
-  extraReducers: (builder) =>
+  extraReducers: (builder: ActionReducerMapBuilder<any>) =>
     builder
       //상품 리스트
       .addCase(getList.pending, (state) => {
