@@ -117,14 +117,7 @@ const communitySlice = createSlice({
       })
       .addCase(getDetailComment.fulfilled, (state, action) => {
         state.getDetailCommentLoading = false;
-        const list = action.payload.map((m: FeedComment) => {
-          return {
-            ...m,
-            isMenuOn: false,
-          };
-        });
-
-        state.communityDetailCommentList = list;
+        state.communityDetailCommentList = action.payload;
         state.getDetailCommentDone = true;
       })
       .addCase(getDetailComment.rejected, (state, action) => {

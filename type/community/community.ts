@@ -6,7 +6,6 @@ export type CommunityReqData = {
 };
 
 export type FeedComment = {
-  isMenuOn: false;
   id: number;
   userId: number;
   feedId: number;
