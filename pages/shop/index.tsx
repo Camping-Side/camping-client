@@ -11,7 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CustomLink from "@cp/common/CustomLink";
 import { getCategoryList } from "../../actions/shop";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { Category } from "../../type/shop/shop";
 import { CategoryComponent } from "@cp/product/CategoryComponent";
 import { getList as getBannerList } from "../../actions/banner";
@@ -25,18 +25,16 @@ const Shop: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const categoryList: Category[] = useSelector(
-    (state: any) => state.shop.categoryList
+    (state: RootState) => state.shop.categoryList
   );
 
   const bannerList: Category[] = useSelector(
-    (state: any) => state.banner.bannerList
+    (state: RootState) => state.banner.bannerList
   );
 
   const productList: Product[] = useSelector(
-    (state: any) => state.product.productList
+    (state: RootState) => state.product.productList
   );
-
-  const myInfo: any = useSelector((state: any) => state.account.myInfo);
 
   const [keyword, setKeyword] = useState("");
 

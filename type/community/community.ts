@@ -6,8 +6,10 @@ export type CommunityReqData = {
 };
 
 export type FeedComment = {
+  isMenuOn: false;
   id: number;
   userId: number;
+  feedId: number;
   username: string;
   desc: string;
   created: string;
@@ -28,5 +30,4 @@ export type Feed = {
   userId: number;
   created: string;
   location: string;
-  commentList: FeedComment[];
 };

@@ -1,11 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import {
   getDetail,
+  getDetailComment,
   getList,
   remove,
   removeComment,
   update,
 } from "../actions/community";
+import { FeedComment } from "../type/community/community";
 
 const communityList = {
   getListLoading: false,
@@ -19,6 +21,9 @@ const communityDetail = {
   getDetailLoading: false,
   getDetailDone: false,
   getDetailError: null,
+  getDetailCommentLoading: false,
+  getDetailCommentDone: false,
+  getDetailCommentError: null,
   communityDetail: {
     id: 0,
     img: "",
@@ -34,8 +39,8 @@ const communityDetail = {
     userId: 0,
     created: "",
     location: "",
-    commentList: [],
   },
+  communityDetailCommentList: [],
   removeLoading: false,
   removeDone: false,
   removeError: null,
@@ -67,14 +72,11 @@ const communitySlice = createSlice({
     setCommunityDetail(state, action) {
       state.communityDetail = action.payload;
     },
-    setCommunityDetailComment(state, action) {
-      state.communityDetail = {
-        ...state.communityDetail,
-        commentList: action.payload,
-      };
+    communityDetailCommentList(state, action) {
+      state.communityDetailCommentList = action.payload;
     },
   },
-  extraReducers: (builder) =>
+  extraReducers: (builder: ActionReducerMapBuilder<any>) =>
     builder
       //커뮤니티 리스트
       .addCase(getList.pending, (state) => {
@@ -88,7 +90,7 @@ const communitySlice = createSlice({
         state.communityList = action.payload;
         state.getListDone = true;
       })
-      .addCase(getList.rejected, (state: any, action) => {
+      .addCase(getList.rejected, (state, action) => {
         state.getListLoading = false;
         state.getListError = action.payload;
       })
@@ -100,13 +102,34 @@ const communitySlice = createSlice({
       })
       .addCase(getDetail.fulfilled, (state, action) => {
         state.getDetailLoading = false;
-        console.log("action.payload: ", action.payload);
         state.communityDetail = action.payload;
         state.getDetailDone = true;
       })
-      .addCase(getDetail.rejected, (state: any, action) => {
+      .addCase(getDetail.rejected, (state, action) => {
         state.getDetailLoading = false;
         state.getDetailError = action.payload;
+      })
+      //커뮤니티 댓글
+      .addCase(getDetailComment.pending, (state) => {
+        state.getDetailCommentDone = false;
+        state.getDetailCommentLoading = true;
+        state.getDetailCommentError = null;
+      })
+      .addCase(getDetailComment.fulfilled, (state, action) => {
+        state.getDetailCommentLoading = false;
+        const list = action.payload.map((m: FeedComment) => {
+          return {
+            ...m,
+            isMenuOn: false,
+          };
+        });
+
+        state.communityDetailCommentList = list;
+        state.getDetailCommentDone = true;
+      })
+      .addCase(getDetailComment.rejected, (state, action) => {
+        state.getDetailCommentLoading = false;
+        state.getDetailCommentError = action.payload;
       })
       //커뮤니티 삭제
       .addCase(remove.pending, (state) => {
@@ -119,7 +142,7 @@ const communitySlice = createSlice({
         state.communityList = action.payload;
         state.removeDone = true;
       })
-      .addCase(remove.rejected, (state: any, action) => {
+      .addCase(remove.rejected, (state, action) => {
         state.removeLoading = false;
         state.removeError = action.payload;
       })
@@ -133,9 +156,9 @@ const communitySlice = createSlice({
         state.updateLoading = false;
         state.updateDone = true;
       })
-      .addCase(update.rejected, (state: any, action) => {
+      .addCase(update.rejected, (state, action) => {
         state.updateLoading = false;
-        state.updateError = action.payload;
+        if (action.payload) state.updateError = action.payload;
       })
       //커뮤니티 댓글 삭제
       .addCase(removeComment.pending, (state) => {
@@ -148,7 +171,7 @@ const communitySlice = createSlice({
         state.communityDetail = action.payload;
         state.removeCommentDone = true;
       })
-      .addCase(removeComment.rejected, (state: any, action) => {
+      .addCase(removeComment.rejected, (state, action) => {
         state.removeCommentLoading = false;
         state.removeCommentError = action.payload;
       }),

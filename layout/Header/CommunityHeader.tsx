@@ -22,8 +22,9 @@ import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { Divider } from "@mui/material";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { remove } from "../../actions/community";
+import { LoginInfo } from "../../type/auth/auth";
 
 const HeaderBox = styled(Box)`
   background: white;
@@ -52,15 +53,17 @@ export default function DrawerAppBar() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const isLoggedIn: Boolean = useSelector(
-    (state: any) => state.auth.isLoggedIn
+    (state: RootState) => state.auth.isLoggedIn
   );
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const loginInfo: any = useSelector((state: any) => state.auth.loginInfo);
+  const loginInfo: LoginInfo = useSelector(
+    (state: RootState) => state.auth.loginInfo
+  );
 
   const communityDetail: Feed = useSelector(
-    (state: any) => state.community.communityDetail
+    (state: RootState) => state.community.communityDetail
   );
 
   const goBack = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {

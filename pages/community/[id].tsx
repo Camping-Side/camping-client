@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import Layout from "@layout/Layout";
 import Grid from "@mui/material/Grid";
@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import { Button, Divider } from "@mui/material";
 import {
   getDetail,
+  getDetailComment,
   getList,
   remove,
   removeComment,
@@ -21,7 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import communitySlice from "@reducers/community";
 import { useRouter } from "next/router";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 import { Feed, FeedComment } from "../../type/community/community";
 import CustomLink from "@cp/common/CustomLink";
 import ProductLayout from "@layout/CommunityDetailLayout";
@@ -33,6 +34,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { removeComments } from "@babel/types";
 import productSlice from "@reducers/product";
+import MeatBallImg from "../../assets/img/temp/meatball_icon.png";
+import { LoginInfo } from "../../type/auth/auth";
 
 const CommunityHeaderGrid = styled(Grid)`
   padding: 20px;
@@ -135,18 +138,6 @@ const CommunityCommentHeaderGrid = styled(Grid)`
     margin-left: 5px;
     color: #fc6e51;
   }
-  .grid-community-comments-user {
-    margin-top: 20px;
-    img {
-      height: 40px;
-    }
-    p {
-      margin-left: 10px;
-      font-weight: 400;
-      font-size: 16px;
-      color: #919191;
-    }
-  }
 `;
 const CommunityCommentGrid = styled(Grid)`
   padding: 20px;
@@ -176,59 +167,91 @@ const CommunityCommentGrid = styled(Grid)`
     margin-top: 15px;
     margin-left: 60px;
   }
+  .grid-community-comment-menu {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 75%;
+    z-index: 1;
+    border: 1px solid #e9e9e9;
+    background: #ffffff;
+    border-radius: 8px;
+    text-align: center;
+    p {
+      padding: 15px;
+      font-weight: 400;
+      font-size: 16px;
+      color: #000000;
+      cursor: pointer;
+    }
+  }
+  .meatball_icon {
+    width: 24px;
+    height: 24px !important;
+    cursor: pointer;
+  }
 `;
 
 const CommunityDetailComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { id } = router.query;
+  const menuRef = useRef(new Array(5));
+
+  const handleClick = (e: any) => {
+    const hasClass = e.target.classList.contains("comment_menu");
+    if (!hasClass) {
+      communityDetailCommentList.forEach((f: FeedComment, index: number) => {
+        menuRef.current[index].style.display = "none";
+      });
+    }
+  };
 
   const isLoggedIn: Boolean = useSelector(
-    (state: any) => state.auth.isLoggedIn
+    (state: RootState) => state.auth.isLoggedIn
   );
 
-  const loginInfo: any = useSelector((state: any) => state.auth.loginInfo);
+  const loginInfo: LoginInfo = useSelector(
+    (state: RootState) => state.auth.loginInfo
+  );
 
   const communityDetail: Feed = useSelector(
-    (state: any) => state.community.communityDetail
+    (state: RootState) => state.community.communityDetail
+  );
+
+  const communityDetailCommentList: FeedComment[] = useSelector(
+    (state: RootState) => state.community.communityDetailCommentList
   );
 
   useEffect(() => {
+    document.addEventListener("click", handleClick);
     dispatch(getDetail(id));
+    dispatch(getDetailComment(id));
+    return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const handleClickCommentMenu = (index: number) => {
+    communityDetailCommentList.forEach((f: FeedComment, fIndex: number) => {
+      if (fIndex !== index) menuRef.current[fIndex].style.display = "none";
+    });
+    const isShowMenu = menuRef.current[index].style.display;
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event.currentTarget);
-    setAnchorEl(event.currentTarget);
+    isShowMenu === "block"
+      ? (menuRef.current[index].style.display = "none")
+      : (menuRef.current[index].style.display = "block");
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDelete = (commentId: number) => {
-    setAnchorEl(null);
+  const handleClickDelete = (id: number) => {
     if (confirm("정말 삭제하시겠습니까?")) {
       alert("삭제되었습니다.");
-
-      console.log(commentId);
-
-      /*const mappedCommentList = communityDetail.commentList.filter((f) => {
-        return f.id !== commentId;
-      });
-
+      const mappedCommentList = communityDetailCommentList.filter(
+        (f: FeedComment) => {
+          return f.id !== id;
+        }
+      );
       dispatch(
-        communitySlice.actions.setCommunityDetailComment(mappedCommentList)
-      );*/
-      /*dispatch(removeComment(commentId))
-        .unwrap()
-        .then((res) => {
-        })
-        .catch((e) => {
-          console.log(e);
-        });*/
+        communitySlice.actions.communityDetailCommentList(mappedCommentList)
+      );
     }
   };
 
@@ -282,7 +305,7 @@ const CommunityDetailComponent = () => {
         </Grid>
       </CommunityDescGrid>
       <Divider sx={{ borderWidth: "4px" }} />
-      {communityDetail && communityDetail.descImg.length > 0 && (
+      {communityDetailCommentList.length > 0 && (
         <>
           <CommunityCommentHeaderGrid
             item
@@ -294,77 +317,78 @@ const CommunityDetailComponent = () => {
               {communityDetail.comments}
             </Typography>
           </CommunityCommentHeaderGrid>
-          {communityDetail.commentList.map((comment: FeedComment) => {
-            return (
-              <>
-                <CommunityCommentGrid container key={comment.id}>
-                  <Grid
-                    item
-                    container
-                    xs={12}
-                    className={"grid-community-comments-user"}
-                  >
-                    <Grid item xs={1}>
-                      <img src={CommunityUser.src} />
+          {communityDetailCommentList.map(
+            (comment: FeedComment, index: number) => {
+              return (
+                <Box key={comment.id}>
+                  <CommunityCommentGrid container sx={{ position: "relative" }}>
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      className={"grid-community-comments-user"}
+                    >
+                      <Grid item xs={1}>
+                        <img src={CommunityUser.src} />
+                      </Grid>
+                      <Grid item xs={10} className={"grid-community-user-info"}>
+                        <Box>
+                          <Typography>{comment.username}</Typography>
+                          <Typography>{comment.created}</Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item xs={1}>
+                        <img
+                          className={"comment_menu meatball_icon"}
+                          src={MeatBallImg.src}
+                          onClick={(e) => handleClickCommentMenu(index)}
+                        />
+                      </Grid>
                     </Grid>
-                    <Grid item xs={10} className={"grid-community-user-info"}>
-                      <Box>
-                        <Typography>{comment.username}</Typography>
-                        <Typography>{comment.created}</Typography>
-                      </Box>
+                    <Grid
+                      item
+                      xs={12}
+                      className={"grid-community-comments-desc"}
+                    >
+                      <Typography>{comment.desc}</Typography>
                     </Grid>
-                    <Grid item xs={1}>
+                    <Box
+                      className={"grid-community-comment-menu comment_menu"}
+                      ref={(element) => {
+                        return (menuRef.current[index] = element);
+                      }}
+                    >
                       {isLoggedIn && loginInfo.id === comment.userId && (
-                        <div>
-                          <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="inherit"
+                        <>
+                          <Typography
+                            className={"comment_menu"}
+                            onClick={(e) => handleClickDelete(comment.id)}
                           >
-                            <MoreIcon />
-                          </IconButton>
-                          <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                              vertical: "top",
-                              horizontal: "right",
-                            }}
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                          >
-                            <MenuItem onClick={(e) => handleDelete(comment.id)}>
-                              삭제
-                            </MenuItem>
-                            <Divider />
-                            <MenuItem onClick={handleClose}>수정</MenuItem>
-                          </Menu>
-                        </div>
+                            삭제
+                          </Typography>
+                          <Divider className={"comment_menu"} />
+                          <Typography className={"comment_menu"}>
+                            수정
+                          </Typography>
+                          <Divider className={"comment_menu"} />
+                        </>
                       )}
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} className={"grid-community-comments-desc"}>
-                    <Typography>{comment.desc}</Typography>
-                  </Grid>
-                </CommunityCommentGrid>
-                <Divider
-                  sx={{
-                    borderWidth: "1px",
-                    width: "90%",
-                    margin: "0px auto",
-                  }}
-                />
-              </>
-            );
-          })}
+                      <Typography className={"comment_menu"}>
+                        답댓글쓰기
+                      </Typography>
+                    </Box>
+                  </CommunityCommentGrid>
+                  <Divider
+                    sx={{
+                      borderWidth: "1px",
+                      width: "90%",
+                      margin: "0px auto",
+                    }}
+                  />
+                </Box>
+              );
+            }
+          )}
         </>
       )}
     </ProductLayout>

@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import communitySlice from "@reducers/community";
 import CustomLink from "@cp/common/CustomLink";
 import { CommunityReqData, Feed } from "../../type/community/community";
-import { AppDispatch } from "../../store/configureStore";
+import { AppDispatch, RootState } from "../../store/configureStore";
 
 //styled-component
 import {
@@ -33,15 +33,15 @@ const Shop: FC = () => {
   };
 
   const communityList: Feed[] = useSelector(
-    (state: any) => state.community.communityList
+    (state: RootState) => state.community.communityList
   );
 
   const selectedCategory: string = useSelector(
-    (state: any) => state.community.selectedCategory
+    (state: RootState) => state.community.selectedCategory
   );
 
   const selectedSort: string = useSelector(
-    (state: any) => state.community.selectedSort
+    (state: RootState) => state.community.selectedSort
   );
 
   useEffect(() => {

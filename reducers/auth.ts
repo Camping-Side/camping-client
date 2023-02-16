@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { login, join, reissueToken } from "../actions/auth";
 
 // 기본 state
@@ -28,7 +28,7 @@ const authSlice = createSlice({
       localStorage.removeItem("comporest_auth");
     },
   },
-  extraReducers: (builder) =>
+  extraReducers: (builder: ActionReducerMapBuilder<any>) =>
     builder
       // 로그인
       .addCase(login.pending, (state) => {
@@ -54,7 +54,7 @@ const authSlice = createSlice({
         state.loginDone = true;
         state.isLoggedIn = true;
       })
-      .addCase(login.rejected, (state: any, action) => {
+      .addCase(login.rejected, (state, action) => {
         state.loginLoading = false;
         state.loginError = action.payload;
         state.isLoggedIn = false;
@@ -77,7 +77,7 @@ const authSlice = createSlice({
         );
         state.reissueTokenDone = true;
       })
-      .addCase(reissueToken.rejected, (state: any, action) => {
+      .addCase(reissueToken.rejected, (state, action) => {
         state.reissueTokenLoading = false;
         state.reissueTokenError = action.payload;
       })
@@ -89,7 +89,7 @@ const authSlice = createSlice({
       .addCase(join.fulfilled, (state, action) => {
         state.joinLoading = false;
       })
-      .addCase(join.rejected, (state: any, action) => {
+      .addCase(join.rejected, (state, action) => {
         state.joinLoading = false;
         state.joinError = action.payload;
       }),

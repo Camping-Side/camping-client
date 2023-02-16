@@ -15,7 +15,7 @@ import ProductDetailLayout from "@layout/ProductDetailLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetail } from "../../../actions/product";
 import productSlice from "@reducers/product";
-import { AppDispatch } from "../../../store/configureStore";
+import { AppDispatch, RootState } from "../../../store/configureStore";
 import { Product, SubImage } from "../../../type/product/product";
 
 //styled-component
@@ -35,13 +35,13 @@ const ProductDetailComponent: FC = () => {
   const { id } = router.query;
 
   const productDetail: Product = useSelector(
-    (state: any) => state.product.productDetail
+    (state: RootState) => state.product.productDetail
   );
   const selectedImg: string = useSelector(
-    (state: any) => state.product.selectedImg
+    (state: RootState) => state.product.selectedImg
   );
   const imgList: SubImage[] = useSelector(
-    (state: any) => state.product.imgList
+    (state: RootState) => state.product.imgList
   );
 
   useEffect(() => {

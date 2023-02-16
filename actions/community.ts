@@ -30,6 +30,20 @@ export const getDetail = createAsyncThunk(
   }
 );
 
+export const getDetailComment = createAsyncThunk(
+  "community/getDetailComment",
+  async (data: string | string[] | undefined, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        BASE_URL + "/api/v1/community/comment/" + data
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const update = createAsyncThunk(
   "community/update",
   async (data: number, { rejectWithValue }) => {

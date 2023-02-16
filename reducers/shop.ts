@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { getCategoryList } from "../actions/shop";
 
 // 기본 state
@@ -14,7 +14,7 @@ const shopSlice = createSlice({
   name: "shop",
   initialState,
   reducers: {},
-  extraReducers: (builder) =>
+  extraReducers: (builder: ActionReducerMapBuilder<any>) =>
     builder
       //카테고리 리스트
       .addCase(getCategoryList.pending, (state) => {

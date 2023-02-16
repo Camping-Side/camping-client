@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import {
   checkPhoneDup,
   checkEmailDup,
@@ -41,7 +41,7 @@ const accountSlice = createSlice({
       state.checkEmailDupSuccess = false;
     },
   },
-  extraReducers: (builder) =>
+  extraReducers: (builder: ActionReducerMapBuilder<any>) =>
     builder
       //이메일 중복체크
       .addCase(checkEmailDup.pending, (state) => {
@@ -54,7 +54,7 @@ const accountSlice = createSlice({
         state.checkEmailDupDone = true;
         state.checkEmailDupSuccess = action.payload.isDup ? false : true;
       })
-      .addCase(checkEmailDup.rejected, (state: any, action) => {
+      .addCase(checkEmailDup.rejected, (state, action) => {
         state.checkEmailDupLoading = false;
         state.checkEmailDupError = action.payload;
       })
@@ -69,7 +69,7 @@ const accountSlice = createSlice({
         state.checkPhoneDupDone = true;
         state.checkPhoneDupSuccess = action.payload.isDup ? false : true;
       })
-      .addCase(checkPhoneDup.rejected, (state: any, action) => {
+      .addCase(checkPhoneDup.rejected, (state, action) => {
         state.checkPhoneDupLoading = false;
         state.checkPhoneDupError = action.payload;
       })
@@ -83,7 +83,7 @@ const accountSlice = createSlice({
         state.resetPasswordLoading = false;
         state.resetPasswordDone = true;
       })
-      .addCase(resetPassword.rejected, (state: any, action) => {
+      .addCase(resetPassword.rejected, (state, action) => {
         state.resetPasswordLoading = false;
         state.resetPasswordError = action.payload;
       })
@@ -98,7 +98,7 @@ const accountSlice = createSlice({
         state.findEmailDone = true;
         state.findEmailResult = action.payload.email;
       })
-      .addCase(findEmail.rejected, (state: any, action) => {
+      .addCase(findEmail.rejected, (state, action) => {
         state.findEmailLoading = false;
         state.findEmailError = action.payload;
       })
@@ -114,7 +114,7 @@ const accountSlice = createSlice({
         state.myInfo = action.payload.resultData;
         console.log("getInfo: ", action.payload.resultData);
       })
-      .addCase(getInfo.rejected, (state: any, action) => {
+      .addCase(getInfo.rejected, (state, action) => {
         state.getInfoLoading = false;
         state.getInfoError = action.payload;
       }),

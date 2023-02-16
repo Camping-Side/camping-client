@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { getList } from "../actions/banner";
 
 // 기본 state
@@ -18,7 +18,7 @@ const bannerSlice = createSlice({
       state.bannerList = action.payload;
     },
   },
-  extraReducers: (builder) =>
+  extraReducers: (builder: ActionReducerMapBuilder<any>) =>
     builder
       //배너 리스트
       .addCase(getList.pending, (state) => {
@@ -31,7 +31,7 @@ const bannerSlice = createSlice({
         state.bannerList = action.payload;
         state.getListDone = true;
       })
-      .addCase(getList.rejected, (state: any, action) => {
+      .addCase(getList.rejected, (state, action) => {
         state.getListLoading = false;
         state.getListError = action.payload;
       }),
